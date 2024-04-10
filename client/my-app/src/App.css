@@ -1,10 +1,82 @@
 .App {
   text-align: center;
+  
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  background-color: #3f424e;
+}
+
+.testMain{
+  display: grid;
+  grid-template-columns: 1fr 1fr 5fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  height: 100vh;
+  width: 100%;
+  justify-content: center;
+  justify-items: center;
+}
+.App-footer{
+  display: grid;
+  min-height: 20%;
+  width: 100%;
+  justify-content: center;
+  justify-items: center;
+  background-color: #464e5c;
+}
+.App-footer>*{
+  color: #fdfdfd;
+  font-size: 100%;
+  font-family: 'Times New Roman', serif;
+  text-align: center;
+  padding: 5px;
+}
+.Footer-container{
+  display: grid;
+  width: 100%;
+  justify-content: center;
+  justify-items: center;
+  background-color: #464e5c;
+  padding: 20px;
+}
+.Footer-container>*{
+  color: #fdfdfd;
+  font-size: 100%;
+  font-variant: small-caps;
+  text-align: center;
+  padding: 5px;
+
+}
+
+.LoginText{
+  font-size:200%;
+  font-family: Arial, sans-serif;
+  color: #fdfdfd;
+}
+.LoginButton{
+
+}
+
+.StartLoginBox{
+  display: grid;
+  justify-items: center;
+  background-color: #3f424e;
+  width:fit-content;
+  grid-row: 2;
+  grid-column: 3;
+
+  
+}
+.LoginRow{
+  padding: 15px;
+  width: 100%;
+}
+
+.StartLoginInput{
+
+  min-width: 10%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -13,15 +85,192 @@
   }
 }
 
+
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #464e5c;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
+  
+}
+.ProfileTextDivider{
+  display: grid;
+  grid-template-rows: 2fr 1fr 1fr 1fr;
+  height: 100%;
+  width: 100%;
+  border: 1px black;
+}
+.Header-text{
+  font-size: 100%;
+  font-family: Arial, sans-serif;
+  color: #fdfdfd;
+  margin: 10%;
+}
+.Header-text:hover, .Header-text:active, a:visited{
+  color: inherit;
+  text-decoration: none;
+}
+
+
+
+.ProfileTextDivider>*{
+  text-align: left;
+  margin-left: 20px;
+}
+.UserName{
+  text-align: center;
+  margin: 15%;
+  font-family: Arial, sans-serif;
+}
+
+.Header-container{
+  display: grid;
+  position: sticky;
+  grid-template-columns: repeat(9, 1fr);
+  height: fit-content;
+  grid-gap: 10px;
+  background-color: #464e5c;
+  position: sticky;
+  width: 100%;
+
+}
+.firstSiteLayout> *{
+  border: 1px solid black;
+}
+.SearchBox {
+  grid-column: 10;
+  border-radius: 0.3vh;
+}
+
+.NavigationTabs{
+  border-radius: 0.3vh;
+  width: auto;
+  height: auto;
+  border: 0px;
+  background-color: #969aa8;
+}
+.NavigationTabs:hover{
+  background-color: grey;
+}
+.NavigationTabs.NavigationTabs:click{
+  color: #61dafb;
+}
+
+.mainMain{
+  display: flexbox;
+  grid-template-rows: 2fr;
+  width: 55%;
+  margin-left: 1%;
+  margin-right: auto;
+  min-height: 100px;
+  padding: 10px;
+  grid-gap: 1cm;
+  background-color: white;
+  size-adjust: none;
+  height: min-content;
+  border-radius: 1%;
+  top: 7%;
+}
+
+.profileContainer{
+  display: grid;
+  grid-template-rows: 1fr 5fr;
+  border-color: 1px black;
+  max-height: fit-content;
+  width: 55%;
+  background-color: white;
+  padding: 10px;
+  margin-left: 1%;
+  border-radius: 1vh;
+}
+.LoginOrRegisterColumns>*{
+  justify-self: center;
+  width: 100%;
+}
+.App-body{
+
+  min-height: 100vh;
+  width: 100%;
+  background-color: #282c34;
+  justify-content: center;
+  justify-items: center;
+}
+
+
+.upperProfileGrid{
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1.5fr 2fr;
+  max-height: fit-content;
+  background-color: #969aa8;
+  
+}
+
+
+.lowerProfileGrid{
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  border: 1px black;
+  background-color: rgb(244, 244, 244);
+}
+.profilePictureImage{
+  width: fit-content;
+  height: fit-content;
+
+}
+.mainMain>*{
+width: 90%;
+margin-left: 5%;
+margin-right: 5%;
+}
+
+.profilePictureImage{
+  width: 100%;
+  height: auto;
+  margin-top: 5%;
+}
+
+  
+
+.Main{
+  display: flex;
+  grid-template-columns: max-content;
+  padding-top: 1%;
+}
+
+.mainNavigation{
+  display: flexbox;
+  grid-template-rows: 1fr;
+  width: 20%;
+  height: min-content;
+  padding: 10px;
+  grid-gap: 1cm;
+  background-color: white;
+  size-adjust: none;
+  margin-left: 10%;
+  border-radius: 1%;
+  position: sticky;
+  top:7%;
+}
+.mainNavigation> *{
+   border: 0.5px solid black;
+   padding: 10px;
+   background-color: #fdfdfd;
+   border-radius: 0.5vh;
+   width: 70%;
+   margin-right: 50%;
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
+.mainNavigation> *:hover{
+  background-color: grey;
+}
+.navigationButton{
+  background-color: #969aa8;
+  color: rgb(118, 95, 65);
+  text-align: left;
 }
 
 .App-link {

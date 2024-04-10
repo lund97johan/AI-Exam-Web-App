@@ -1,24 +1,168 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 
-function App() {
-  const [data, setData] = React.useState(null);
 
-  React.useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
+import './App.css';
 
+import { useState } from 'react';
+import {Link } from "react-router-dom";
+
+
+function App(){
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{!data ? "Loading..." : data}</p>
-      </header>
+    <div className='App'>
+      <ReturnHeader/>
+      <div className='App-body'>
+        <LoginOrRegisterColumns column={3} row ={2}/>
+      </div>
+      <ReturnFooter/>
+       
+    </div>
+  )
+}
+
+function ReturnFooter(){
+  return(
+    <div className='App-footer'>
+       <text className='Footer-text'>
+          © 2024 Tenta QuizBuilder. All rights reserved.
+       </text>
+       <text className='Footer-text'>
+        By Group 18:
+       </text>
+       <div className='Footer-container'>
+          <text className='Footer-text'>
+            Henrik Ravnborg
+          </text>
+          <text className='Footer-text'>
+            Jesper Truedsson
+          </text>
+          <text className='Footer-text'>
+            Johan Lund
+          </text>
+          <text className='Footer-text'>
+            Mattias Fridsén 
+          </text>
+          <text className='Footer-text'>
+            Nils Fritzner
+          </text>
+       </div>
+    </div>
+  )
+}
+
+function ReturnHeader(){
+  return (
+    <div className='App-header'>
+      <div className='Header-container'>
+        <div className='Header-text' style={{gridColumn: 4}}>
+        What can our bot do?
+        </div>
+        <div className='Header-text'>
+          <Link to ="/">
+            Home
+          </Link>
+        </div>
+        <div className='Header-text'>
+          <Link to ="/contactus">
+          Contact Us
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function LoginOrRegisterColumns({ column, row }) {
+  return(
+    <div className="testMain">
+      <div className='LoginRow' style={{gridColumn: 3, gridRow: 1}}>
+        <text className='LoginText'>Welcome to our AI quizbuilder website, login or register to start creating tenta quizzes</text>
+      </div>
+      <div className="LoginOrRegisterColumns" style={{ gridColumn: column, gridRow: row }}>
+        <div className="LoginRow">
+          <Link to ="/login">
+          <button className="LoginButton">Login</button>
+          </Link>
+        </div>
+        <div className="LoginRow" >
+          <div className ="LoginText" style={{color: "white", fontSize: 20}}
+          >OR</div>
+        </div>
+        <div className="LoginRow">
+          <Link to ="/register">
+          <button className="LoginButton">Register</button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
 
+function SetInStartBox() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async (event)=>{
+    event.preventDefault();
+    const loginDetails = {username, password};
+
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginDetails),
+      });
+      const data = await response.json();
+      if (data.success){
+        console.log('login successful');
+      }else{
+        console.log('login failed', data.message);
+      }
+  }catch(error){
+    console.log('login error', error);
+  }
+};
+  
+
+
+  return (
+    <div className='StartLoginBox' >
+      <div className='LoginRow'>
+        <text className='LoginText'>login</text>
+      </div>
+      <div className='LoginRow'>
+        <input 
+        className='StartLoginInput'
+        type='text'
+        placeholder='User Name'
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        />
+      </div>
+      <div className='LoginRow'>
+        <input
+        className='StartLoginInput'
+        type ='text'
+        placeholder='Password'
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+      <div className='LoginRow'>
+      <button className='LoginButton' type='submit' onClick={handleLogin}>Login</button>
+      </div>
+    </div>
+  )
+}
+
+
+function LoginButton(){
+  return (
+    <button className='LoginButton' type='loginButton'>login</button>
+  )
+}
+
 export default App;
+export {ReturnHeader};
+export {ReturnFooter};
