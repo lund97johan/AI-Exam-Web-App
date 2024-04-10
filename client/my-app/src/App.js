@@ -19,6 +19,7 @@ function App(){
   )
 }
 
+
 function ReturnFooter(){
   return(
     <div className='App-footer'>
@@ -49,10 +50,21 @@ function ReturnFooter(){
   )
 }
 
+
+
 function ReturnHeader(){
   return (
     <div className='App-header'>
       <div className='Header-container'>
+        <div className='Header-text-dropdown' style={{gridColumn: 2}}> tjena  {/* dropdown menyers nu poggers */}
+          <div className='Header-text-dropdown-content'>
+            <div className='Header-text-dropdown-content-grid'>
+              <text >test</text>
+              <text >test</text>
+              <text >test</text>
+            </div>
+          </div>
+        </div>
         <div className='Header-text' style={{gridColumn: 4}}>
         What can our bot do?
         </div>
