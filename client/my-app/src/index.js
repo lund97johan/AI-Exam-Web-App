@@ -12,6 +12,7 @@ import ContactUs from "./Sites/ContactUsSite/ContactUs";
 
 import BotInfo from './Sites/BotInfoSite/botInfo';
 import About from './Sites/AboutSite/About';
+import Quiz from './Sites/QuizSite/Quiz';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -24,6 +25,7 @@ root.render(
         <Route path='/contactus' element={<ContactUs/>}/>
         <Route path='/BotInfo' element={<BotInfo/>}/>
         <Route path='/About' element={<About/>}/>
+        <Route path='/quiz' element={<Quiz/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

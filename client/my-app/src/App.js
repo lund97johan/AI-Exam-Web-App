@@ -79,7 +79,11 @@ function ReturnHeader(){
       <div className='Header-text-dropdown' style={{gridColumn: 1}}> tjena  {/* dropdown menyers nu poggers */}
           <div className='Header-text-dropdown-content'>
             <div className='Header-text-dropdown-content-grid'>
-              <text >test</text>
+              <text >
+                <Link to ="/quiz">
+                Ta Quiz
+                </Link>
+                </text>
               <text >test</text>
               <text >test</text>
             </div>
