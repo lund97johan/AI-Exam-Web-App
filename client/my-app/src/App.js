@@ -66,8 +66,20 @@ function ReturnHeader(){
           </div>
         </div>
         <div className='Header-text' style={{gridColumn: 4}}>
-        What can our bot do?
+          <Link to ="/BotInfo">
+            What can our bot do?
+          </Link>
+
+         
+       
         </div>
+
+        <div className='Header-text'>
+            <Link to='/About'>
+              About
+            </Link>
+
+          </div>
         <div className='Header-text'>
           <Link to ="/">
             Home
