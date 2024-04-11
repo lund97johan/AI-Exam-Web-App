@@ -77,6 +77,9 @@
   width:fit-content;
   grid-row: 2;
   grid-column: 3;
+  padding: 2vh;
+  padding-left: 15vh;
+  padding-right: 15vh;
 
   
 }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import "../../App.css";
+import "./Register.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {ReturnHeader} from "../../App";
@@ -10,7 +10,9 @@ function Register(){
         <div className='App'>
             <ReturnHeader/>
               <div className='App-body'>
-              
+                <div className='Register-body'>
+                    
+                </div>
             </div>
             <ReturnFooter/>
         </div>

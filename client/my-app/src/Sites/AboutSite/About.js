@@ -1,6 +1,6 @@
 
 import * as React from "react";
-import "../../App.css";
+import "./About.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {ReturnHeader} from "../../App";
