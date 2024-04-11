@@ -76,16 +76,25 @@ function ReturnHeader(){
   return (
     <div className='App-header'>
       <div className='Header-container'>
-        <ReturnDropDown gridColumn={2}/>
+      <div className='Header-text-dropdown' style={{gridColumn: 1}}> tjena  {/* dropdown menyers nu poggers */}
+          <div className='Header-text-dropdown-content'>
+            <div className='Header-text-dropdown-content-grid'>
+              <text >test</text>
+              <text >test</text>
+              <text >test</text>
+            </div>
+          </div>
+        </div>
         <div className='Header-text' style={{gridColumn: 4}}>
           <Link to ="/BotInfo">
             What can our bot do?
           </Link>
-
-         
-       
         </div>
-
+        <div className='Header-text'>
+          <Link to ="/">
+            Home
+          </Link>
+        </div>
         <div className='Header-text'>
             <Link to='/About'>
               About
@@ -93,16 +102,10 @@ function ReturnHeader(){
 
           </div>
         <div className='Header-text'>
-          <Link to ="/">
-            Home
-          </Link>
-        </div>
-        <div className='Header-text'>
           <Link to ="/contactus">
           Contact Us
           </Link>
         </div>
-        <ReturnMenu/>
       </div>
     </div>
   )

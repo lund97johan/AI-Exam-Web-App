@@ -12,7 +12,7 @@ function BotInfo(){
             <ReturnHeader/>
               <div className='App-body'>
                 <div className="test">
-                    de
+                    
                 </div>
                 
               </div>
