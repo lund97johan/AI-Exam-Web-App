@@ -19,6 +19,14 @@ function App(){
   )
 }
 
+function ReturnMenu(){
+  return (
+    <div className='Header-text'>
+      <text>tjena</text>
+    </div>
+  )
+}
+
 
 function ReturnFooter(){
   return(
@@ -50,13 +58,9 @@ function ReturnFooter(){
   )
 }
 
-
-
-function ReturnHeader(){
-  return (
-    <div className='App-header'>
-      <div className='Header-container'>
-        <div className='Header-text-dropdown' style={{gridColumn: 2}}> tjena  {/* dropdown menyers nu poggers */}
+function ReturnDropDown({gridColumn = 2, gridRow = 1}){
+  return(
+    <div className='Header-text-dropdown' style={{gridColumn: {gridColumn}}}> tjena  {/* dropdown menyers nu poggers */}
           <div className='Header-text-dropdown-content'>
             <div className='Header-text-dropdown-content-grid'>
               <text >test</text>
@@ -65,6 +69,14 @@ function ReturnHeader(){
             </div>
           </div>
         </div>
+  )
+}
+
+function ReturnHeader(){
+  return (
+    <div className='App-header'>
+      <div className='Header-container'>
+        <ReturnDropDown gridColumn={2}/>
         <div className='Header-text' style={{gridColumn: 4}}>
         What can our bot do?
         </div>
@@ -78,6 +90,7 @@ function ReturnHeader(){
           Contact Us
           </Link>
         </div>
+        <ReturnMenu/>
       </div>
     </div>
   )
