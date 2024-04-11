@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Welcome from "./App";
 import Register from "./Sites/RegisterSite/Register";
 import Login from "./Sites/LoginSite/Login";
-import ContactUs from "./Sites/ContactUs/ContactUsSite";
+import ContactUs from "./Sites/ContactUsSite/ContactUs";
 
 import BotInfo from './Sites/BotInfoSite/botInfo';
 import About from './Sites/AboutSite/About';
