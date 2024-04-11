@@ -10,11 +10,117 @@ function Register(){
         <div className='App'>
             <ReturnHeader/>
               <div className='App-body'>
-                <div className='Register-body'>
-                    
-                </div>
+                <ReturnRegister/>
             </div>
             <ReturnFooter/>
+        </div>
+    )
+}
+
+function ReturnRegister(){
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const navigate = useNavigate();
+
+    function showPassword() {
+        var x = document.getElementById("TheSecretPassword");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+
+    const handleRegister = async (event)=>{
+        event.preventDefault();
+        const registerDetails = {username, password};
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(registerDetails),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`); // Handle non-200 responses
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                console.log('Register successful');
+                navigate('/');
+            } else {
+                console.log('Register failed', data.message);
+            }
+        } catch (error) {
+            console.error('Register error:', error);
+        }
+    };
+
+    return (
+        <div className='Register-main'>
+            <div className="RegisterTitleContainer">
+                <div className="RegisterTitle">Register</div>
+            </div>
+            <div className="RegisterBox">  
+                <div className='RegisterRow' style={{gridColumn: 1}}>
+                    <div className='RegisterText'>First Name:</div>
+                </div>
+                <div className='RegisterRow' style={{gridColumn: 2}}>
+                    <input className="Registerbox-default" 
+                    type="text"
+                    placeholder="John"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}>
+                    </input>
+                </div>
+                <div className='RegisterRow' style={{gridColumn: 1}}>
+                    <div className='RegisterText'>Last Name:</div>
+                </div>
+                <div className='RegisterRow' style={{gridColumn: 2}}>
+                <input className="Registerbox-default" 
+                    type="text"
+                    placeholder="Doe"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}>
+                    </input>
+                </div>
+                <div className='RegisterRow' style={{gridColumn: 1}}>
+                    <div className='RegisterText'>Email:</div>
+                </div>
+                <div className='RegisterRow' style={{gridColumn: 2}}>
+                <input className="Registerbox-default" 
+                    type="text"
+                    placeholder="JohnDoe@gmail.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}>
+                    </input>
+                </div>
+                <div className='RegisterRow' style={{gridColumn: 1}}>
+                    <div className='RegisterText'>Password:</div>
+                </div>
+                <div className='RegisterRow' style={{gridColumn: 2}}>
+                <input className="Registerbox-default" 
+                    type="password"
+                    placeholder="MySecretPassword"
+                    value={password}
+                    id="TheSecretPassword"
+                    onChange={(e) => setPassword(e.target.value)}>
+                    </input>
+                </div>
+                <div className='RegisterRowCheckBox' style={{gridColumn: 3}}>
+                    <input type="checkbox" onClick={showPassword}/> show password
+                </div>
+
+                <div className='RegisterRow' style={{gridColumn: 2}}>
+                    <button className='RegisterButton' type='submit' onClick={handleRegister}>Register</button>
+                </div>
+            </div>
         </div>
     )
 }
