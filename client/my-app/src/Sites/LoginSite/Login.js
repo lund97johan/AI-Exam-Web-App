@@ -22,6 +22,12 @@ function SetInStartBox() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+
+    function handleClick() {
+      navigate("/register");
+    }
+  
+  
   
     const handleLogin = async (event)=>{
       event.preventDefault();
@@ -79,8 +85,9 @@ function SetInStartBox() {
           />
         </div>
         <div className='LoginRow'>
-        <button className='LoginButton' type='submit' onClick={handleLogin}>Login</button>
-        </div>
+            <button className='LoginButton' type='submit' onClick={handleClick}>Login</button> 
+           {/* <button className='LoginButton' type='submit' onClick={handleLogin}>Login</button> */}
+        </div>  
       </div>
       </div>
       
