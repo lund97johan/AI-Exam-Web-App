@@ -10,6 +10,9 @@ import Register from "./Sites/RegisterSite/Register";
 import Login from "./Sites/LoginSite/Login";
 import ContactUs from "./Sites/ContactUs/ContactUsSite";
 
+import BotInfo from './Sites/BotInfoSite/botInfo';
+import About from './Sites/AboutSite/About';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -19,6 +22,8 @@ root.render(
         <Route path="/register" element={<Register />}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/contactus' element={<ContactUs/>}/>
+        <Route path='/BotInfo' element={<BotInfo/>}/>
+        <Route path='/About' element={<About/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
