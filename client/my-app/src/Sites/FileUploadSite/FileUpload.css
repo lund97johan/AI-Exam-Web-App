@@ -1,0 +1,24 @@
+/* File Upload Styles */
+.file-upload {
+    margin: 20px 0;
+  }
+  
+  .file-upload input[type="file"] {
+    display: block;
+    margin-bottom: 10px; /* Space below the file input */
+  }
+  
+  .file-upload button {
+    background-color: #0056b3; /* Blue background */
+    color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    text-transform: uppercase; /* Uppercase text */
+    letter-spacing: 1px; /* More spacing between letters */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 4px; /* Rounded button edges */
+  }
+  
+  .file-upload button:hover {
+    background-color: #004494; /* Darker blue on hover */
+  }
