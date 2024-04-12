@@ -28,37 +28,37 @@ function ContactForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="name">Name</label>
-            <input
-                type="text"
-                id="name"
-                name="name"
+        <form  className='Contactus-form'onSubmit={handleSubmit}>
+            <div className='ContactUs-text'>
+                name
+            </div>
+            <input className='registerInputbox'
+                type="text" 
+                name="name" 
                 value={formData.name}
-                onChange={handleChange}
-            />
+                onChange={handleChange}>
+            </input>
 
+            <div className='ContactUs-text'>
+                email
+            </div>
+            <input className='registerInputbox'
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}>
+            </input>
+            <div className='ContactUs-text'>
+                Message
+            </div>
+            <input className='registerInputbox'
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}>
+            </input>
 
-
-            <label htmlFor="email">Email</label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-            />
-
-            <label htmlFor="message">Message</label>
-            <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-
-            />
-
-            <button type="submit">Send</button>
+            <button className='Contact-us-button'type="submit">Send</button>
         </form>
     );
 }
