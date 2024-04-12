@@ -84,7 +84,11 @@ function ReturnHeader(){
                 Ta Quiz
                 </Link>
                 </text>
-              <text >test</text>
+              <text >
+                <Link to = "/FileUpload">
+                File Upload
+                </Link>
+              </text>
               <text >test</text>
             </div>
           </div>
