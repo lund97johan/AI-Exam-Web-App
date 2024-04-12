@@ -85,8 +85,8 @@ function SetInStartBox() {
           />
         </div>
         <div className='LoginRow'>
-            <button className='LoginButton' type='submit' onClick={handleClick}>Login</button> 
-           {/* <button className='LoginButton' type='submit' onClick={handleLogin}>Login</button> */}
+        <button className='LoginButton' type='submit' onClick={handleLogin}>Login</button>
+           {/*  <button className='LoginButton' type='submit' onClick={handleClick}>Login</button> */}
         </div>  
       </div>
       </div>

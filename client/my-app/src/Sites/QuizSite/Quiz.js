@@ -37,7 +37,7 @@ function ReturnQuiz(){
             </div>
             <div className="Quiz-question-container" style={{gridColumn: 2}}>
                 <div className='Quiz-question-potanswer' style={{gridColumn: 2}}>
-                    tjena
+                    baghdad
                 </div>
                 <label className='Quiz-question-answer-box-container' style={{gridColumn: 3}}>
                     <input type="checkbox"/>
@@ -46,7 +46,7 @@ function ReturnQuiz(){
             </div>
             <div className="Quiz-question-container" style={{gridColumn: 2}}>
                 <div className='Quiz-question-potanswer' style={{gridColumn: 2}}>
-                    tjena
+                    damascus
                 </div>
                 <label className='Quiz-question-answer-box-container' style={{gridColumn: 3}}>
                     <input type="checkbox"/>
@@ -55,7 +55,7 @@ function ReturnQuiz(){
             </div>
             <div className="Quiz-question-container" style={{gridColumn: 2}}>
                 <div className='Quiz-question-potanswer' style={{gridColumn: 2}}>
-                    tjena
+                    mosul
                 </div>
                 <label className='Quiz-question-answer-box-container' style={{gridColumn: 3}}>
                     <input type="checkbox"/>
@@ -64,7 +64,7 @@ function ReturnQuiz(){
             </div>
             <div className="Quiz-question-container" style={{gridColumn: 2}}>
                 <div className='Quiz-question-potanswer' style={{gridColumn: 2}}>
-                    tjena
+                    cairo
                 </div>
                 <label className='Quiz-question-answer-box-container' style={{gridColumn: 3}}>
                     <input type="checkbox"/>
