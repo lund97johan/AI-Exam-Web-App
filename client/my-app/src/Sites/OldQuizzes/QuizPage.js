@@ -6,7 +6,7 @@ function QuizPage() {
   return (
     <div>
       <h1>{quizName}</h1> {/* Display the quiz name */}
-      {/* You can include  input field and "TA Quiz" button here */}
+      {/* Y */}
     </div>
   );
 }
