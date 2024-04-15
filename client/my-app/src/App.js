@@ -110,6 +110,14 @@ function ReturnHeader(){
               About
             </Link>
           </div>
+
+          <div className='Header-text'> 
+          <Link to='/old_quizzes'>
+            Old Quizzes
+          </Link>
+          
+          </div>
+
         <div className='Header-text'>
           <Link to ="/contactus">
           Contact Us

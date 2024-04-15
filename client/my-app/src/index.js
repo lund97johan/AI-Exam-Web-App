@@ -12,9 +12,11 @@ import ContactUs from "./Sites/ContactUsSite/ContactUs";
 
 import BotInfo from './Sites/BotInfoSite/botInfo';
 import About from './Sites/AboutSite/About';
+
 import Quiz from './Sites/QuizSite/Quiz';
 import FileUpload from './Sites/FileUploadSite/FileUpload';
 import AuthProvider from "./AuthProvider";
+import OldQuizzes from './Sites/OldQuizzes/OldQuizzes';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -29,7 +31,7 @@ root.render(
         <Route path='/BotInfo' element={<BotInfo/>}/>
         <Route path='/About' element={<About/>}/>
         <Route path='/quiz' element={<Quiz/>}/>
-        <Route path='/FileUpload' element={<FileUpload/>}/>
+        <Route path='/old_quizzes' element={<OldQuizzes/>}/>
       </Routes>
     </AuthProvider>
     </BrowserRouter>
