@@ -32,12 +32,21 @@ app.post("/login", async (req, res) => {
       return;
     }
 
-    // Assuming the message is returned as part of the first result set
     const message = result[0][0].message;
-    if (message === "Login successful") {
-      res.json({ success: true, message: "Login successful" });
+    if (message.includes("Login successful")) {
+      // Extract user data from the same result set
+      const userData = {
+        user_id: result[0][0].user_id,
+        username: result[0][0].username,
+        email: result[0][0].email,
+        firstname: result[0][0].firstname,
+        lastname: result[0][0].lastname,
+        last_login: result[0][0].last_login
+      };
+      console.log("User data:", userData);
+      res.json({ success: true, message: "Login successful", user: userData });
     } else {
-      res.json({ success: false, message: message }); // Use the message from the stored procedure
+      res.json({ success: false, message: message });
     }
   });
 });
@@ -56,8 +65,24 @@ app.post("/register", async (req, res) => {
     if (err) {
         console.error("Database error:", err);
         res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
+        return;
+    }
+
+    const message = result[0][0].message;
+    if (message.includes("User registered")) {
+      const userData = {
+        user_id: result[0][0].user_id,
+        username: result[0][0].username,
+        email: result[0][0].email,
+        firstname: result[0][0].firstname,
+        lastname: result[0][0].lastname,
+        last_login: result[0][0].last_login
+      };
+      console.log("User data:", userData);
+      res.json({ success: true, message: "User registered successfully", user: userData });
+
     } else {
-        res.json({ success: true, message: "User registered successfully" });
+        res.json({ success: false, message: message });
     }
 });
 });

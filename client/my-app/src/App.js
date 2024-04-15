@@ -4,6 +4,8 @@ import './App.css';
 
 import { useState } from 'react';
 import {Link } from "react-router-dom";
+import { useAuth } from './AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 
 function App(){
@@ -107,16 +109,55 @@ function ReturnHeader(){
             <Link to='/About'>
               About
             </Link>
-
           </div>
         <div className='Header-text'>
           <Link to ="/contactus">
           Contact Us
           </Link>
         </div>
+
+        <LoggedInUser/>
       </div>
     </div>
   )
+}
+
+function LoggedInUser() {
+  const {user, logout} = useAuth();// Use the custom hook correctly
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout(); // Call the logout function from the AuthProvider
+  };
+  if (!user) {
+    return (
+      <div className='Header-text'>
+        <Link to="/login">
+          Login
+        </Link>
+      </div>
+    );
+  } else {
+    return (
+      <div className='Header-loggedin-container'>
+        <div className='Header-text'>
+          <Link to="/dashboard"> {/* Assuming you have a dashboard route */}
+            Welcome, {user.username} {/* Display user information */}
+          </Link>
+        </div>
+        <div className='Header-text' onClick={handleLogout}>
+          <Link to="/">
+          Logout
+          </Link>
+        </div>
+      </div>
+    );
+  }
+}
+
+function useLoggedInUser() {
+  const { user } = useAuth();
+  return user;
 }
 
 function LoginOrRegisterColumns({ column, row }) {

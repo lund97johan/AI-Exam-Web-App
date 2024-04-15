@@ -14,11 +14,13 @@ import BotInfo from './Sites/BotInfoSite/botInfo';
 import About from './Sites/AboutSite/About';
 import Quiz from './Sites/QuizSite/Quiz';
 import FileUpload from './Sites/FileUploadSite/FileUpload';
+import AuthProvider from "./AuthProvider";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <AuthProvider>
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/register" element={<Register />}/>
@@ -29,6 +31,7 @@ root.render(
         <Route path='/quiz' element={<Quiz/>}/>
         <Route path='/FileUpload' element={<FileUpload/>}/>
       </Routes>
+    </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
+import { useAuth } from '../../AuthProvider';
 
 function Login(){
     return(
@@ -19,6 +20,7 @@ function Login(){
 }
 
 function SetInStartBox() {
+  const { login } = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -29,30 +31,35 @@ function SetInStartBox() {
   
   
   
-    const handleLogin = async (event)=>{
+    const handleLogin = async (event) => {
       event.preventDefault();
-      const loginDetails = {username, password};
+      const loginDetails = { username, password };
       try {
-        const response = await fetch('/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(loginDetails),
-        });
-    
-        const data = await response.json();
-        if (data.success) {
-          console.log('Login successful');
-          navigate('/');
-        } else {
-          console.log('Login failed', data.message);
-          alert(data.message);  // Display error message to the user
-        }
+          const response = await fetch('/login', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(loginDetails),
+          });
+  
+          const data = await response.json(); // Parse JSON response
+          if (response.ok && data.success) {
+              if (data.user) {
+                  login(data.user); // Login user with the data received
+                  navigate('/'); // Redirect to home page
+              } else {
+                  alert('Login successful but no user data returned');
+              }
+          } else {
+              alert(data.message || 'Login failed'); // Show error message
+          }
       } catch (error) {
-        console.error('Login error:', error);
+          console.error('Login error:', error);
+          alert('Network or server error');
       }
-    };
+  };
+  
     
   
   
