@@ -1,0 +1,48 @@
+.quiz-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .quiz-item {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    margin-bottom: 20px; /* Add space between each pair */
+  }
+  
+  .quiz-input {
+    display: flex;
+    align-items: center; /* Center items vertically */
+  }
+  
+  .quiz {
+    width: 300px;
+    height: 40px;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px; /* Adjust margin-right as needed */
+    color: black; /* Set the text color inside the text box to black */
+  }
+
+  .quiz::placeholder {
+    color: black; /* Set the color of the placeholder text to black */
+  }
+  
+  .quiz-button, .remove-button {
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .quiz-button {
+    background-color: green; /* Change the background color of the "TA Quiz" button to green */
+    color: white; /* Change the text color of the "TA Quiz" button to white */
+  }
+  
+  .remove-button {
+    background-color: red; /* Change the background color of the "Remove Quiz" button if desired */
+    color: white; /* Change the text color of the "Remove Quiz" button if desired */
+    margin-left: 10px; /* Adjust margin-left as needed */
+  }
+  
