@@ -36,7 +36,7 @@ function ReturnRegister(){
 
     const handleRegister = async (event)=>{
         event.preventDefault();
-        const registerDetails = {username, password};
+        const registerDetails = {username, email, firstName, lastName, password};
         try {
             const response = await fetch('/register', {
                 method: 'POST',
@@ -46,16 +46,13 @@ function ReturnRegister(){
                 body: JSON.stringify(registerDetails),
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`); // Handle non-200 responses
-            }
-
             const data = await response.json();
             if (data.success) {
                 console.log('Register successful');
                 navigate('/');
             } else {
-                console.log('Register failed', data.message);
+                console.log('Register failed:', data.message);
+                alert(data.message);  // Display error message to the user
             }
         } catch (error) {
             console.error('Register error:', error);
@@ -99,6 +96,17 @@ function ReturnRegister(){
                     placeholder="JohnDoe@gmail.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}>
+                    </input>
+                </div>
+                <div className='RegisterRow' style={{gridColumn: 1}}>
+                    <div className='RegisterText'>Username:</div>
+                </div>
+                <div className='RegisterRow' style={{gridColumn: 2}}>
+                    <input className="Registerbox-default" 
+                    type="text"
+                    placeholder="John123"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}>
                     </input>
                 </div>
                 <div className='RegisterRow' style={{gridColumn: 1}}>

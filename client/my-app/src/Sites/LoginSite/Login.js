@@ -41,16 +41,13 @@ function SetInStartBox() {
           body: JSON.stringify(loginDetails),
         });
     
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`); // Handle non-200 responses
-        }
-    
         const data = await response.json();
         if (data.success) {
           console.log('Login successful');
           navigate('/');
         } else {
           console.log('Login failed', data.message);
+          alert(data.message);  // Display error message to the user
         }
       } catch (error) {
         console.error('Login error:', error);

@@ -22,19 +22,45 @@ var con = mysql.createConnection({
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const query = 'SELECT * FROM test.User Where Email = ? and Password = ?';
 
-  con.query(query, [username, password], function(err, result) {
-    if (err) throw err;
+  const callProcedure = 'CALL login_user(?, ?)';
 
-    if (result.length > 0) {
+  con.query(callProcedure, [username, password], function(err, result, fields) {
+    if (err) {
+      console.error("Database error:", err);
+      res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
+      return;
+    }
+
+    // Assuming the message is returned as part of the first result set
+    const message = result[0][0].message;
+    if (message === "Login successful") {
       res.json({ success: true, message: "Login successful" });
     } else {
-      res.json({ success: false, message: "Invalid credentials" });
+      res.json({ success: false, message: message }); // Use the message from the stored procedure
     }
   });
 });
 
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+app.post("/register", async (req, res) => {
+  const { username, email, firstName, lastName, password } = req.body;
+
+  const callProcedure = 'CALL register_user(?, ?, ?, ?, ?)';
+    
+  con.query(callProcedure, [username, email, firstName, lastName, password], function(err, result) {
+    if (err) {
+        console.error("Database error:", err);
+        res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
+    } else {
+        res.json({ success: true, message: "User registered successfully" });
+    }
+});
+});
 
 /*
 app.get("/api", (req, res) => {
