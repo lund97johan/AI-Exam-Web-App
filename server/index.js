@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Correct way to configure the OpenAI API client, should probably store my api key in a .env file seperate from alla er, speciellt nils. men men 
 const openai = new OpenAI({
-  apiKey: ""
+  apiKey: "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"
 })
 
 // the connection to the mysql database
