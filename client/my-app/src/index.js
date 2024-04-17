@@ -14,22 +14,27 @@ import BotInfo from './Sites/BotInfoSite/botInfo';
 import About from './Sites/AboutSite/About';
 
 import Quiz from './Sites/QuizSite/Quiz';
+import FileUpload from './Sites/FileUploadSite/FileUpload';
+import AuthProvider from "./AuthProvider";
 import OldQuizzes from './Sites/OldQuizzes/oldQuizzes';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Welcome />} />
-        <Route path="/register" element={<Register />}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/contactus' element={<ContactUs/>}/>
-        <Route path='/BotInfo' element={<BotInfo/>}/>
-        <Route path='/About' element={<About/>}/>
-        <Route path='/quiz' element={<Quiz/>}/>
-        <Route path='/old_quizzes' element={<OldQuizzes/>}/>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Welcome />} />
+          <Route path="/register" element={<Register />}/>
+          <Route path='/login' element={<Login/>}/>
+          <Route path='/contactus' element={<ContactUs/>}/>
+          <Route path='/BotInfo' element={<BotInfo/>}/>
+          <Route path='/About' element={<About/>}/>
+          <Route path='/quiz' element={<Quiz/>}/>
+          <Route path='/old_quizzes' element={<OldQuizzes/>}/>
+          <Route path='/FileUpload' element={<FileUpload/>}/>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

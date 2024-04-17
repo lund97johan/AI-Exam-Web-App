@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
+import { useAuth } from '../../AuthProvider';
 
 function Register(){
     return(
@@ -18,6 +19,7 @@ function Register(){
 }
 
 function ReturnRegister(){
+    const { login } = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -49,6 +51,7 @@ function ReturnRegister(){
             const data = await response.json();
             if (data.success) {
                 console.log('Register successful');
+                login(data.user);
                 navigate('/');
             } else {
                 console.log('Register failed:', data.message);
