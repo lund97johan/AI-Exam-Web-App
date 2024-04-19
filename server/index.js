@@ -150,36 +150,100 @@ function createQuiz(responseData) {
 
 
 app.post("/login", async (req, res) => {
+    // Destructure and immediately trim the username
+    let { username, password } = req.body;
+    username = username.trim();  // Trim the username to remove accidental whitespace
 
-  const { username, password } = req.body;
+    const callProcedure = 'CALL login_user(?, ?)';
 
-  const callProcedure = 'CALL login_user(?, ?)';
+    con.query(callProcedure, [username, password], function(err, result, fields) {
+        if (err) {
+            console.error("Database error:", err);
+            res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
+            return;
+        }
 
-  con.query(callProcedure, [username, password], function(err, result, fields) {
-    if (err) {
-      console.error("Database error:", err);
-      res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
-      return;
-    }
-
-    const message = result[0][0].message;
-    if (message.includes("Login successful")) {
-      // Extract user data from the same result set
-      const userData = {
-        user_id: result[0][0].user_id,
-        username: result[0][0].username,
-        email: result[0][0].email,
-        firstname: result[0][0].firstname,
-        lastname: result[0][0].lastname,
-        last_login: result[0][0].last_login
-      };
-      console.log("User data:", userData);
-      res.json({ success: true, message: "Login successful", user: userData });
-    } else {
-      res.json({ success: false, message: message });
-    }
-  });
+        if (result[0][0].message.includes("Login successful")) {
+            // Extract user data from the same result set
+            const userData = {
+                user_id: result[0][0].user_id,
+                username: result[0][0].username,
+                email: result[0][0].email,
+                firstname: result[0][0].firstname,
+                lastname: result[0][0].lastname,
+                last_login: result[0][0].last_login
+            };
+            console.log("User data:", userData);
+            res.json({ success: true, message: "Login successful", user: userData });
+        } else {
+            res.json({ success: false, message: result[0][0].message });
+        }
+    });
 });
+
+app.post("/getQuizDetailed", async (req, res) => {
+    const { userId, quizId } = req.body;
+    con.query('CALL GetQuizQuestionsAnswersByUserIdAndQuizId(?, ?)', [userId, quizId], function(err, result, fields) {
+        if (err) {
+            console.error("Database error:", err);
+            res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
+            return;
+        }
+
+        if (result[0] && result[0].length > 0) {
+            const quizData = JSON.parse(result[0][0].QuizData);
+
+            // Logging detailed quiz data
+            console.log("Quiz Title:", quizData.title);
+            quizData.questions.forEach(question => {
+                console.log("Question:", question.text);
+                question.answers.forEach(answer => {
+                    console.log("Answer:", answer.text, "Correct:", answer.is_correct ? "Yes" : "No");
+                });
+            });
+
+            res.json({ success: true, quiz: quizData });
+        } else {
+            res.status(404).json({ success: false, message: "No quizzes found" });
+        }
+    });
+});
+
+app.get("/getQuiz", async (req, res) => {
+    const querystring = 'CALL GetQuizNamesByUserId(?)';
+    const userId = req.query.userId;
+    // Ensure userId is present
+    if (!req.query.userId) {
+        console.log("No userId provided");
+        res.status(400).json({ success: false, message: "userId is required" });
+        return;
+    }
+
+    con.query(querystring, [userId], function(err, result, fields) {
+        if (err) {
+            console.error("Database error:", err);
+            res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
+            return;
+        }
+
+        // Check if there are any quizzes returned
+        if (result[0] && result[0].length > 0) {
+            const quizNames = result[0].map(row => row.title);
+            //add their quizz id to the quiz names
+            quizNames.forEach((quizName, index) => {
+                quizNames[index] = { id: result[0][index].quiz_id, title: quizName };
+            });
+            console.log("Query result:", result[0]); // Log the raw result for debugging
+            console.log("Quiz names:", quizNames); // Log the processed names for clarity
+
+            res.json({ success: true, quizzes: quizNames });
+        } else {
+            console.log("No quizzes found for userId:", req.query.userId); // Log this scenario for debugging
+            res.status(404).json({ success: false, message: "No quizzes found" });
+        }
+    });
+});
+
 
 
 app.listen(PORT, () => {

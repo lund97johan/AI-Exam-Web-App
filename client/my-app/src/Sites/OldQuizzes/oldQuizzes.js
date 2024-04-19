@@ -1,17 +1,50 @@
 import * as React from "react";
 import "./oldQuizzes.css";
-import { useState } from 'react';
-import { Link } from 'react-router-dom'; //  Link
+import {useEffect, useState} from 'react';
+import { Link, useNavigate } from 'react-router-dom'; //  Link
 import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
 
-function OldQuizzes() {
-  const [selectedQuiz, setSelectedQuiz] = useState(""); 
 
+function OldQuizzes() {
+  const [selectedQuiz, setSelectedQuiz] = useState("");
+  const [quizzes, setQuizzes] = useState([]);
+  const { user } = useAuth();
   // Function to handle quiz selection
   const handleQuizSelection = (quizName) => {
     setSelectedQuiz(quizName);
   }
+    useEffect(() => {
+        const fetchQuizzes = async () => {
+            if (!user) {  // Assuming 'user' holds the current user state
+                console.log("Redirecting because no user is logged in.");
+                navigate("/login");  // Redirect to login if no user
+                return;
+            }
+
+            try {
+                const response = await fetch('/getQuiz', { // Endpoint changed from /getQuiz to /quizzes
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Assuming your user object includes a token
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                setQuizzes(data.quizzes);
+            } catch (error) {
+                console.error('Failed to fetch quizzes:', error);
+                alert('Failed to fetch quizzes, please try again later');
+            }
+        };
+
+        fetchQuizzes();
+    }, [user]);
 
   return (
     <div className='App'>

@@ -16,7 +16,7 @@ import About from './Sites/AboutSite/About';
 import Quiz from './Sites/QuizSite/Quiz';
 import FileUpload from './Sites/FileUploadSite/FileUpload';
 import AuthProvider from "./AuthProvider";
-import OldQuizzes from './Sites/OldQuizzes/oldQuizzes';
+import OldQuizzes from './Sites/OldQuizzes/QuizPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
