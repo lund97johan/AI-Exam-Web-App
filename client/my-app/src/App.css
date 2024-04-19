@@ -101,6 +101,10 @@
   }
 }
 
+.Header-loggedin-container{
+  display: flex;
+}
+
 
 .App-header {
   background-color: #464e5c;

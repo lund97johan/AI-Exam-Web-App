@@ -3,6 +3,7 @@ import './FileUpload.css';
 
 import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
+import { useAuth } from '../../AuthProvider';
 
 function FileUpload(){
     return(
@@ -17,30 +18,44 @@ function FileUpload(){
 }
 
 function ReturnFileUpload() {
+    const [file, setFile] = useState(null);
+    const { user } = useAuth();
 
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0])
+
+    };
+    const handleFileUpload = () => {
+
+        const formData = new FormData();
+        formData.append('file', file);
+        if (user) {
+            formData.append('userId', user.user_id);  // Append user ID from context
+        }
     
-const [file, setFile] = useState(null);
+        // Get the file name
+        const fileName = file.name;
+        // Append the file name as the "title" to the form data
+        formData.append('title', fileName);
+        
+        //send data to server
+        fetch('/upload', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            alert('File uploaded successfully');
+        })
+        .catch(error => console.error('Error uploading file', error));
+    };
 
-const handleFileChange = (e) => {
-    setFile(e.target.files[0])
-
-};
-
-const handleFileUpload = () => {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    fetch('/upload', { method: 'POST', body: formData })
-    .then(response => response.json)
-    .then(data => console.log(data))
-.catch(error => console.error ('Error uploading file', error));
-};
-
-return (
-    <div>
-        <input type="file" onChange={handleFileChange} />
-        <button onClick={handleFileUpload}>Upload File</button>
-    </div>
+    return (
+        <div>
+            <input type="file" onChange={handleFileChange} />
+            <button onClick={handleFileUpload}>Upload File</button>
+        </div>
 );
 
 
