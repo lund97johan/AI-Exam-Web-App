@@ -101,7 +101,7 @@ function ReturnQuiz() {
         </div>
     );
 }
-
+//nu kommer jag inte kunna jobba på ett tag när jag slutar snusa, såååååååå GG
 
 /*
 function ReturnQuiz(){
