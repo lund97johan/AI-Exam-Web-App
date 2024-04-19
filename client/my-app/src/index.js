@@ -27,8 +27,9 @@ root.render(
         <Route path='/contactus' element={<ContactUs/>}/>
         <Route path='/BotInfo' element={<BotInfo/>}/>
         <Route path='/About' element={<About/>}/>
-        <Route path='/quiz' element={<Quiz/>}/>
-        <Route path='/old_quizzes' element={<OldQuizzes/>}/>
+
+        <Route path='/quiz/:quizName' element={<Quiz />} />
+        <Route path='/old_quizzes' element={<OldQuizzes />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

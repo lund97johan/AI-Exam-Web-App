@@ -4,22 +4,25 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
+import { useParams } from 'react-router-dom'; // Add this line
 
 function Quiz(){
+    const { quizName } = useParams(); // Add this line
     return(
         <div className='App'>
             <ReturnHeader/>
               <div className='App-body'>
-                <ReturnQuiz/>
+              <ReturnQuiz quizName={quizName}/> {/* Pass quizName as prop */}
             </div>
             <ReturnFooter/>
         </div>
     )
 }
 
-function ReturnQuiz(){
+function ReturnQuiz({ quizName }){
     return(
         <div className='Quiz-body'>
+             <h1>Here is {quizName}</h1> {/* Display the selected quiz name */}
             <div className='Quiz-nrOfQuestions' style={{gridColumn: 3}}>
                 <div className='Quiz-nrOfQuestions-text'>
                     number of questions
