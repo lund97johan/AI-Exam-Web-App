@@ -181,9 +181,12 @@ app.post("/login", async (req, res) => {
     });
 });
 
-app.post("/getQuizDetailed", async (req, res) => {
-    const { userId, quizId } = req.body;
-    con.query('CALL GetQuizQuestionsAnswersByUserIdAndQuizId(?, ?)', [userId, quizId], function(err, result, fields) {
+app.get("/getQuizDetailed/:quizId", async (req, res) => {
+    const quizId = req.params.quizId; // Get quizId from URL parameters
+    // Optionally, get userId from an authenticated session or token if needed
+    const userId = req.user?.id; // Assuming you have some authentication middleware
+
+    con.query('CALL GetQuizDetailsByQuizId(?)', [quizId], function(err, result, fields) {
         if (err) {
             console.error("Database error:", err);
             res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
@@ -192,8 +195,6 @@ app.post("/getQuizDetailed", async (req, res) => {
 
         if (result[0] && result[0].length > 0) {
             const quizData = JSON.parse(result[0][0].QuizData);
-
-            // Logging detailed quiz data
             console.log("Quiz Title:", quizData.title);
             quizData.questions.forEach(question => {
                 console.log("Question:", question.text);
@@ -204,10 +205,11 @@ app.post("/getQuizDetailed", async (req, res) => {
 
             res.json({ success: true, quiz: quizData });
         } else {
-            res.status(404).json({ success: false, message: "No quizzes found" });
+            res.status(404).json({ success: false, message: "No quiz found with ID " + quizId });
         }
     });
 });
+
 
 app.get("/getQuiz", async (req, res) => {
     const querystring = 'CALL GetQuizNamesByUserId(?)';

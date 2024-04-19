@@ -63,9 +63,7 @@ function ReturnQuizzes() {
                     <div key={index} className="quiz-item">
                         <div className="quiz-input">
                             <input className='quiz' type='text' value={quiz.title} disabled />
-                            <Link to={`/quiz/${encodeURIComponent(quiz)}`} className='quiz-button'>
-                                Take Quiz
-                            </Link>
+                            <Link to={`/quiz/${quiz.id}`} className="quiz-button">Take Quiz</Link>
                         </div>
                         <button className='remove-button'>Remove Quiz</button>
                     </div>
