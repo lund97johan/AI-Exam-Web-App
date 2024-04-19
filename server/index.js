@@ -83,6 +83,8 @@ app.post('/upload', (req, res) => {
               model: "gpt-3.5-turbo",
               messages: [{ role: "user", content: prompt }]
           });
+          console.log('Response:', response);
+         
 
           // Assuming response.data.choices[0].message.content contains a JSON string of questions
           const message = response.choices[0].message;
