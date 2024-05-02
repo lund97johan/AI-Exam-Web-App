@@ -13,11 +13,11 @@ function About(){
           <div className='App-body'>
               <div className="about-main">
                   <div className="hello-textbox">
-                      <p>Welcome to StudentSummary.com, your one-stop destination for quiz summaries!
+                      <p>Welcome to aiwebexam.com, your one-stop destination for quiz summaries!
 
                       Our website is designed to help students like you get a clear understanding of various quizzes and assessments you might encounter throughout your academic journey. Whether you're preparing for exams, looking to brush up on your knowledge, or simply curious about different subjects, we've got you covered.
 
-                      At StudentSummary.com, we believe that concise summaries are key to effective learning. Instead of sifting through lengthy textbooks or lecture notes, our summaries provide you with the essential information you need to know. Think of us as your personal study companion, simplifying complex topics into digestible chunks.</p>
+                      At aiwebexam.com, we believe that concise summaries are key to effective learning. Instead of sifting through lengthy textbooks or lecture notes, our summaries provide you with the essential information you need to know. Think of us as your personal study companion, simplifying complex topics into digestible chunks.</p>
                   </div>
                   <ReturnBilderBoxes/>
               </div>
@@ -33,7 +33,7 @@ function ReturnBilderBoxes() {
             <div className="about-rightside-containers">
                 <div className="picture-box-container">
                     <div className="picture-box">
-                        <img src="../Henrik.jpg" alt="Hänki" className="quiz-image"/>
+                        <img src="../Henrik.jpg" alt="Hänki" className="quiz-image-hanki"/>
                         <p className="quiz-text">Hänki</p>
                     </div>
                 </div>
