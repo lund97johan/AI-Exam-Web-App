@@ -26,7 +26,7 @@ const openai = new OpenAI({
 const dbManager = new DatabaseManager();
 
 dbManager.connect()
-    .then(() => dbManager.runSqlScript('sql/create_tables.sql'))
+    .then(() => dbManager.runSqlScript('sql/create_db.sql'))
     .then(() => dbManager.runSqlScript('sql/create_procedures.sql'))
     .then(() => dbManager.runShowProcedures())
     .then(procedures => {
