@@ -1,4 +1,7 @@
+// Importing file system module for file operations
 const fs = require('fs');
+
+// Importing MySQL driver, ensure version 2.x for compatibility with current methods
 const mysql = require('mysql2');
 
 /**
