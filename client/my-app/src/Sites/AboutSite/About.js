@@ -19,9 +19,7 @@ function About(){
 
                       At StudentSummary.com, we believe that concise summaries are key to effective learning. Instead of sifting through lengthy textbooks or lecture notes, our summaries provide you with the essential information you need to know. Think of us as your personal study companion, simplifying complex topics into digestible chunks.</p>
                   </div>
-                  <div className="image-container">
-                      <img src="Henrik.jpg" alt="Hank" />
-                  </div>
+                  
               </div>
           </div>
           <ReturnFooter/>

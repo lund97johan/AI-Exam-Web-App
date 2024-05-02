@@ -1,0 +1,25 @@
+/* About.css */
+.App-body {
+    padding-top: 20px; /* Add padding to push content down */
+}
+
+.test {
+    margin-top: 20px; /* Add margin to push content down */
+}
+
+.textbox-botInfo {
+    background-color: #f0f0f0; /* Background color */
+    padding: 20px; /* Padding around the text */
+    border-radius: 8px; /* Rounded corners */
+    margin-bottom: 20px; /* Spacing at the bottom */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Shadow effect */
+    text-align: left; /* Align text to the left */
+    width: 60%; /* Set the width of the text box */
+    margin: auto; /* Center the text box horizontally */
+    margin-top: 50px; /* Move the text box further down */
+}
+
+.textbox-botInfo p {
+    font-size: 18px; /* Font size */
+    color: black; /* Text color */
+}

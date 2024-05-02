@@ -25,14 +25,3 @@
     color: black; /* Text color */
 }
 
-/* About.css */
-.image-container {
-    text-align: center; /* Center the image horizontally */
-}
-
-.image-container img {
-    max-width: 100%; /* Ensure the image doesn't exceed its container */
-    height: auto; /* Maintain aspect ratio */
-    margin-top: 20px; /* Add some space above the image */
-}
-
