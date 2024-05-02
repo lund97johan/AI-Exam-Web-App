@@ -31,23 +31,31 @@ function ReturnBilderBoxes() {
     return (
         <div className="about-rightside">
             <div className="about-rightside-containers">
-                <div className="picture-box">
-                    <img src="../Henrik.jpg" alt="Hänki" className="quiz-image"/>
-                    <p className="quiz-text">Hänki</p>
+                <div className="picture-box-container">
+                    <div className="picture-box">
+                        <img src="../Henrik.jpg" alt="Hänki" className="quiz-image"/>
+                        <p className="quiz-text">Hänki</p>
+                    </div>
                 </div>
-                <div className={"picture-box"}>
-                    <img src="../Johan.jpg" alt="John" className="quiz-image"/>
-                    <p className="quiz-text">John</p>
+                <div className="picture-box-container">
+                    <div className="picture-box">
+                        <img src="../Johan.jpg" alt="john" className="quiz-image"/>
+                        <p className="quiz-text">John</p>
+                    </div>
                 </div>
             </div>
             <div className="about-rightside-containers">
-                <div className="picture-box">
-                    <img src="../Jesper.jpg" alt="Jeppe" className="quiz-image"/>
-                    <p className="quiz-text">Jeppe</p>
+                <div className="picture-box-container">
+                    <div className="picture-box">
+                        <img src="../Jesper.jpg" alt="jeppe" className="quiz-image"/>
+                        <p className="quiz-text">Jeppe</p>
+                    </div>
                 </div>
-                <div className="picture-box">
-                    <img src="../Nils.jpg" alt="nilsfri" className="quiz-image"/>
-                    <p className="quiz-text">nilsfri</p>
+                <div className="picture-box-container">
+                    <div className="picture-box">
+                        <img src="../Nils.jpg" alt="nils" className="quiz-image"/>
+                        <p className="quiz-text">Nilsfri</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,10 +66,10 @@ function SetInStartBox() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-  
-    const handleLogin = async (event)=>{
-      event.preventDefault();
-      const loginDetails = {username, password};
+
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        const loginDetails = {username, password};
       try {
         const response = await fetch('/login', {
           method: 'POST',
