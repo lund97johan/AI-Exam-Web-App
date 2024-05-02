@@ -20,15 +20,17 @@ function Quiz(){
     )
 }
 function ReturnQuiz() {
+    // State and variables
     const { quizId } = useParams();
     const { user } = useAuth();
     const navigate = useNavigate();
     const [quiz, setQuiz] = useState(null);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // For navigating questions
-
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [selectedAnswer, setSelectedAnswer] = useState({}); // State to store selected answers
+    
+    // Fetching quiz data
     useEffect(() => {
         if (!user) {
-            console.log("Redirecting because no user is logged in.");
             navigate("/login");
             return;
         }
@@ -60,6 +62,14 @@ function ReturnQuiz() {
         return <div>Loading...</div>;
     }
 
+    // Handle selection of an answer
+    const handleAnswerSelect = (questionId, answerId) => {
+        setSelectedAnswer({
+            ...selectedAnswer,
+            [questionId]: answerId
+        });
+    };
+
     const currentQuestion = quiz.questions[currentQuestionIndex];
 
     return (
@@ -85,7 +95,13 @@ function ReturnQuiz() {
                         {answer.text}
                     </div>
                     <label className='Quiz-question-answer-box-container' style={{ gridColumn: 3 }}>
-                        <input type="checkbox" name={`question_${currentQuestion.id}`} value={answer.id} />
+                        <input 
+                            type="radio" 
+                            name={`question_${currentQuestion.id}`} 
+                            value={answer.id} 
+                            checked={selectedAnswer[currentQuestion.id] === answer.id} 
+                            onChange={() => handleAnswerSelect(currentQuestion.id, answer.id)}
+                        />
                         <span className="Quiz-question-answer-box"></span>
                     </label>
                 </div>

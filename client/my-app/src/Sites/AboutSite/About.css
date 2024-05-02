@@ -1,0 +1,38 @@
+/* About.css */
+.App-body {
+    padding-top: 20px; /* Add padding to push content down */
+}
+
+.test {
+    margin-top: 20px; /* Add margin to push content down */
+}
+
+.hello-textbox {
+    background-color: #f0f0f0; /* Background color */
+    padding: 20px; /* Padding around the text */
+    border-radius: 8px; /* Rounded corners */
+    margin-bottom: 20px; /* Spacing at the bottom */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Shadow effect */
+    text-align: left; /* Align text to the left */
+    width: 20%; /* Set the width of the text box */
+    margin: auto; /* Center the text box horizontally */
+    margin-left: 10%; /* Move the text box more to the left */
+    margin-top: 50px; /* Move the text box further down */
+}
+
+.hello-textbox p {
+    font-size: 18px; /* Font size */
+    color: black; /* Text color */
+}
+
+/* About.css */
+.image-container {
+    text-align: center; /* Center the image horizontally */
+}
+
+.image-container img {
+    max-width: 100%; /* Ensure the image doesn't exceed its container */
+    height: auto; /* Maintain aspect ratio */
+    margin-top: 20px; /* Add some space above the image */
+}
+

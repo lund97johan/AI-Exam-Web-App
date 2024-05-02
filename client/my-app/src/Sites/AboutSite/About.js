@@ -7,18 +7,26 @@ import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
 
 function About(){
-    return(
-        <div className='App'>
-            <ReturnHeader/>
-              <div className='App-body'>
-                <div className="test">
-                    de
-                </div>
-                
+  return(
+      <div className='App'>
+          <ReturnHeader/>
+          <div className='App-body'>
+              <div className="test">
+                  <div className="hello-textbox">
+                      <p>Welcome to StudentSummary.com, your one-stop destination for quiz summaries!
+
+                      Our website is designed to help students like you get a clear understanding of various quizzes and assessments you might encounter throughout your academic journey. Whether you're preparing for exams, looking to brush up on your knowledge, or simply curious about different subjects, we've got you covered.
+
+                      At StudentSummary.com, we believe that concise summaries are key to effective learning. Instead of sifting through lengthy textbooks or lecture notes, our summaries provide you with the essential information you need to know. Think of us as your personal study companion, simplifying complex topics into digestible chunks.</p>
+                  </div>
+                  <div className="image-container">
+                      <img src="Henrik.jpg" alt="Hank" />
+                  </div>
               </div>
-            <ReturnFooter/>
-        </div>
-      )
+          </div>
+          <ReturnFooter/>
+      </div>
+  )
 }
 
 function SetInStartBox() {
