@@ -5,12 +5,14 @@ const express = require("express");
 const multer = require('multer');
 const OpenAI = require('openai');
 const pdfParse = require('pdf-parse');
-var mysql = require('mysql');
+const mysql = require('mysql');
 const fs = require('fs');
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(express.json());
 
+// Project Imports
+const DatabaseManager = require('./DatabaseManager');
 
 
 // Correct way to configure the OpenAI API client, should probably store my api key in a .env file seperate from alla er, speciellt nils. men men 
@@ -18,16 +20,24 @@ const openai = new OpenAI({
   apiKey: "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"
 })
 
-// the connection to the mysql database
-var con = mysql.createConnection({
-  host: "localhost", //här får man lägga till sina egna inställningar om man vill fixa
-  user: "newuser",
-  password: "hejpådigapa",
-  database: "test",
-  port: 3306
-});
 
-//setup database from file
+
+// Connect to and setup database
+const dbManager = new DatabaseManager();
+
+dbManager.connect()
+    .then(() => dbManager.runSqlScript('./db/create_db.sql'))
+    .then(() => dbManager.runSqlScript('./db/setup_tables.sql'))
+    .then(() => dbManager.runSqlScript('./db/seed_data.sql'))
+    .then(() => {
+        console.log('All scripts executed successfully.');
+        dbManager.close();
+    })
+    .catch(err => {
+        console.error('An error occurred:', err);
+    });
+
+
 
 
 //something something saying where to store the file the user uploads to the server momentarily, we will delete it after we have used it

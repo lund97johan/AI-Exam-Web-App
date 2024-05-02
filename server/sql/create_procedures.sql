@@ -27,9 +27,6 @@ BEGIN
     GROUP BY q.quiz_id;
 END
 
-
-
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetQuizNamesByUserId`(IN `userid` INT)
 BEGIN
     -- Selecting only the titles of quizzes created by the specified user ID
@@ -38,9 +35,6 @@ BEGIN
     WHERE user_id = userid;
     
 END
-
-
-
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetQuizzesQuestionsAnswersByUserId`(IN `user_id` INT)
 BEGIN
@@ -70,9 +64,6 @@ BEGIN
     WHERE q.user_id = user_id
     GROUP BY q.quiz_id;
 END
-
-
-
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertQuizData`(IN quizData JSON)
 BEGIN
@@ -120,14 +111,6 @@ BEGIN
     END WHILE;
 END
 
-
-
-
-
-
-
-
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `login_user`(
     IN p_identifier VARCHAR(100),
     IN p_password_hash VARCHAR(255)
@@ -156,12 +139,6 @@ BEGIN
         SET MESSAGE_TEXT = 'Invalid credentials';
     END IF;
 END
-
-
-
-
-
-
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `register_user`(
 	IN p_username VARCHAR(50),
