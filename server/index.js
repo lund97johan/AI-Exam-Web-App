@@ -27,7 +27,8 @@ const dbManager = new DatabaseManager();
 
 dbManager.connect()
     .then(() => dbManager.runSqlScript('sql/create_db.sql'))
-    .then(() => dbManager.runSqlScript('sql/create_procedures.sql'))
+    //TODO procedures don't work yet
+    //.then(() => dbManager.runSqlScript('sql/create_procedures.sql'))
     .then(() => dbManager.runShowProcedures())
     .then(procedures => {
         console.log('Procedures:', procedures);

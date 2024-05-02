@@ -33,27 +33,37 @@ class DatabaseManager {
     }
 
     runSqlScript(filePath) {
+        // Tracer
+        console.log(`TRACER DatabaseManager.js.runSqlScript: Running SQL script from: ${filePath}`);
+
         return new Promise((resolve, reject) => {
             const sqlScript = fs.readFileSync(filePath, { encoding: 'utf-8' });
-            const sqlCommands = sqlScript.split(';');
+            const sqlCommands = sqlScript.split(';').filter(sql => sql.trim()); // Filter out any empty commands
 
-            sqlCommands.forEach((sql, index) => {
-                if (sql.trim()) {
-                    this.connection.query(sql, (err, results, fields) => {
+            const runCommand = async (command) => {
+                return new Promise((resolve, reject) => {
+                    this.connection.query(command, (err, results, fields) => {
                         if (err) {
-                            console.error(`Error executing command from ${filePath}: ${err.message}`);
+                            console.error(`Error executing command: ${err.message}`);
                             reject(err);
                         } else {
-                            if (sql.trim().toUpperCase().startsWith('SHOW')) {
-                                console.log(results); // This will log the result of SHOW TABLES
+                            if (command.trim().toUpperCase().startsWith('SHOW')) {
+                                console.log(results); // Log the result of SHOW TABLES
                             }
-                            if (index === sqlCommands.length - 1) { // Check if it's the last command
-                                resolve();
-                            }
+                            resolve();
                         }
                     });
+                });
+            };
+
+            const executeCommands = async () => {
+                for (const command of sqlCommands) {
+                    await runCommand(command);
                 }
-            });
+                resolve(); // Resolve only after all commands have been executed
+            };
+
+            executeCommands().catch(reject);
         });
     }
 
