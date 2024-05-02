@@ -11,7 +11,7 @@ function About(){
       <div className='App'>
           <ReturnHeader/>
           <div className='App-body'>
-              <div className="test">
+              <div className="about-main">
                   <div className="hello-textbox">
                       <p>Welcome to StudentSummary.com, your one-stop destination for quiz summaries!
 
@@ -19,12 +19,39 @@ function About(){
 
                       At StudentSummary.com, we believe that concise summaries are key to effective learning. Instead of sifting through lengthy textbooks or lecture notes, our summaries provide you with the essential information you need to know. Think of us as your personal study companion, simplifying complex topics into digestible chunks.</p>
                   </div>
-                  
+                  <ReturnBilderBoxes/>
               </div>
           </div>
           <ReturnFooter/>
       </div>
   )
+}
+
+function ReturnBilderBoxes() {
+    return (
+        <div className="about-rightside">
+            <div className="about-rightside-containers">
+                <div className="picture-box">
+                    <img src="../Henrik.jpg" alt="Hänki" className="quiz-image"/>
+                    <p className="quiz-text">Hänki</p>
+                </div>
+                <div className={"picture-box"}>
+                    <img src="../Johan.jpg" alt="John" className="quiz-image"/>
+                    <p className="quiz-text">John</p>
+                </div>
+            </div>
+            <div className="about-rightside-containers">
+                <div className="picture-box">
+                    <img src="../Jesper.jpg" alt="Jeppe" className="quiz-image"/>
+                    <p className="quiz-text">Jeppe</p>
+                </div>
+                <div className="picture-box">
+                    <img src="../Nils.jpg" alt="nilsfri" className="quiz-image"/>
+                    <p className="quiz-text">nilsfri</p>
+                </div>
+            </div>
+        </div>
+    )
 }
 
 function SetInStartBox() {
