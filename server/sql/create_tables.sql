@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS test;
+CREATE DATABASE AI_Exam_Web_App_DB;
+USE AI_Exam_Web_App_DB;
 
 -- Users
 CREATE TABLE `users` (
@@ -68,3 +71,5 @@ CREATE TABLE `user_quiz_attempts` (
   CONSTRAINT `fk_attempt_quiz_id` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
   CONSTRAINT `fk_attempt_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 );
+
+SHOW TABLES;
