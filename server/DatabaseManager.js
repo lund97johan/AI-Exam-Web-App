@@ -1,20 +1,18 @@
 const fs = require('fs');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 class DatabaseManager {
-    constructor(config) {
-        // Define the database connection configuration internally
+    constructor() {
         this.config = {
             host: "localhost",
-            user: "newuser",
-            password: "hejpådigapa",
-            database: "test",
+            user: "root",
+            password: "password",
+            database: "AI_Exam_Web_App_DB",
             port: 3306
         };
-        this.connection = null;  // Initially, there is no connection
+        this.connection = null;
     }
 
-    // Method to establish a database connection
     connect() {
         return new Promise((resolve, reject) => {
             if (this.connection) {
@@ -34,28 +32,31 @@ class DatabaseManager {
         });
     }
 
-    // Method to run SQL script from a file
     runSqlScript(filePath) {
         return new Promise((resolve, reject) => {
             const sqlScript = fs.readFileSync(filePath, { encoding: 'utf-8' });
             const sqlCommands = sqlScript.split(';');
 
-            sqlCommands.forEach(sql => {
+            sqlCommands.forEach((sql, index) => {
                 if (sql.trim()) {
-                    this.connection.query(sql, (err, result) => {
+                    this.connection.query(sql, (err, results, fields) => {
                         if (err) {
                             console.error(`Error executing command from ${filePath}: ${err.message}`);
                             reject(err);
+                        } else {
+                            if (sql.trim().toUpperCase().startsWith('SHOW')) {
+                                console.log(results); // This will log the result of SHOW TABLES
+                            }
+                            if (index === sqlCommands.length - 1) { // Check if it's the last command
+                                resolve();
+                            }
                         }
-                        console.log(`Successfully executed command from ${filePath}`);
                     });
                 }
             });
-            resolve();
         });
     }
 
-    // Method to close the database connection
     close() {
         if (this.connection) {
             this.connection.end();

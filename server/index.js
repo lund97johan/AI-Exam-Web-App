@@ -5,7 +5,7 @@ const express = require("express");
 const multer = require('multer');
 const OpenAI = require('openai');
 const pdfParse = require('pdf-parse');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const fs = require('fs');
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -26,9 +26,7 @@ const openai = new OpenAI({
 const dbManager = new DatabaseManager();
 
 dbManager.connect()
-    .then(() => dbManager.runSqlScript('./db/create_db.sql'))
-    .then(() => dbManager.runSqlScript('./db/setup_tables.sql'))
-    .then(() => dbManager.runSqlScript('./db/seed_data.sql'))
+    .then(() => dbManager.runSqlScript('sql/create_tables.sql'))
     .then(() => {
         console.log('All scripts executed successfully.');
         dbManager.close();
