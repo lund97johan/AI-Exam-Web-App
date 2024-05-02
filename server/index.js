@@ -27,6 +27,9 @@ var con = mysql.createConnection({
   port: 3306
 });
 
+//setup database from file
+
+
 //something something saying where to store the file the user uploads to the server momentarily, we will delete it after we have used it
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
