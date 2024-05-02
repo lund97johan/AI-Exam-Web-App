@@ -25,7 +25,7 @@ BEGIN
     JOIN Questions qu ON q.quiz_id = qu.quiz_id
     WHERE q.quiz_id = quiz_id
     GROUP BY q.quiz_id;
-END
+END;
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetQuizNamesByUserId`(IN `userid` INT)
 BEGIN
@@ -34,7 +34,7 @@ BEGIN
     FROM Quizzes
     WHERE user_id = userid;
     
-END
+END;
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetQuizzesQuestionsAnswersByUserId`(IN `user_id` INT)
 BEGIN
@@ -63,7 +63,7 @@ BEGIN
     JOIN Questions qu ON q.quiz_id = qu.quiz_id
     WHERE q.user_id = user_id
     GROUP BY q.quiz_id;
-END
+END;
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertQuizData`(IN quizData JSON)
 BEGIN
@@ -109,7 +109,7 @@ BEGIN
 
         SET v_index = v_index + 1;
     END WHILE;
-END
+END;
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `login_user`(
     IN p_identifier VARCHAR(100),
@@ -138,7 +138,7 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Invalid credentials';
     END IF;
-END
+END;
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `register_user`(
 	IN p_username VARCHAR(50),
@@ -173,4 +173,4 @@ BEGIN
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'A user with this email already exists.';
 		END IF;
 	END IF;
-END
+END;

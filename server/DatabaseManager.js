@@ -7,13 +7,16 @@ class DatabaseManager {
             host: "localhost",
             user: "root",
             password: "password",
-            database: "AI_Exam_Web_App_DB",
-            port: 3306
+            database: "my_database",
+            port: 3306,
         };
         this.connection = null;
     }
 
     connect() {
+        // Tracer
+        console.log("TRACER DatabaseManager.js.connect: Attempting to connect to the database...");
+
         return new Promise((resolve, reject) => {
             if (this.connection) {
                 resolve();
@@ -32,9 +35,9 @@ class DatabaseManager {
         });
     }
 
-    runSqlScript(filePath) {
+    runTableScript(filePath) {
         // Tracer
-        console.log(`TRACER DatabaseManager.js.runSqlScript: Running SQL script from: ${filePath}`);
+        console.log(`TRACER DatabaseManager.js.runTableScript: Running SQL script from: ${filePath}`);
 
         return new Promise((resolve, reject) => {
             const sqlScript = fs.readFileSync(filePath, { encoding: 'utf-8' });
@@ -67,14 +70,45 @@ class DatabaseManager {
         });
     }
 
+    runProceduresScript(filePath) {
+        // Tracer
+        console.log("TRACER DatabaseManager.js.runProceduresScript: Attempting to connect to the database...");
+
+        console.log(`Running SQL script with multiple statements from: ${filePath}`);
+        const multiStatementConfig = { ...this.config, multipleStatements: true };
+        const multiStatementConnection = mysql.createConnection(multiStatementConfig);
+
+        return new Promise((resolve, reject) => {
+            fs.readFile(filePath, { encoding: 'utf-8' }, (err, sqlScript) => {
+                if (err) {
+                    console.error(`Error reading SQL file: ${err.message}`);
+                    reject(err);
+                    return;
+                }
+
+                multiStatementConnection.query(sqlScript, (err, results) => {
+                    multiStatementConnection.end(); // Ensure to close the connection after execution
+                    if (err) {
+                        console.error(`Error executing SQL script: ${err.message}`);
+                        reject(err);
+                    } else {
+                        console.log('Multiple statements executed successfully');
+                        resolve(results);
+                    }
+                });
+            });
+        });
+    }
+
+
     //Used to display all procedures, to ensure everything went well
     runShowProcedures() {
         return new Promise((resolve, reject) => {
             const sql = `
-            SELECT ROUTINE_NAME, ROUTINE_DEFINITION
-            FROM information_schema.ROUTINES
-            WHERE ROUTINE_SCHEMA = '${this.config.database}' AND ROUTINE_TYPE = 'PROCEDURE';
-        `;
+                SELECT ROUTINE_NAME, ROUTINE_DEFINITION
+                FROM information_schema.ROUTINES
+                WHERE ROUTINE_SCHEMA = '${this.config.database}' AND ROUTINE_TYPE = 'PROCEDURE';
+            `;
             this.connection.query(sql, (err, results) => {
                 if (err) {
                     console.error('Error fetching procedures:', err.message);
@@ -86,7 +120,6 @@ class DatabaseManager {
             });
         });
     }
-
 
     close() {
         if (this.connection) {
