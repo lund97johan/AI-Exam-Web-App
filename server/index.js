@@ -27,6 +27,12 @@ const dbManager = new DatabaseManager();
 
 dbManager.connect()
     .then(() => dbManager.runSqlScript('sql/create_tables.sql'))
+    .then(() => dbManager.runSqlScript('sql/create_procedures.sql'))
+    .then(() => dbManager.runShowProcedures())
+    .then(procedures => {
+        console.log('Procedures:', procedures);
+        dbManager.close();
+    })
     .then(() => {
         console.log('All scripts executed successfully.');
         dbManager.close();

@@ -57,6 +57,27 @@ class DatabaseManager {
         });
     }
 
+    //Used to display all procedures, to ensure everything went well
+    runShowProcedures() {
+        return new Promise((resolve, reject) => {
+            const sql = `
+            SELECT ROUTINE_NAME, ROUTINE_DEFINITION
+            FROM information_schema.ROUTINES
+            WHERE ROUTINE_SCHEMA = '${this.config.database}' AND ROUTINE_TYPE = 'PROCEDURE';
+        `;
+            this.connection.query(sql, (err, results) => {
+                if (err) {
+                    console.error('Error fetching procedures:', err.message);
+                    reject(err);
+                } else {
+                    console.log('Stored Procedures:', results);
+                    resolve(results);
+                }
+            });
+        });
+    }
+
+
     close() {
         if (this.connection) {
             this.connection.end();
