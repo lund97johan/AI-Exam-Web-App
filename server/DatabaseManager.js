@@ -1,7 +1,18 @@
 const fs = require('fs');
 const mysql = require('mysql2');
 
+/**
+ * Manages database operations including connecting to the database,
+ * executing SQL scripts, and closing the database connection.
+ * @class
+ * @classdesc This class provides methods to manage database operations like connection,
+ * script execution, and closing the connection.
+ * @author Mattias Fridsén
+ */
 class DatabaseManager {
+    /**
+     * Constructs a new instance of the DatabaseManager class with default database configuration.
+     */
     constructor() {
         this.config = {
             host: "localhost",
@@ -13,6 +24,10 @@ class DatabaseManager {
         this.connection = null;
     }
 
+    /**
+     * Connects to the database. If a connection is already established, it returns a resolved promise.
+     * @returns {Promise<void>} A promise that resolves if the connection is successful, or rejects if it fails.
+     */
     connect() {
         // Tracer
         console.log("TRACER DatabaseManager.js.connect: Attempting to connect to the database...");
@@ -35,6 +50,11 @@ class DatabaseManager {
         });
     }
 
+    /**
+     * Executes a SQL script that consists of multiple table-related commands from a file.
+     * @param {string} filePath - The path to the SQL script file.
+     * @returns {Promise<void>} A promise that resolves when all commands have been executed, or rejects if an error occurs.
+     */
     runTableScript(filePath) {
         // Tracer
         console.log(`TRACER DatabaseManager.js.runTableScript: Running SQL script from: ${filePath}`);
@@ -70,6 +90,11 @@ class DatabaseManager {
         });
     }
 
+    /**
+     * Executes a SQL script with multiple stored procedures from a specified file.
+     * @param {string} filePath - The path to the file containing the SQL procedures.
+     * @returns {Promise<void>} A promise that resolves when all procedures are executed, or rejects if an error occurs.
+     */
     runProceduresScript(filePath) {
         // Tracer
         console.log("TRACER DatabaseManager.js.runProceduresScript: Attempting to connect to the database...");
@@ -100,8 +125,10 @@ class DatabaseManager {
         });
     }
 
-
-    //Used to display all procedures, to ensure everything went well
+    /**
+     * Retrieves and displays all stored procedures from the database schema.
+     * @returns {Promise<Array>} A promise that resolves with the stored procedures, or rejects if an error occurs.
+     */
     runShowProcedures() {
         return new Promise((resolve, reject) => {
             const sql = `
@@ -121,6 +148,9 @@ class DatabaseManager {
         });
     }
 
+    /**
+     * Closes the database connection if it exists.
+     */
     close() {
         if (this.connection) {
             this.connection.end();
