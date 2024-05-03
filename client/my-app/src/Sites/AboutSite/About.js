@@ -16,29 +16,8 @@ function About(){
                       <p>About Us
                       </p>
                       <p>
-                          AIWebQuiz: Your Gateway to Smart Learning
-
-
-                          Welcome to AIWebQuiz, a cutting-edge platform designed to transform the way you study. Here,
-                          we convert your PDF materials into interactive quizzes tailored to your learning needs.
-
-                          How It Works
-
-                          Simply upload your educational PDFs, and let our sophisticated AI, powered by ChatGPT, dissect
-                          the material to craft quizzes that challenge and engage you. It’s a straightforward process
-                          aimed at reinforcing learning and making study sessions as efficient as possible.
-
-                          Our Vision
-
-                          We believe in the power of AI to revolutionize educational experiences by creating
-                          personalized learning pathways. Our mission is to help students maximize their potential
-                          through tools that adapt to their unique learning styles.
-
-                          Join Us
-
-                          Start your journey towards smarter learning today. Whether you're preparing for a major exam
-                          or just brushing up on a topic, our platform is designed to assist you.
-
+                          <p>At AIWebQuiz, our development is not just about software; it's about cultivating an atmosphere of refined taste and intellectual enrichment. We are a team of highly skilled, motivated, and sophisticated individuals who not only excel in technology but also have a profound appreciation for the finer things in life—be it the complex narratives of classical literature, the subtle nuances of fine art, or the rich, intricate flavors of vintage wines.</p>
+                          <p>Join us at AIWebQuiz, where we blend the art of learning with the art of living. Explore our platform and discover how it mirrors the sophistication of learners who not only seek knowledge but also value the cultural richness that shapes our world. Let AIWebQuiz be your portal to a learning experience where knowledge meets the elegance of fine arts and the discerning taste of a well-aged wine.</p>
                           And remember, steer clear of The Foul Tempting Ghouls of procrastination and misinformation.
                           Explore our website to learn more about how our tools can enhance your academic
                           performance.
@@ -60,7 +39,7 @@ function ReturnBilderBoxes() {
         <div className="about-rightside">
                 <div className="picture-box-container">
                     <div className="picture-box">
-                        <img src="../Henrik.jpg" alt="Hänki" className="quiz-image-hanki"/>
+                        <img src="../Henrik2.jpg" alt="Hänki" className="quiz-image-hanki"/>
                         <p className="quiz-text">Hänki</p>
                     </div>
                 </div>
@@ -79,7 +58,7 @@ function ReturnBilderBoxes() {
                 </div>
                 <div className="picture-box-container">
                     <div className="picture-box">
-                        <img src="../Nils.jpg" alt="nils" className="quiz-image"/>
+                        <img src="../Nils.jpg" alt="nils" className="quiz-image-nilsfri"/>
                         <p className="quiz-text">Nilsfri</p>
                     </div>
                 </div>
