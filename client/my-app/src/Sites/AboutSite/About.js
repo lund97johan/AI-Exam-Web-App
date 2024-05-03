@@ -13,11 +13,39 @@ function About(){
           <div className='App-body'>
               <div className="about-main">
                   <div className="hello-textbox">
-                      <p>Welcome to aiwebexam.com, your one-stop destination for quiz summaries!
+                      <p>About Us
+                      </p>
+                      <p>
+                          AIWebQuiz: Your Gateway to Smart Learning
 
-                      Our website is designed to help students like you get a clear understanding of various quizzes and assessments you might encounter throughout your academic journey. Whether you're preparing for exams, looking to brush up on your knowledge, or simply curious about different subjects, we've got you covered.
 
-                      At aiwebexam.com, we believe that concise summaries are key to effective learning. Instead of sifting through lengthy textbooks or lecture notes, our summaries provide you with the essential information you need to know. Think of us as your personal study companion, simplifying complex topics into digestible chunks.</p>
+                          Welcome to AIWebQuiz, a cutting-edge platform designed to transform the way you study. Here,
+                          we convert your PDF materials into interactive quizzes tailored to your learning needs.
+
+                          How It Works
+
+                          Simply upload your educational PDFs, and let our sophisticated AI, powered by ChatGPT, dissect
+                          the material to craft quizzes that challenge and engage you. It’s a straightforward process
+                          aimed at reinforcing learning and making study sessions as efficient as possible.
+
+                          Our Vision
+
+                          We believe in the power of AI to revolutionize educational experiences by creating
+                          personalized learning pathways. Our mission is to help students maximize their potential
+                          through tools that adapt to their unique learning styles.
+
+                          Join Us
+
+                          Start your journey towards smarter learning today. Whether you're preparing for a major exam
+                          or just brushing up on a topic, our platform is designed to assist you.
+
+                          And remember, steer clear of The Foul Tempting Ghouls of procrastination and misinformation.
+                          Explore our website to learn more about how our tools can enhance your academic
+                          performance.
+                      </p>
+                          <p>
+                              If you have any questions, please contact us on our "contact" page, where out
+                              intern jesper will be receiving and answering any of your questions. Happy studying!</p>
                   </div>
                   <ReturnBilderBoxes/>
               </div>
