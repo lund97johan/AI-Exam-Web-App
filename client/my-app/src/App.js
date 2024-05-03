@@ -2,23 +2,31 @@
 
 import './App.css';
 
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import {Link } from "react-router-dom";
 import { useAuth } from './AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
 
 function App(){
-  return (
-    <div className='App'>
-      <ReturnHeader/>
-      <div className='App-body'>
-        <LoginOrRegisterColumns column={3} row ={2}/>
-      </div>
-      <ReturnFooter/>
-       
-    </div>
-  )
+    const {user, logout} = useAuth();// Use the custom hook correctly
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (user) {
+            navigate("/dashboard");
+            return;
+        }
+    });
+    return(
+        <div className='App'>
+            <ReturnHeader/>
+            <div className='App-body'>
+              <LoginOrRegisterColumns column={3} row={2}/>
+            </div>
+            <ReturnFooter/>
+        </div>
+    )
+
 }
 
 function ReturnMenu(){
@@ -73,61 +81,51 @@ function ReturnDropDown({gridColumn = 2, gridRow = 1}){
         </div>
   )
 }
+function ReturnHeader() {
+    const { user } = useAuth(); // Get user authentication status
 
-function ReturnHeader(){
-  return (
-    <div className='App-header'>
-      <div className='Header-container'>
-      <div className='Header-text-dropdown' style={{gridColumn: 1}}> tjena  {/* dropdown menyers nu poggers */}
-          <div className='Header-text-dropdown-content'>
-            <div className='Header-text-dropdown-content-grid'>
-              <text >
-                <Link to ="/quiz">
-                Ta Quiz
-                </Link>
-                </text>
-              <text >
-                <Link to = "/FileUpload">
-                File Upload
-                </Link>
-              </text>
-              <text >test</text>
+    return (
+        <div className='App-header'>
+            <div className='Header-container'>
+                {user && ( // Only display these elements if the user is logged in
+                    <div className='Header-text-dropdown' style={{gridColumn: 1}}>
+                        tjena  {/* Dropdown menus now visible only to logged-in users */}
+                        <div className='Header-text-dropdown-content'>
+                            <div className='Header-text-dropdown-content-grid'>
+                                <text>
+                                    <Link to="/quiz">Take Quiz</Link>
+                                </text>
+                                <text>
+                                    <Link to="/FileUpload">File Upload</Link>
+                                </text>
+                                <text>test</text>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                <div className='Header-text' style={{gridColumn: 3}}>
+                    <Link to="/BotInfo">What can our bot do?</Link>
+                </div>
+                <div className='Header-text'>
+                    <Link to='/About'>About</Link>
+                </div>
+                <div className='Header-text'>
+                    <Link to="/">
+                        Home
+                    </Link>
+                </div>
+                {user && ( // Only show Old Quizzes if the user is logged in
+                    <div className='Header-text'>
+                        <Link to='/old_quizzes'>Old Quizzes</Link>
+                    </div>
+                )}
+                <div className='Header-text'>
+                    <Link to="/contactus">Contact Us</Link>
+                </div>
+                <LoggedInUser/>
             </div>
-          </div>
         </div>
-        <div className='Header-text' style={{gridColumn: 3}}>
-          <Link to ="/BotInfo">
-            What can our bot do?
-          </Link>
-        </div>
-        <div className='Header-text'>
-            <Link to='/About'>
-              About
-            </Link>
-          </div>
-          <div className='Header-text'>
-          <Link to ="/">
-            Home
-          </Link>
-        </div>
-
-          <div className='Header-text'> 
-          <Link to='/old_quizzes'>
-            Old Quizzes
-          </Link>
-          
-          </div>
-
-        <div className='Header-text'>
-          <Link to ="/contactus">
-          Contact Us
-          </Link>
-        </div>
-
-        <LoggedInUser/>
-      </div>
-    </div>
-  )
+    );
 }
 
 function LoggedInUser() {
