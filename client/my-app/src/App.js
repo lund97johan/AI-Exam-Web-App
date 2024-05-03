@@ -81,6 +81,7 @@ function ReturnDropDown({gridColumn = 2, gridRow = 1}){
         </div>
   )
 }
+
 function ReturnHeader() {
     const { user } = useAuth(); // Get user authentication status
 
@@ -110,7 +111,8 @@ function ReturnHeader() {
                     <Link to='/About'>About</Link>
                 </div>
                 <div className='Header-text'>
-                    <Link to="/">
+                    {/* Conditional rendering of the Home link based on user status */}
+                    <Link to={user ? "/dashboard" : "/"}>
                         Home
                     </Link>
                 </div>
