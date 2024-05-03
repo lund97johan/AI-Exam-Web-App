@@ -19,8 +19,8 @@ class DatabaseManager {
     constructor() {
         this.config = {
             host: "localhost",
-            user: "newuser",
-            password: "hejpådigapa",
+            user: "root",
+            password: "password",
             database: "AI_Exam_Web_App_DB",
             port: 3306,
         };
@@ -58,11 +58,12 @@ class DatabaseManager {
         console.log("Initializing database...");
         return this.connect()
             .then(() => this.runTableScript('sql/create_db.sql'))
+            .then(() => this.runTableScript('sql/sample_data.sql'))
             .then(() => this.runProceduresScript('sql/create_procedures.sql'))
-            .then(() => this.runShowProcedures())
-            .then(procedures => {
+            //.then(() => this.runShowProcedures())
+            /*.then(procedures => {
                 console.log('Procedures:', procedures);
-            })
+            })*/
             .catch(err => {
                 console.error('An error occurred during database initialization:', err);
                 throw err;  // Re-throw to allow caller to handle it
