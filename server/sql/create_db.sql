@@ -15,6 +15,11 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`)
 );
 
+-- Sample user for testing purposes
+INSERT INTO `users` (`username`, `email`, `firstname`, `lastname`, `password_hash`, `created_at`, `last_login`)
+VALUES ('user', 'example@mail.com', 'user', 'mcUser', 'password', NOW(), NOW());
+
+
 -- Quizzes, depends on Users
 CREATE TABLE `quizzes` (
   `quiz_id` int NOT NULL AUTO_INCREMENT,
