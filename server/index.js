@@ -242,7 +242,7 @@ app.get("/getQuizDetailed/:quizId", async (req, res) => {
         }
 
         if (result[0] && result[0].length > 0) {
-            const quizData = JSON.parse(result[0][0].QuizData);
+            const quizData = JSON.parse(JSON.stringify(result[0][0].QuizData));
             console.log("Quiz Title:", quizData.title);
             quizData.questions.forEach(question => {
                 console.log("Question:", question.text);

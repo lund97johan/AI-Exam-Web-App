@@ -19,8 +19,8 @@ class DatabaseManager {
     constructor() {
         this.config = {
             host: "localhost",
-            user: "root",
-            password: "password",
+            user: "newuser",
+            password: "hejpådigapa",
             database: "AI_Exam_Web_App_DB",
             port: 3306,
         };
