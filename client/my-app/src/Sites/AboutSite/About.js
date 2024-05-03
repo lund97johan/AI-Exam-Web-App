@@ -39,7 +39,7 @@ function ReturnBilderBoxes() {
         <div className="about-rightside">
                 <div className="picture-box-container">
                     <div className="picture-box">
-                        <img src="../Henrik2.jpg" alt="Hänki" className="quiz-image-hanki"/>
+                        <img src="../Henrik.jpg" alt="Hänki" className="quiz-image-hanki"/>
                         <p className="quiz-text">Hänki</p>
                     </div>
                 </div>
