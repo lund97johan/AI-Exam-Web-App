@@ -53,6 +53,31 @@ class DatabaseManager {
         });
     }
 
+    //TODO JSDoc
+    initializeDatabase() {
+        console.log("Initializing database...");
+        return this.connect()
+            .then(() => this.runTableScript('sql/create_db.sql'))
+            .then(() => this.runProceduresScript('sql/create_procedures.sql'))
+            .then(() => this.runShowProcedures())
+            .then(procedures => {
+                console.log('Procedures:', procedures);
+            })
+            .catch(err => {
+                console.error('An error occurred during database initialization:', err);
+                throw err;  // Re-throw to allow caller to handle it
+            });
+    }
+
+    /**
+     * Closes the database connection if it exists.
+     */
+    close() {
+        if (this.connection) {
+            this.connection.end();
+        }
+    }
+
     /**
      * Executes a SQL script that consists of multiple table-related commands from a file.
      * @param {string} filePath - The path to the SQL script file.
@@ -151,14 +176,20 @@ class DatabaseManager {
         });
     }
 
-    /**
-     * Closes the database connection if it exists.
-     */
-    close() {
-        if (this.connection) {
-            this.connection.end();
-        }
+    //TODO JSDoc
+    runQuery(sql, params = []) {
+        return new Promise((resolve, reject) => {
+            this.connection.query(sql, params, (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
     }
+
+    getConnection() {
+        return this.connection;  // This exposes the connection object
+    }
+
 }
 
 module.exports = DatabaseManager;
