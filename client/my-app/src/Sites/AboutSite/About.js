@@ -30,7 +30,6 @@ function About(){
 function ReturnBilderBoxes() {
     return (
         <div className="about-rightside">
-            <div className="about-rightside-containers">
                 <div className="picture-box-container">
                     <div className="picture-box">
                         <img src="../Henrik.jpg" alt="Hänki" className="quiz-image-hanki"/>
@@ -39,12 +38,11 @@ function ReturnBilderBoxes() {
                 </div>
                 <div className="picture-box-container">
                     <div className="picture-box">
-                        <img src="../Johan.jpg" alt="john" className="quiz-image"/>
+                        <img src="../Johan.jpg" alt="john" className="quiz-image-john"/>
                         <p className="quiz-text">John</p>
                     </div>
                 </div>
-            </div>
-            <div className="about-rightside-containers">
+
                 <div className="picture-box-container">
                     <div className="picture-box">
                         <img src="../Jesper.jpg" alt="jeppe" className="quiz-image"/>
@@ -60,10 +58,9 @@ function ReturnBilderBoxes() {
                 <div className="picture-box-container">
                     <div className="picture-box">
                         <img src="../Mattias.png" alt="mattias" className="quiz-image"/>
-                        <p className="quiz-text">matfir</p>
+                        <p className="quiz-text">Matfri</p>
                     </div>
                 </div>
-            </div>
         </div>
     )
 }
