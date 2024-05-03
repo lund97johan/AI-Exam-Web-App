@@ -21,7 +21,7 @@ class DatabaseManager {
             host: "localhost",
             user: "newuser",
             password: "hejpådigapa",
-            database: "test",
+            database: "AI_Exam_Web_App_DB",
             port: 3306,
         };
         this.connection = null;
