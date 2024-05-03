@@ -200,7 +200,7 @@ function createQuiz(responseData) {
   const callProcedure = 'CALL InsertQuizData(?)';
 
   // Convert the quiz data to a JSON string and pass it as a parameter to the stored procedure
-  con.query(callProcedure, [JSON.stringify(responseData)], function(err, result) {
+    dbManager.getConnection().query(callProcedure, [JSON.stringify(responseData)], function(err, result) {
       if (err) {
           console.error("Database error:", err);
           return;
@@ -234,7 +234,7 @@ app.get("/getQuizDetailed/:quizId", async (req, res) => {
     // Optionally, get userId from an authenticated session or token if needed
     const userId = req.user?.id; // Assuming you have some authentication middleware
 
-    con.query('CALL GetQuizDetailsByQuizId(?)', [quizId], function(err, result, fields) {
+    dbManager.getConnection().query('CALL GetQuizDetailsByQuizId(?)', [quizId], function(err, result, fields) {
         if (err) {
             console.error("Database error:", err);
             res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
@@ -269,7 +269,7 @@ app.get("/getQuiz", async (req, res) => {
         return;
     }
 
-    con.query(querystring, [userId], function(err, result, fields) {
+    dbManager.getConnection().query(querystring, [userId], function(err, result, fields) {
         if (err) {
             console.error("Database error:", err);
             res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
