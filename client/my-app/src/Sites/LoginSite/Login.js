@@ -47,7 +47,7 @@ function SetInStartBox() {
           if (response.ok && data.success) {
               if (data.user) {
                   login(data.user); // Login user with the data received
-                  navigate('/'); // Redirect to home page
+                  navigate('/dashboard'); // Redirect to home page
               } else {
                   alert('Login successful but no user data returned');
               }
