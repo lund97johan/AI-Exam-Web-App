@@ -15,9 +15,6 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`)
 );
 
-
-
-
 -- Quizzes, depends on Users
 CREATE TABLE `quizzes` (
   `quiz_id` int NOT NULL AUTO_INCREMENT,
@@ -74,7 +71,5 @@ CREATE TABLE `user_quiz_attempts` (
   CONSTRAINT `fk_attempt_quiz_id` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
   CONSTRAINT `fk_attempt_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 );
-
-
 
 SHOW TABLES;
