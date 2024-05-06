@@ -13,11 +13,18 @@ function About(){
           <div className='App-body'>
               <div className="about-main">
                   <div className="hello-textbox">
-                      <p>Welcome to StudentSummary.com, your one-stop destination for quiz summaries!
-
-                      Our website is designed to help students like you get a clear understanding of various quizzes and assessments you might encounter throughout your academic journey. Whether you're preparing for exams, looking to brush up on your knowledge, or simply curious about different subjects, we've got you covered.
-
-                      At StudentSummary.com, we believe that concise summaries are key to effective learning. Instead of sifting through lengthy textbooks or lecture notes, our summaries provide you with the essential information you need to know. Think of us as your personal study companion, simplifying complex topics into digestible chunks.</p>
+                      <p>About Us
+                      </p>
+                      <p>
+                          <p>At AIWebQuiz, our development is not just about software; it's about cultivating an atmosphere of refined taste and intellectual enrichment. We are a team of highly skilled, motivated, and sophisticated individuals who not only excel in technology but also have a profound appreciation for the finer things in life—be it the complex narratives of classical literature, the subtle nuances of fine art, or the rich, intricate flavors of vintage wines.</p>
+                          <p>Join us at AIWebQuiz, where we blend the art of learning with the art of living. Explore our platform and discover how it mirrors the sophistication of learners who not only seek knowledge but also value the cultural richness that shapes our world. Let AIWebQuiz be your portal to a learning experience where knowledge meets the elegance of fine arts and the discerning taste of a well-aged wine.</p>
+                          And remember, steer clear of The Foul Tempting Ghouls of procrastination and misinformation.
+                          Explore our website to learn more about how our tools can enhance your academic
+                          performance.
+                      </p>
+                          <p>
+                              If you have any questions, please contact us on our "contact" page, where out
+                              intern jesper will be receiving and answering any of your questions. Happy studying!</p>
                   </div>
                   <ReturnBilderBoxes/>
               </div>
@@ -30,21 +37,19 @@ function About(){
 function ReturnBilderBoxes() {
     return (
         <div className="about-rightside">
-            <div className="about-rightside-containers">
                 <div className="picture-box-container">
                     <div className="picture-box">
-                        <img src="../Henrik.jpg" alt="Hänki" className="quiz-image"/>
+                        <img src="../Henrik.jpg" alt="Hänki" className="quiz-image-hanki"/>
                         <p className="quiz-text">Hänki</p>
                     </div>
                 </div>
                 <div className="picture-box-container">
                     <div className="picture-box">
-                        <img src="../Johan.jpg" alt="john" className="quiz-image"/>
+                        <img src="../Johan.jpg" alt="john" className="quiz-image-john"/>
                         <p className="quiz-text">John</p>
                     </div>
                 </div>
-            </div>
-            <div className="about-rightside-containers">
+
                 <div className="picture-box-container">
                     <div className="picture-box">
                         <img src="../Jesper.jpg" alt="jeppe" className="quiz-image"/>
@@ -53,82 +58,19 @@ function ReturnBilderBoxes() {
                 </div>
                 <div className="picture-box-container">
                     <div className="picture-box">
-                        <img src="../Nils.jpg" alt="nils" className="quiz-image"/>
+                        <img src="../Nils.jpg" alt="nils" className="quiz-image-nilsfri"/>
                         <p className="quiz-text">Nilsfri</p>
                     </div>
                 </div>
-            </div>
+                <div className="picture-box-container">
+                    <div className="picture-box">
+                        <img src="../Mattias.png" alt="mattias" className="quiz-image"/>
+                        <p className="quiz-text">Matfri</p>
+                    </div>
+                </div>
         </div>
     )
 }
 
-function SetInStartBox() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-
-    const handleLogin = async (event) => {
-        event.preventDefault();
-        const loginDetails = {username, password};
-      try {
-        const response = await fetch('/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(loginDetails),
-        });
-    
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`); // Handle non-200 responses
-        }
-    
-        const data = await response.json();
-        if (data.success) {
-          console.log('Login successful');
-          navigate('/');
-        } else {
-          console.log('Login failed', data.message);
-        }
-      } catch (error) {
-        console.error('Login error:', error);
-      }
-    };
-    
-  
-  
-    return (
-      <div className="testMain">
-<div className='StartLoginBox' >
-        <div className='LoginRow'>
-          <text className='LoginText'>login</text>
-        </div>
-        <div className='LoginRow'>
-          <input 
-          className='StartLoginInput'
-          type='text'
-          placeholder='User Name'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div className='LoginRow'>
-          <input
-          className='StartLoginInput'
-          type ='password'
-          placeholder='Password'
-          value={password}
-          
-          onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className='LoginRow'>
-        <button className='LoginButton' type='submit' onClick={handleLogin}>Login</button>
-        </div>
-      </div>
-      </div>
-      
-    )
-  }
 
  export default About;

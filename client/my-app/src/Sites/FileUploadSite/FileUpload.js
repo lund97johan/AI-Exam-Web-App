@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './FileUpload.css';
 
 import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
 import { useAuth } from '../../AuthProvider';
+import {useNavigate} from "react-router-dom";
 
 function FileUpload(){
+    const {user, logout} = useAuth();
+    const navigate = useNavigate();
+
     return(
         <div className='App'>
             <ReturnHeader/>
@@ -20,6 +24,7 @@ function FileUpload(){
 function ReturnFileUpload() {
     const [file, setFile] = useState(null);
     const { user } = useAuth();
+
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0])
