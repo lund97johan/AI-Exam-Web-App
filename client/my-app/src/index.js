@@ -19,6 +19,7 @@ import AuthProvider from "./AuthProvider";
 import OldQuizzes from './Sites/OldQuizzes/OldQuizPage';
 import Dashboard from "./Sites/DashboardSite/Dashboard";
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

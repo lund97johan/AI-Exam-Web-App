@@ -88,7 +88,6 @@ function ReturnHeader() {
     return (
         <div className='App-header'>
             <div className='Header-container'>
-
                 <div className='Header-text' style={{gridColumn: 3}}>
                     <Link to="/BotInfo">What can our bot do?</Link>
                 </div>
@@ -141,6 +140,9 @@ function LoggedInUser() {
                     </text>
                     <text>
                         <Link to='/' onClick={handleLogout}>Logout</Link>
+                    </text>
+                    <text>
+                        <Link to='/FileUpload'>Upload File</Link>
                     </text>
                 </div>
             </div>
