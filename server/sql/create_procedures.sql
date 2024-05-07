@@ -188,7 +188,7 @@ BEGIN
 	WHERE qa.user_id = user_id
     ORDER BY 
         qa.attempt_time DESC;
-END
+END;
 
 
 -- Simple delete procedure for quizzes with given quiz id 
