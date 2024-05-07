@@ -214,7 +214,7 @@ function ReturnQuiz(){
         }
 
         const fetchQuiz = async () => {
-            try {
+
                 const response = await fetch(`/getQuizDetailed/${quizId}`, {
                     method: 'GET',
                     headers: {
