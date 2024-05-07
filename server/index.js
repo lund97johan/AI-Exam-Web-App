@@ -5,11 +5,14 @@ const express = require("express");
 const multer = require('multer');
 const OpenAI = require('openai');
 const pdfParse = require('pdf-parse');
-const mysql = require('mysql2');
+const mysql = require('mysql');
 const fs = require('fs');
 const PORT = process.env.PORT || 3001;
 const app = express();
+const initializeDatabase = require('./initializeDatabase');
 app.use(express.json());
+
+initializeDatabase();
 
 // Project Imports
 const DatabaseManager = require('./DatabaseManager');
@@ -21,6 +24,7 @@ const openai = new OpenAI({
 })
 
 
+/*
 
 // Connect to and setup database
 const dbManager = new DatabaseManager();
@@ -33,6 +37,16 @@ dbManager.initializeDatabase()
         console.error('Failed to initialize the database:', err);
         dbManager.close();
     });
+*/
+
+var con = mysql.createConnection({
+    host: "localhost", //här får man lägga till sina egna inställningar om man vill fixa
+    user: "newuser",
+    password: "hejpådigapa",
+    database: "AI_Exam_Web_App_DB",
+    port: 3306
+});
+
 
 
 
@@ -49,6 +63,113 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single('file');
 
+app.post('/upload', (req, res) => {
+    //something something javascript magic upload file
+    upload(req, res, async function (err) {
+        if (err) {
+            //  some error thingy
+            return res.status(500).send({ error: err.message });
+        }
+        if (!req.file) {
+            //another error thingy
+            return res.status(400).send('No file uploaded.');
+        }
+
+        try {
+            // convert the file to a buffer and then to a string
+            // since it costs more to upload files to gpt and we want to save money and its easier this whay probably
+            const dataBuffer = await fs.promises.readFile(req.file.path);
+            const data = await pdfParse(dataBuffer);
+
+            // give exact promt to gpt so it returns the correct dataformat every time using our insane "service"
+            const prompt = `Generate a series of multiple choice quiz questions (maximum and minimum of 5 questions and a maximum of 4 answers per question) based on the following text. Each question should be structured as a JSON object with the question text, four options, and a correct answer. Please format the entire output as a JSON array:
+          Text: "${data.text}"
+          User ID: "${req.body.userId}"  // Include user ID in prompt
+          Quiz Title: "${req.body.title}" // Include quiz title in prompt
+          Please format the output as follows:
+          [
+              {
+                  "question": "What is the main theme of the text?",
+                  "options": ["Option A", "Option B", "Option C", "Option D"],
+                  "answer": "Option A"
+              },
+              {
+                  "question": "How does the author describe the relationship between X and Y?",
+                  "options": ["Option A", "Option B", "Option C", "Option D"],
+                  "answer": "Option B"
+              }
+              // More questions as needed
+          ]`;
+            // here we actually send the prompt to the openai api and get the response
+            const response = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [{ role: "user", content: prompt }]
+            });
+            console.log('Response:', response);
+
+
+            // Assuming response.data.choices[0].message.content contains a JSON string of questions
+            const message = response.choices[0].message;
+            const quizContent = JSON.parse(message.content);  // Parse the JSON content
+
+            // add the user ID of the currently logged in user to the quiz data, the userid is sent in the json file from the client side from "FileUpload.js"
+            //also add the title of the quiz that is just what the file name was called when the user uploaded it into the "FileUpload.js" file
+            const responseData = {
+                userId: req.body.userId,
+                title: req.body.title,
+                questionsAndAnswers: quizContent
+            };
+
+            console.log('Response data:', responseData);
+            // Insert the quiz data into the database
+            // call the function responsible for inserting the quiz data into the database
+            createQuiz(responseData);
+            res.status(200).json(responseData);  // Send the modified quiz questions and answers
+        } catch (error) {
+            //something error manager dont really know
+            console.error('Error processing the request:', error);
+            res.status(500).send({ error: 'Failed to parse PDF, generate quiz, or parse JSON: ' + error.message });
+        } finally {
+            //delete the file after it has been used
+            //how? i dont know javascript magic
+            fs.unlink(req.file.path, err => {
+                if (err) console.error('Error deleting file:', err);
+            });
+        }
+    });
+});
+
+function createQuiz(responseData) {
+    // Call the stored procedure to insert the quiz data into the database
+    const callProcedure = 'CALL InsertQuizData(?)';
+
+    // Convert the quiz data to a JSON string and pass it as a parameter to the stored procedure
+    con.query(callProcedure, [JSON.stringify(responseData)], function(err, result) {
+        if (err) {
+            console.error("Database error:", err);
+            return;
+        }
+        //logg the success of the insertion
+        console.log("Quiz and associated questions and answers inserted successfully.");
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.post("/login", async (req, res) => {
     // Destructure and immediately trim the username
@@ -57,7 +178,7 @@ app.post("/login", async (req, res) => {
 
     const callProcedure = 'CALL login_user(?, ?)';
 
-    dbManager.getConnection().query(callProcedure, [username, password], function(err, result, fields) {
+    con.query(callProcedure, [username, password], function(err, result, fields) {
         if (err) {
             console.error("Database error:", err);
             res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
@@ -82,159 +203,12 @@ app.post("/login", async (req, res) => {
     });
 });
 
-app.post("/register", async (req, res) => {
-    const { username, email, firstName, lastName, password } = req.body;
-
-    const callProcedure = 'CALL register_user(?, ?, ?, ?, ?)';
-
-    dbManager.getConnection().query(callProcedure, [username, email, firstName, lastName, password], function(err, result) {
-        if (err) {
-            console.error("Database error:", err);
-            res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
-            return;
-        }
-
-        const message = result[0][0].message;
-        if (message.includes("User registered")) {
-            const userData = {
-                user_id: result[0][0].user_id,
-                username: result[0][0].username,
-                email: result[0][0].email,
-                firstname: result[0][0].firstname,
-                lastname: result[0][0].lastname,
-                last_login: result[0][0].last_login
-            };
-            console.log("User data:", userData);
-            res.json({ success: true, message: "User registered successfully", user: userData });
-
-        } else {
-            res.json({ success: false, message: message });
-        }
-    });
-});
-
-
-
-
-
-// this recieves the file from the client side and then sends it to the openai api to get the questions and answers
-// this entire function or whatever you'd call it could probalby be done in a better way but i dont really have the time to do that right now
-app.post('/upload', (req, res) => {
-  //something something javascript magic upload file
-  upload(req, res, async function (err) {
-      if (err) {
-        //  some error thingy
-          return res.status(500).send({ error: err.message });
-      }
-      if (!req.file) {
-        //another error thingy
-          return res.status(400).send('No file uploaded.');
-      }
-
-      try {
-        // convert the file to a buffer and then to a string
-        // since it costs more to upload files to gpt and we want to save money and its easier this whay probably
-          const dataBuffer = await fs.promises.readFile(req.file.path);
-          const data = await pdfParse(dataBuffer);
-
-          // give exact promt to gpt so it returns the correct dataformat every time using our insane "service"
-          const prompt = `Generate a series of multiple choice quiz questions (maximum and minimum of 5 questions and a maximum of 4 answers per question) based on the following text. Each question should be structured as a JSON object with the question text, four options, and a correct answer. Please format the entire output as a JSON array:
-          Text: "${data.text}"
-          User ID: "${req.body.userId}"  // Include user ID in prompt
-          Quiz Title: "${req.body.title}" // Include quiz title in prompt
-          Please format the output as follows:
-          [
-              {
-                  "question": "What is the main theme of the text?",
-                  "options": ["Option A", "Option B", "Option C", "Option D"],
-                  "answer": "Option A"
-              },
-              {
-                  "question": "How does the author describe the relationship between X and Y?",
-                  "options": ["Option A", "Option B", "Option C", "Option D"],
-                  "answer": "Option B"
-              }
-              // More questions as needed
-          ]`;
-          // here we actually send the prompt to the openai api and get the response
-          const response = await openai.chat.completions.create({
-              model: "gpt-3.5-turbo",
-              messages: [{ role: "user", content: prompt }]
-          });
-          console.log('Response:', response);
-         
-
-          // Assuming response.data.choices[0].message.content contains a JSON string of questions
-          const message = response.choices[0].message;
-          const quizContent = JSON.parse(message.content);  // Parse the JSON content
-
-          // add the user ID of the currently logged in user to the quiz data, the userid is sent in the json file from the client side from "FileUpload.js"
-          //also add the title of the quiz that is just what the file name was called when the user uploaded it into the "FileUpload.js" file
-          const responseData = {
-              userId: req.body.userId,
-              title: req.body.title,
-              questionsAndAnswers: quizContent
-          };
-
-          console.log('Response data:', responseData);
-          // Insert the quiz data into the database
-          // call the function responsible for inserting the quiz data into the database
-          createQuiz(responseData);
-          res.status(200).json(responseData);  // Send the modified quiz questions and answers
-      } catch (error) {
-        //something error manager dont really know
-          console.error('Error processing the request:', error);
-          res.status(500).send({ error: 'Failed to parse PDF, generate quiz, or parse JSON: ' + error.message });
-      } finally {
-        //delete the file after it has been used
-        //how? i dont know javascript magic
-          fs.unlink(req.file.path, err => {
-              if (err) console.error('Error deleting file:', err);
-          });
-      }
-  });
-});
-
-function createQuiz(responseData) {
-  // Call the stored procedure to insert the quiz data into the database
-  const callProcedure = 'CALL InsertQuizData(?)';
-
-  // Convert the quiz data to a JSON string and pass it as a parameter to the stored procedure
-    dbManager.getConnection().query(callProcedure, [JSON.stringify(responseData)], function(err, result) {
-      if (err) {
-          console.error("Database error:", err);
-          return;
-      }
-      //logg the success of the insertion
-      console.log("Quiz and associated questions and answers inserted successfully.");
-  });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.get("/getQuizDetailed/:quizId", async (req, res) => {
     const quizId = req.params.quizId; // Get quizId from URL parameters
     // Optionally, get userId from an authenticated session or token if needed
     const userId = req.user?.id; // Assuming you have some authentication middleware
 
-    dbManager.getConnection().query('CALL GetQuizDetailsByQuizId(?)', [quizId], function(err, result, fields) {
+    con.query('CALL GetQuizDetailsByQuizId(?)', [quizId], function(err, result, fields) {
         if (err) {
             console.error("Database error:", err);
             res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
@@ -242,7 +216,7 @@ app.get("/getQuizDetailed/:quizId", async (req, res) => {
         }
 
         if (result[0] && result[0].length > 0) {
-            const quizData = JSON.parse(JSON.stringify(result[0][0].QuizData));
+            const quizData = JSON.parse(result[0][0].QuizData);
             console.log("Quiz Title:", quizData.title);
             quizData.questions.forEach(question => {
                 console.log("Question:", question.text);
@@ -269,7 +243,7 @@ app.get("/getQuiz", async (req, res) => {
         return;
     }
 
-    dbManager.getConnection().query(querystring, [userId], function(err, result, fields) {
+    con.query(querystring, [userId], function(err, result, fields) {
         if (err) {
             console.error("Database error:", err);
             res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
@@ -297,20 +271,42 @@ app.get("/getQuiz", async (req, res) => {
 
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
 
+app.post("/register", async (req, res) => {
+    const { username, email, firstName, lastName, password } = req.body;
 
-process.on('SIGINT', () => {
-    console.log('Received SIGINT. Closing database connection...');
-    dbManager.close().then(() => {
-        console.log('Database connection closed.');
-        process.exit(0); // Exit cleanly after closing the connection
-    }).catch(err => {
-        console.error('Failed to close database connection:', err);
-        process.exit(1); // Exit with error code
+    const callProcedure = 'CALL register_user(?, ?, ?, ?, ?)';
+
+    con.query(callProcedure, [username, email, firstName, lastName, password], function(err, result) {
+        if (err) {
+            console.error("Database error:", err);
+            res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
+            return;
+        }
+
+        const message = result[0][0].message;
+        if (message.includes("User registered")) {
+            const userData = {
+                user_id: result[0][0].user_id,
+                username: result[0][0].username,
+                email: result[0][0].email,
+                firstname: result[0][0].firstname,
+                lastname: result[0][0].lastname,
+                last_login: result[0][0].last_login
+            };
+            console.log("User data:", userData);
+            res.json({ success: true, message: "User registered successfully", user: userData });
+
+        } else {
+            res.json({ success: false, message: message });
+        }
     });
 });
+
+
+
 
 
 

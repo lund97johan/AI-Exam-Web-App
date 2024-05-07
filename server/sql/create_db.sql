@@ -1,9 +1,8 @@
-DROP DATABASE IF EXISTS AI_Exam_Web_App_DB;
-CREATE DATABASE AI_Exam_Web_App_DB;
+CREATE DATABASE IF NOT EXISTS AI_Exam_Web_App_DB;
 USE AI_Exam_Web_App_DB;
 
 -- Users
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
@@ -16,7 +15,7 @@ CREATE TABLE `users` (
 );
 
 -- Quizzes, depends on Users
-CREATE TABLE `quizzes` (
+CREATE TABLE IF NOT EXISTS `quizzes` (
   `quiz_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `title` varchar(100) DEFAULT NULL,
@@ -27,7 +26,7 @@ CREATE TABLE `quizzes` (
 );
 
 -- Questions, depends on Quizzes
-CREATE TABLE `questions` (
+CREATE TABLE IF NOT EXISTS `questions` (
   `question_id` int NOT NULL AUTO_INCREMENT,
   `quiz_id` int DEFAULT NULL,
   `text` longtext,
@@ -37,7 +36,7 @@ CREATE TABLE `questions` (
 );
 
 -- Answers, depends on Questions
-CREATE TABLE `answers` (
+CREATE TABLE IF NOT EXISTS `answers` (
   `answer_id` int NOT NULL AUTO_INCREMENT,
   `question_id` int DEFAULT NULL,
   `text` longtext,
@@ -48,7 +47,7 @@ CREATE TABLE `answers` (
 );
 
 -- PDFs, depends on Users
-CREATE TABLE `pdfs` (
+CREATE TABLE IF NOT EXISTS `pdfs` (
   `PDF_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `file_path` varchar(255) DEFAULT NULL,
@@ -59,7 +58,7 @@ CREATE TABLE `pdfs` (
 );
 
 -- Quiz Attempts, depends on Users and Quizzes
-CREATE TABLE `user_quiz_attempts` (
+CREATE TABLE IF NOT EXISTS `user_quiz_attempts` (
   `attempt_id` int NOT NULL AUTO_INCREMENT,
   `quiz_id` int DEFAULT NULL,
   `user_id` int DEFAULT NULL,

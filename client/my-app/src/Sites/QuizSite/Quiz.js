@@ -54,8 +54,8 @@ function ReturnQuiz() {
                 console.error('Network or server error', error);
             }
         };
-
         fetchQuiz();
+
     }, [quizId, user, navigate]);
 
     if (!quiz) {
