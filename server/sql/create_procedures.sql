@@ -174,3 +174,28 @@ BEGIN
 		END IF;
 	END IF;
 END;
+
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ViewQuizAttempts`(IN `user_id` INT)
+BEGIN
+	Select * 
+    FROM user_quiz_attempts qa
+    JOIN 
+        users u ON qa.user_id = u.user_id
+    JOIN 
+        quizzes q ON qa.quiz_id = q.quiz_id
+	WHERE qa.user_id = user_id
+    ORDER BY 
+        qa.attempt_time DESC;
+END
+
+
+-- Simple delete procedure for quizzes with given quiz id 
+-- Note this will cause cascade deleting related questions and answers to the quiz
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteQuiz`(IN q_id INT)
+BEGIN
+	DELETE FROM quizzes WHERE quiz_id = q_id; 
+END
+
+
