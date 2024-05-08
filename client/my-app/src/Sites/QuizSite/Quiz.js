@@ -31,7 +31,7 @@ function ShowQuizScore(){
     )
 }
 
-function ReturnQuizScore({Score, MaximumScore}){
+function ReturnQuizScore({Score, MaximumScore, QuizId}){
     return(
         <>
             <div className={Score >= MaximumScore ? 'Quiz-nrOfQuestions' : 'Quiz-nrOfQuestions-fail'}
@@ -46,8 +46,8 @@ function ReturnQuizScore({Score, MaximumScore}){
                 </div>
             </div>
             <div className="redo-quiz-button" style={{gridColumn: 2, gridRow: 5, justifySelf:"left"}}>
-                <Link to='/quiz'>
-                    <button onClick={Quiz} className='Quiz-button'>Redo test</button>
+                <Link to={`/quiz/${QuizId}`}>
+                    <button className='Quiz-button'>Redo test</button>
                 </Link>
             </div>
             <div className='finish-test-button' style={{gridColumn: 2, gridRow: 5, justifySelf:"right"}}>
@@ -68,6 +68,8 @@ function ReturnQuiz() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState({}); // State to store selected answers
     const [showScore, setShowScore] = useState(false);
+    const [finalScore, setFinalScore] = useState(0); // State for the final score
+    const [maximumScore, setMaximumScore] = useState(0); // State for the maximum possible score
     // This useEffect will log the selectedAnswer state every time it changes
     useEffect(() => {
         console.log('Selected Answers:', selectedAnswer);
@@ -81,6 +83,9 @@ function ReturnQuiz() {
         }
 
         const fetchQuiz = async () => {
+            setSelectedAnswer({});
+            setCurrentQuestionIndex(0);
+            setShowScore(false);
             try {
                 const response = await fetch(`/getQuizDetailed/${quizId}`, {
                     method: 'GET',
@@ -128,10 +133,21 @@ function ReturnQuiz() {
         });
         return score;
     };
+    const resetQuiz = () => {
+        // Reset relevant states
+        setSelectedAnswer({});
+        setCurrentQuestionIndex(0);
+        setShowScore(false); // Assuming you have access to setShowScore here
+        setFinalScore(0);
+        setMaximumScore(0);
+
+    };
 
     const submitQuiz = async () => {
         const finalScore = calculateScore();
         console.log("Final Score:", finalScore); // Log the final score to debug
+        setFinalScore(calculateScore());
+        setMaximumScore(quiz.questions.length);
         setShowScore(true);
     };
 
@@ -142,7 +158,27 @@ function ReturnQuiz() {
     return (
         <div className='Quiz-body'>
             {showScore ? (
-                <ReturnQuizScore Score={calculateScore()} MaximumScore={quiz.questions.length} />
+                <>
+                    <div className={finalScore >= maximumScore ? 'Quiz-nrOfQuestions' : 'Quiz-nrOfQuestions-fail'}
+                         style={{gridColumn: 2, gridRow: 2}}>
+                        <div className='Quiz-nrOfQuestions-text'>
+                            {finalScore >= maximumScore ? 'Congratulations! you passed the test' : 'You failed!'}
+                        </div>
+                    </div>
+                    <div className='Quiz-nrOfQuestions' style={{gridColumn: 2, gridRow: 3}}>
+                        <div className='Quiz-nrOfQuestions-text'>
+                            Your score: {finalScore} of {maximumScore}
+                        </div>
+                    </div>
+                    <div className="redo-quiz-button" style={{gridColumn: 2, gridRow: 5, justifySelf:"left"}}>
+                        <button className='Quiz-button' onClick={resetQuiz}>Redo test</button>
+                    </div>
+                    <div className='finish-test-button' style={{gridColumn: 2, gridRow: 5, justifySelf:"right"}}>
+                        <Link to='/dashboard'>
+                            <button className='Quiz-button'>Finish test</button>
+                        </Link>
+                    </div>
+                </>
             ) : (
                             <>
                             <div className='Quiz-nrOfQuestions' style={{ gridColumn: 3 }}>
