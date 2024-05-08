@@ -159,21 +159,20 @@ function ReturnQuiz() {
         <div className='Quiz-body'>
             {showScore ? (
                 <>
-                    <div className={finalScore >= maximumScore ? 'Quiz-nrOfQuestions' : 'Quiz-nrOfQuestions-fail'}
+                    <div className={finalScore >= maximumScore ? 'Quiz-Result-Text-Pass' : 'Quiz-Result-Text-Fail'}
                          style={{gridColumn: 2, gridRow: 2}}>
-                        <div className='Quiz-nrOfQuestions-text'>
                             {finalScore >= maximumScore ? 'Congratulations! you passed the test' : 'You failed!'}
-                        </div>
                     </div>
-                    <div className='Quiz-nrOfQuestions' style={{gridColumn: 2, gridRow: 3}}>
-                        <div className='Quiz-nrOfQuestions-text'>
+                    <div className='Quiz-Result-Score-Container' style={{gridColumn: 2, gridRow: 3}}>
+                        <div className='Quiz-Result-Score'>
                             Your score: {finalScore} of {maximumScore}
                         </div>
                     </div>
-                    <div className="redo-quiz-button" style={{gridColumn: 2, gridRow: 5, justifySelf:"left"}}>
+
+                    <div className="redo-quiz-button" style={{gridColumn: 2, gridRow: 5, justifySelf: "left", marginLeft: "20vh"}}>
                         <button className='Quiz-button' onClick={resetQuiz}>Redo test</button>
                     </div>
-                    <div className='finish-test-button' style={{gridColumn: 2, gridRow: 5, justifySelf:"right"}}>
+                    <div className='finish-test-button' style={{gridColumn: 2, gridRow: 5, justifySelf:"right", marginRight: "20vh"}}>
                         <Link to='/dashboard'>
                             <button className='Quiz-button'>Finish test</button>
                         </Link>
@@ -186,7 +185,7 @@ function ReturnQuiz() {
                             Number of questions: {quiz.questions.length}
                         </div>
                     </div>
-                <div className="Quiz-question-number-text" style={{ gridColumn: 2 }}>
+                <div className="Quiz-question-number-text" style={{ gridColumn: 2, gridRow: 1 }}>
                     <div className='Quiz-question-nr' style={{ gridColumn: 2 }}>
                         <h1>Question {currentQuestionIndex + 1}</h1>
                     </div>
