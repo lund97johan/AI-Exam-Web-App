@@ -20,7 +20,7 @@ class DatabaseManager {
         this.config = {
             host: "localhost",
             user: "root",
-            password: "",
+            password: "password",
             database: "AI_Exam_Web_App_DB",
             port: 3306,
         };
@@ -173,6 +173,31 @@ class DatabaseManager {
                     console.log('Stored Procedures:', results);
                     resolve(results);
                 }
+            });
+        });
+    }
+
+    /**
+     * Calls a stored procedure to delete a quiz by its ID.
+     * @param {number} quizId - The ID of the quiz to delete.
+     * @returns {Promise<void>} A promise that resolves when the quiz is deleted or rejects if an error occurs.
+     */
+    deleteQuizById(quizId) {
+        return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                const sql = 'CALL DeleteQuiz(?)';
+                this.connection.query(sql, [quizId], (err, results, fields) => {
+                    if (err) {
+                        console.error(`Error when calling DeleteQuiz: ${err.message}`);
+                        reject(err);
+                    } else {
+                        console.log('DeleteQuiz executed successfully', results);
+                        resolve();
+                    }
+                });
+            }).catch(err => {
+                console.error('Failed to connect to database:', err);
+                reject(err);
             });
         });
     }

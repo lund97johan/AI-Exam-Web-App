@@ -2,7 +2,7 @@ import * as React from "react";
 import "./oldQuizzes.css";
 import {useEffect, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom'; //  Link
-import app, {ReturnHeader} from "../../App";
+import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
 import {useAuth} from "../../AuthProvider";
 
@@ -56,6 +56,10 @@ function ReturnQuizzes() {
         console.log('fetching quizzes');
     }, [user]); // Depend on `user` to re-run when the user state changes
 
+    const handleRemoveClick = (quizId) => {
+        navigate(`/remove_quiz/${quizId}`);
+    };
+
     return (
         <div className="quiz-container">
             {quizzes.length > 0 ? (
@@ -65,7 +69,9 @@ function ReturnQuizzes() {
                             <input className='quiz' type='text' value={quiz.title} disabled />
                             <Link to={`/quiz/${quiz.id}`} className="quiz-button">Take Quiz</Link>
                         </div>
-                        <button className='remove-button'>Remove Quiz</button>
+                        <button className='remove-button' onClick={() => handleRemoveClick(quiz.id)}>
+                            Remove Quiz
+                        </button>
                     </div>
                 ))
             ) : (

@@ -216,6 +216,18 @@ function createQuiz(responseData) {
 
 
 
+app.delete('/remove_quiz/:quizId', async (req, res) => {
+    const { quizId } = req.params;
+    try {
+        await dbManager.deleteQuizById(quizId);
+        res.status(200).json({ message: 'Quiz successfully deleted' });
+    } catch (error) {
+        console.error('Failed to delete quiz:', error);
+        res.status(500).json({ message: 'Failed to delete quiz' });
+    }
+});
+
+
 
 
 
