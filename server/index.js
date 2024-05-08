@@ -154,6 +154,22 @@ function createQuiz(responseData) {
     });
 }
 
+app.delete('/remove_quiz/:quizId', async (req, res) => {
+    const quizId = req.params.quizId;
+    const callProcedure = 'CALL DeleteQuizByQuizId(?)';
+
+    con.query(callProcedure, [quizId], function(err, result) {
+        if (err) {
+            console.error("Database error:", err);
+            res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
+            return;
+        }
+        console.log("Quiz deleted successfully");
+        res.json({ success: true, message: "Quiz deleted successfully" });
+    });
+});
+
+
 
 
 

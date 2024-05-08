@@ -177,7 +177,7 @@ BEGIN
 END;
 
 
-
+DROP PROCEDURE IF EXISTS ViewQuizAttempts;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ViewQuizAttempts`(IN `user_id` INT)
 BEGIN
 	Select * 
@@ -194,6 +194,7 @@ END;
 
 -- Simple delete procedure for quizzes with given quiz id 
 -- Note this will cause cascade deleting related questions and answers to the quiz
+DROP PROCEDURE IF EXISTS DeleteQuiz;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteQuiz`(IN q_id INT)
 BEGIN
 	DELETE FROM quizzes WHERE quiz_id = q_id; 
