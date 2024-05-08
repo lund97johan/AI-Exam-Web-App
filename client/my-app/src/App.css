@@ -1,6 +1,7 @@
 .App {
   text-align: center;
-  
+
+
 }
 
 .App-logo {
@@ -113,6 +114,8 @@
   align-items: center;
   justify-content: center;
   color: white;
+  min-height: 10vh;
+  max-height: 10vh;
   
 }
 .ProfileTextDivider{
@@ -216,7 +219,8 @@
 }
 
 .App-body{
-  min-height: 100vh;
+
+  min-height: 90vh;
   width: 100%;
   background-color: #353a45;
   justify-content: center;
