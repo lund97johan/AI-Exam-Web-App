@@ -17,7 +17,9 @@ import Quiz from './Sites/QuizSite/Quiz';
 import FileUpload from './Sites/FileUploadSite/FileUpload';
 import AuthProvider from "./AuthProvider";
 import OldQuizzes from './Sites/OldQuizzes/OldQuizPage';
+
 import Dashboard from "./Sites/DashboardSite/Dashboard";
+import RemoveQuiz from "./Sites/RemoveQuiz/RemoveQuiz";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -36,6 +38,7 @@ root.render(
           <Route path='/FileUpload' element={<FileUpload/>}/>
           <Route path='/quiz/:quizId' element={<Quiz/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route path='/remove_quiz/:quizId' element={<RemoveQuiz/>}/>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
