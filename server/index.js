@@ -23,7 +23,7 @@ var con = mysql.createConnection({
   host: "localhost", //här får man lägga till sina egna inställningar om man vill fixa
   user: "newuser",
   password: "hejpådigapa",
-  database: "test",
+  database: "AI_Exam_Web_App_DB",
   port: 3306
 });
 
@@ -147,7 +147,8 @@ function createQuiz(responseData) {
 
 app.delete('/remove_quiz/:quizId', async (req, res) => {
     const quizId = req.params.quizId;
-    const callProcedure = 'CALL DeleteQuizByQuizId(?)';
+    const callProcedure = 'CALL DeleteQuiz(?)';
+    console.log("Deleting quiz with ID:", quizId);
 
     con.query(callProcedure, [quizId], function(err, result) {
         if (err) {
