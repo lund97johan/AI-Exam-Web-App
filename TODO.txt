@@ -1,0 +1,35 @@
+Add QuizAttempts button on OldQuizzes
+
+Implement QuizAttempts
+Implement QuizAttempt
+
+Ensure deletion cascades work for Quizzes and QuizAttempts and anything else
+    User -> Quiz -> everything related
+
+Ensure cohesive look for all sites
+    About
+    BotInfo
+    ContactUs
+    Dashboard
+    FileUpload
+    Login
+    OldQuizzes
+    QuizAttempt
+    QuizAttempts
+    Quiz
+    Register
+    RemoveQuiz
+
+Look over .css files
+
+User deletion
+
+Maybe remove database reset on restart, or just add comments in the related code, and explanation in the report
+
+JSDoc all .js files
+
+Remove trash code
+
+Update db diagram
+
+Complete

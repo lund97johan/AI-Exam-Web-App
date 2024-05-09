@@ -58,18 +58,16 @@ CREATE TABLE `pdfs` (
   CONSTRAINT `fk_PDFs_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 );
 
--- Quiz Attempts, depends on Users and Quizzes
+-- Quiz Attempts, depends on Quizzes
 CREATE TABLE `user_quiz_attempts` (
   `attempt_id` int NOT NULL AUTO_INCREMENT,
   `quiz_id` int DEFAULT NULL,
-  `user_id` int DEFAULT NULL,
+  `score` VARCHAR(255) NOT NULL,
   `ans_str` VARCHAR(255) NOT NULL,
   `attempt_time` datetime DEFAULT NULL,
   PRIMARY KEY (`attempt_id`),
   KEY `fk_quiz_id_idx` (`quiz_id`),
-  KEY `fk_user_id_idx` (`user_id`),
-  CONSTRAINT `fk_attempt_quiz_id` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
-  CONSTRAINT `fk_attempt_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `fk_attempt_quiz_id` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`)
 );
 
 SHOW TABLES;
