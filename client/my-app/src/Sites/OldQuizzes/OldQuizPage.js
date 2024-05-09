@@ -1,31 +1,29 @@
 import * as React from "react";
 import "./oldQuizzes.css";
-import {useEffect, useState} from 'react';
-import { Link, useNavigate } from 'react-router-dom'; //  Link
-import app, {ReturnHeader} from "../../App";
-import {ReturnFooter} from "../../App";
-import {useAuth} from "../../AuthProvider";
-
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import app, { ReturnHeader } from "../../App";
+import { ReturnFooter } from "../../App";
+import { useAuth } from "../../AuthProvider";
 
 function OldQuizzes() {
-  return (
-      <div className='App'>
-          <ReturnHeader/>
-              <div className='App-body'>
-                  <ReturnQuizzes/>
-              </div>
-          <ReturnFooter/>
-      </div>
-  );
+    return (
+        <div className='App'>
+            <ReturnHeader />
+            <div className='App-body'>
+                <ReturnQuizzes />
+            </div>
+            <ReturnFooter />
+        </div>
+    );
 }
 
 function ReturnQuizzes() {
-    const { user } = useAuth(); // Get user info from context
+    const { user } = useAuth();
     const [quizzes, setQuizzes] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Ensure there's a user logged in before fetching quizzes
         if (!user) {
             console.log("No user logged in, redirecting...");
             navigate("/login")
@@ -38,7 +36,6 @@ function ReturnQuizzes() {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-
                     },
                 });
                 const data = await response.json();
@@ -54,7 +51,12 @@ function ReturnQuizzes() {
 
         fetchQuizzes();
         console.log('fetching quizzes');
-    }, [user]); // Depend on `user` to re-run when the user state changes
+    }, [user]);
+
+    // Function to remove a quiz
+    const removeQuiz = (indexToRemove) => {
+        setQuizzes(quizzes.filter((_, index) => index !== indexToRemove));
+    };
 
     return (
         <div className="quiz-container">
@@ -65,11 +67,11 @@ function ReturnQuizzes() {
                             <input className='quiz' type='text' value={quiz.title} disabled />
                             <Link to={`/quiz/${quiz.id}`} className="quiz-button">Take Quiz</Link>
                         </div>
-                        <button className='remove-button'>Remove Quiz</button>
+                        <button className='remove-button' onClick={() => removeQuiz(index)}>Remove Quiz</button>
                     </div>
                 ))
             ) : (
-                <p>No quizzes available</p> // Show a message if no quizzes are found
+                <p>No quizzes available</p>
             )}
         </div>
     );
