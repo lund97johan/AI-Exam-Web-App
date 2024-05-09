@@ -20,11 +20,14 @@ import OldQuizzes from './Sites/OldQuizzes/OldQuizPage';
 import Dashboard from "./Sites/DashboardSite/Dashboard";
 import RemoveQuiz from "./Sites/RemoveQuiz/RemoveQuiz";
 
+import QuizScore  from "./Sites/QuizScoreSite/QuizScore";
+import QuizContext from './QuizContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
+        <QuizContext>
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/register" element={<Register />}/>
@@ -38,7 +41,9 @@ root.render(
           <Route path='/quiz/:quizId' element={<Quiz/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>
           <Route path='/remove_quiz/:quizId' element={<RemoveQuiz/>}/>
+          <Route path='/QuizScore' element={<QuizScore/>}/>
         </Routes>
+        </QuizContext>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
