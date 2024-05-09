@@ -202,6 +202,24 @@ class DatabaseManager {
         });
     }
 
+    /**
+     * Retrieves quiz attempts for a given quiz ID.
+     * @param {number} quizId - The ID of the quiz for which attempts are fetched.
+     * @returns {Promise<Array>} A promise that resolves to an array of attempts.
+     */
+    async getQuizAttemptsByQuizId(quizId) {
+        try {
+            const [attempts] = await this.connection.query(
+                'SELECT attempt_id, score, attempt_time FROM quiz_attempts WHERE quiz_id = ?',
+                [quizId]
+            );
+            return attempts;
+        } catch (error) {
+            console.error(`Error fetching quiz attempts for quiz ID ${quizId}:`, error);
+            throw error;  // Rethrow the error to be handled by the caller
+        }
+    }
+
     //TODO JSDoc
     runQuery(sql, params = []) {
         return new Promise((resolve, reject) => {
