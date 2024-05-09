@@ -139,11 +139,12 @@ function LoggedInUser() {
                         <Link to="/old_quizzes">Old Quizzes</Link>
                     </text>
                     <text>
-                        <Link to='/' onClick={handleLogout}>Logout</Link>
-                    </text>
-                    <text>
                         <Link to='/FileUpload'>Upload File</Link>
                     </text>
+                    <text>
+                        <Link to='/' onClick={handleLogout}>Logout</Link>
+                    </text>
+                    
                 </div>
             </div>
         </div>

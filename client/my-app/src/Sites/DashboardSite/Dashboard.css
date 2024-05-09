@@ -1,0 +1,55 @@
+
+
+/* User profile area */
+.user-details {
+    background-color: #ffffff; /* White background for the user details */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px;
+    margin: 20px;
+    width: 90%; /* Responsive width */
+    max-width: 600px; /* Maximum width */
+    text-align: center; /* Center text */
+}
+
+h1 {
+    color: #007bff; /* Blue color for headers to link it visually with the header/footer */
+    margin-bottom: 0.5em; /* Space below the header */
+}
+
+p {
+    font-size: 16px; /* Larger font size for readability */
+    color: #666; /* Lighter gray for less important text */
+    margin-top: 5px; /* Small margin for spacing paragraphs */
+}
+
+.profile-pic-container {
+    position: relative;
+    width: 10px; /* Adjust size as needed */
+    height: 10px; /* Adjust size as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-pic {
+    width: 40%;
+    height: 50%;
+    object-fit: cover;
+    border-radius: 50%; /* Makes the image round */
+}
+
+.upload-button {
+    position: absolute;
+    width: 10%;
+    height: 40%;
+    top: 0;
+    left: 100;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay for better visibility of text */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 50%; /* Makes the overlay round */
+}
