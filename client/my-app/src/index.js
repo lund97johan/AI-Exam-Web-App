@@ -20,6 +20,7 @@ import OldQuizzes from './Sites/OldQuizzes/OldQuizPage';
 
 import Dashboard from "./Sites/DashboardSite/Dashboard";
 import RemoveQuiz from "./Sites/RemoveQuiz/RemoveQuiz";
+import QuizExplain from "./Sites/QuizExplainSite/QuizExplain";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -39,6 +40,7 @@ root.render(
           <Route path='/quiz/:quizId' element={<Quiz/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>
           <Route path='/remove_quiz/:quizId' element={<RemoveQuiz/>}/>
+          <Route path='/quizExplain' element={<QuizExplain/>}/>
         </Routes>
       </AuthProvider>
     </BrowserRouter>

@@ -70,6 +70,7 @@ function ReturnQuiz() {
     const [showScore, setShowScore] = useState(false);
     const [finalScore, setFinalScore] = useState(0); // State for the final score
     const [maximumScore, setMaximumScore] = useState(0); // State for the maximum possible score
+    const [failure, setFailure] = useState(false); // State for the maximum possible score
     // This useEffect will log the selectedAnswer state every time it changes
     useEffect(() => {
         console.log('Selected Answers:', selectedAnswer);
@@ -140,7 +141,7 @@ function ReturnQuiz() {
         setShowScore(false); // Assuming you have access to setShowScore here
         setFinalScore(0);
         setMaximumScore(0);
-
+        setFailure(false)
     };
 
     const submitQuiz = async () => {
@@ -149,6 +150,9 @@ function ReturnQuiz() {
         setFinalScore(calculateScore());
         setMaximumScore(quiz.questions.length);
         setShowScore(true);
+        if (finalScore < quiz.minimum_pass_score) {
+            setFailure(true);
+        }
     };
 
     const currentQuestion = quiz.questions[currentQuestionIndex];
@@ -159,28 +163,45 @@ function ReturnQuiz() {
         <div className='Quiz-body'>
             {showScore ? (
                 <>
-                    <div className={finalScore >= maximumScore ? 'Quiz-Result-Text-Pass' : 'Quiz-Result-Text-Fail'}
-                         style={{gridColumn: 2, gridRow: 2}}>
-                            {finalScore >= maximumScore ? 'Congratulations! you passed the test' : 'You failed!'}
+                <div className={failure ? 'Quiz-Result-Text-Pass' : 'Quiz-Result-Text-Fail'}
+                     style={{gridColumn: 2, gridRow: 2}}>
+                    {failure ? 'Congratulations! you passed the test' : 'You failed!'}
+                </div>
+                <div className='Quiz-Result-Score-Container' style={{gridColumn: 2, gridRow: 3}}>
+                    <div className='Quiz-Result-Score'>
+                        Your score: {finalScore} of {maximumScore}
                     </div>
-                    <div className='Quiz-Result-Score-Container' style={{gridColumn: 2, gridRow: 3}}>
-                        <div className='Quiz-Result-Score'>
-                            Your score: {finalScore} of {maximumScore}
+                </div>
+                {failure ? null :
+                    <>
+                        <div className='Quiz-Result-Text' style={{gridColumn: 2, gridRow: 4, justifySelf: 'left'}}>
+                            You can now view the correct answers
                         </div>
-                    </div>
+                        <div className='finish-test-button'
+                             style={{gridColumn: 2, gridRow: 4, justifySelf: "right", marginRight: "20vh"}}>
+                            <Link to='/quizExplain'>
+                                <button className='Quiz-button'>see how you fucked up</button>
+                            </Link>
+                        </div>
+                    </>
 
-                    <div className="redo-quiz-button" style={{gridColumn: 2, gridRow: 5, justifySelf: "left", marginLeft: "20vh"}}>
+                }
+
+
+                    <div className="redo-quiz-button"
+                         style={{gridColumn: 2, gridRow: 5, justifySelf: "left", marginLeft: "20vh"}}>
                         <button className='Quiz-button' onClick={resetQuiz}>Redo test</button>
                     </div>
-                    <div className='finish-test-button' style={{gridColumn: 2, gridRow: 5, justifySelf:"right", marginRight: "20vh"}}>
+                    <div className='finish-test-button'
+                         style={{gridColumn: 2, gridRow: 5, justifySelf: "right", marginRight: "20vh"}}>
                         <Link to='/dashboard'>
                             <button className='Quiz-button'>Finish test</button>
                         </Link>
                     </div>
                 </>
             ) : (
-                            <>
-                            <div className='Quiz-nrOfQuestions' style={{ gridColumn: 3 }}>
+                <>
+                    <div className='Quiz-nrOfQuestions' style={{gridColumn: 3}}>
                         <div className='Quiz-nrOfQuestions-text'>
                             Number of questions: {quiz.questions.length}
                         </div>
