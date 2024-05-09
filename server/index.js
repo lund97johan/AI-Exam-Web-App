@@ -136,45 +136,58 @@ app.post('/upload', (req, res) => {
         // since it costs more to upload files to gpt and we want to save money and its easier this whay probably
           const dataBuffer = await fs.promises.readFile(req.file.path);
           const data = await pdfParse(dataBuffer);
+          const nrQuestions = req.body.nrQuestions;
+          /*
+         // nr of questions is always gonna be divisible by 5, so if nr of questions = 25, then run the loop 5 times
+           // this is because the openai api can only handle 5 questions at a time
+         const responses = [];
+         for (let i = 0; i < nrQuestions; i += 5) {
+             const response = await createQuiz5Questions(dataText, userId, title);
+             responses.push(response);  // Assuming response is the data you need
+         }
+         responses.flat()
+         responses.append({userId: req.body.userId, title: req.body.title});
+        */
+         // give exact promt to gpt so it returns the correct dataformat every time using our insane "service"
+         const prompt = `Generate a series of multiple choice quiz questions with "${nrQuestions}" questions and 4 answers per question based on the following text. Each question should be structured as a JSON object with the question text, four options, and a correct answer. Please format the entire output as a JSON array:
+         Text: "${data.text}"
+         User ID: "${req.body.userId}"  // Include user ID in prompt
+         Quiz Title: "${req.body.title}" // Include quiz title in prompt
+         Please format the output as follows:
+         [
+             {
+                 "question": "What is the main theme of the text?",
+                 "options": ["Option A", "Option B", "Option C", "Option D"],
+                 "answer": "Option A"
+             },
+             {
+                 "question": "How does the author describe the relationship between X and Y?",
+                 "options": ["Option A", "Option B", "Option C", "Option D"],
+                 "answer": "Option B"
+             }
+             // More questions as needed
+         ]`;
 
-          // give exact promt to gpt so it returns the correct dataformat every time using our insane "service"
-          const prompt = `Generate a series of multiple choice quiz questions (maximum and minimum of 5 questions and a maximum of 4 answers per question) based on the following text. Each question should be structured as a JSON object with the question text, four options, and a correct answer. Please format the entire output as a JSON array:
-          Text: "${data.text}"
-          User ID: "${req.body.userId}"  // Include user ID in prompt
-          Quiz Title: "${req.body.title}" // Include quiz title in prompt
-          Please format the output as follows:
-          [
-              {
-                  "question": "What is the main theme of the text?",
-                  "options": ["Option A", "Option B", "Option C", "Option D"],
-                  "answer": "Option A"
-              },
-              {
-                  "question": "How does the author describe the relationship between X and Y?",
-                  "options": ["Option A", "Option B", "Option C", "Option D"],
-                  "answer": "Option B"
-              }
-              // More questions as needed
-          ]`;
-          // here we actually send the prompt to the openai api and get the response
-          const response = await openai.chat.completions.create({
-              model: "gpt-3.5-turbo",
-              messages: [{ role: "user", content: prompt }]
-          });
-          console.log('Response:', response);
-         
 
-          // Assuming response.data.choices[0].message.content contains a JSON string of questions
-          const message = response.choices[0].message;
-          const quizContent = JSON.parse(message.content);  // Parse the JSON content
+         // here we actually send the prompt to the openai api and get the response
+         const response = await openai.chat.completions.create({
+             model: "gpt-3.5-turbo",
+             messages: [{ role: "user", content: prompt }]
+         });
+         console.log('Response:', response);
 
-          // add the user ID of the currently logged in user to the quiz data, the userid is sent in the json file from the client side from "FileUpload.js"
-          //also add the title of the quiz that is just what the file name was called when the user uploaded it into the "FileUpload.js" file
-          const responseData = {
-              userId: req.body.userId,
-              title: req.body.title,
-              questionsAndAnswers: quizContent
-          };
+
+         // Assuming response.data.choices[0].message.content contains a JSON string of questions
+         const message = response.choices[0].message;
+         const quizContent = JSON.parse(message.content);  // Parse the JSON content
+
+         // add the user ID of the currently logged in user to the quiz data, the userid is sent in the json file from the client side from "FileUpload.js"
+         //also add the title of the quiz that is just what the file name was called when the user uploaded it into the "FileUpload.js" file
+         const responseData = {
+             userId: req.body.userId,
+             title: req.body.title,
+             questionsAndAnswers: quizContent
+         };
 
           console.log('Response data:', responseData);
           // Insert the quiz data into the database
@@ -194,6 +207,36 @@ app.post('/upload', (req, res) => {
       }
   });
 });
+
+async function createQuiz5Questions(pdfToText, userId, title) {
+    // Generate 5 quiz questions based on the text
+    const prompt = `Generate a series of multiple choice quiz questions containing 5 questions with 4 answers per question based on the following text. Each question should be structured as a JSON object with the question text, four options, and a correct answer. Please format the entire output as a JSON array:
+          Text: "${pdfToText}"  // Corrected to use the parameter passed
+          Please format the output as follows:
+          [
+              {
+                  "question": "What is the main theme of the text?",
+                  "options": ["Option A", "Option B", "Option C", "Option D"],
+                  "answer": "Option A"
+              },
+              {
+                  "question": "How does the author describe the relationship between X and Y?",
+                  "options": ["Option A", "Option B", "Option C", "Option D"],
+                  "answer": "Option B"
+              }
+              // More questions as needed
+          ]`;
+
+    const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [{role: "user", content: prompt}]
+    });
+    console.log('Response:', response);
+
+    return response.data.choices[0].message.content; // Assuming this is how the response is structured
+}
+
+
 
 function createQuiz(responseData) {
   // Call the stored procedure to insert the quiz data into the database

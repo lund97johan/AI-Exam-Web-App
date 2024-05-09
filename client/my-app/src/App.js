@@ -88,22 +88,6 @@ function ReturnHeader() {
     return (
         <div className='App-header'>
             <div className='Header-container'>
-                {user && ( // Only display these elements if the user is logged in
-                    <div className='Header-text-dropdown' style={{gridColumn: 1}}>
-                        tjena  {/* Dropdown menus now visible only to logged-in users */}
-                        <div className='Header-text-dropdown-content'>
-                            <div className='Header-text-dropdown-content-grid'>
-                                <text>
-                                    <Link to="/quiz">Take Quiz</Link>
-                                </text>
-                                <text>
-                                    <Link to="/FileUpload">File Upload</Link>
-                                </text>
-                                <text>test</text>
-                            </div>
-                        </div>
-                    </div>
-                )}
                 <div className='Header-text' style={{gridColumn: 3}}>
                     <Link to="/BotInfo">What can our bot do?</Link>
                 </div>
@@ -116,11 +100,6 @@ function ReturnHeader() {
                         Home
                     </Link>
                 </div>
-                {user && ( // Only show Old Quizzes if the user is logged in
-                    <div className='Header-text'>
-                        <Link to='/old_quizzes'>Old Quizzes</Link>
-                    </div>
-                )}
                 <div className='Header-text'>
                     <Link to="/contactus">Contact Us</Link>
                 </div>
@@ -135,7 +114,8 @@ function LoggedInUser() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout(); // Call the logout function from the AuthProvider
+      logout(); // Call the logout function from the AuthProvider
+
   };
   if (!user) {
     return (
@@ -147,38 +127,48 @@ function LoggedInUser() {
     );
   } else {
     return (
-      <div className='Header-loggedin-container'>
-        <div className='Header-text'>
-          <Link to="/dashboard"> {/* Assuming you have a dashboard route */}
-            Welcome, {user.username} {/* Display user information */}
-          </Link>
+        <div className='Header-text-dropdown' style={{gridColumn: 7}}>
+            {user.username}'s profile {/* Dropdown menus now visible only to logged-in users */}
+            <i className="arrow down"></i>
+            <div className='Header-text-dropdown-content'>
+                <div className='Header-text-dropdown-content-grid'>
+                    <text>
+                        <Link to="/dashboard">Profile</Link>
+                    </text>
+                    <text>
+                        <Link to="/old_quizzes">Old Quizzes</Link>
+                    </text>
+                    <text>
+                        <Link to='/' onClick={handleLogout}>Logout</Link>
+                    </text>
+                    <text>
+                        <Link to='/FileUpload'>Upload File</Link>
+                    </text>
+                </div>
+            </div>
         </div>
-        <div className='Header-text' onClick={handleLogout}>
-          <Link to="/">
-          Logout
-          </Link>
-        </div>
-      </div>
     );
   }
 }
 
 function useLoggedInUser() {
-  const { user } = useAuth();
-  return user;
+    const {user} = useAuth();
+    return user;
 }
 
-function LoginOrRegisterColumns({ column, row }) {
-  return(
-    <div className="testMain">
-      <div className='LoginRow' style={{gridColumn: 3, gridRow: 1}}>
-        <text className='LoginText'>Welcome to our AI quizbuilder website, login or register to start creating tenta quizzes</text>
-      </div>
-      <div className="LoginOrRegisterColumns" style={{ gridColumn: column, gridRow: row }}>
-        <div className="LoginRow">
-          <Link to ="/login">
-          <button className="LoginButton">Login</button>
-          </Link>
+function LoginOrRegisterColumns({column, row}) {
+    return (
+        <div className="testMain">
+            <div className='LoginRow' style={{gridColumn: 3, gridRow: 1}}>
+                <text className='LoginText'>Welcome to our AI quizbuilder website, login or register to start creating
+                    tenta quizzes
+                </text>
+            </div>
+            <div className="LoginOrRegisterColumns" style={{gridColumn: column, gridRow: row}}>
+                <div className="LoginRow">
+                    <Link to="/login">
+                        <button className="LoginButton">Login</button>
+                    </Link>
         </div>
         <div className="LoginRow" >
           <div className ="LoginText" style={{color: "white", fontSize: 20}}
