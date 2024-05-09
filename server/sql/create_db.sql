@@ -63,7 +63,7 @@ CREATE TABLE `user_quiz_attempts` (
   `attempt_id` int NOT NULL AUTO_INCREMENT,
   `quiz_id` int DEFAULT NULL,
   `user_id` int DEFAULT NULL,
-  `score` int DEFAULT NULL,
+  `ans_str` VARCHAR(255) NOT NULL,
   `attempt_time` datetime DEFAULT NULL,
   PRIMARY KEY (`attempt_id`),
   KEY `fk_quiz_id_idx` (`quiz_id`),
