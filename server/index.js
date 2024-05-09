@@ -5,12 +5,14 @@ const express = require("express");
 const multer = require('multer');
 const OpenAI = require('openai');
 const pdfParse = require('pdf-parse');
-var mysql = require('mysql');
+const mysql = require('mysql2');
 const fs = require('fs');
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(express.json());
 
+// Project Imports
+const DatabaseManager = require('./DatabaseManager');
 
 
 // Correct way to configure the OpenAI API client, should probably store my api key in a .env file seperate from alla er, speciellt nils. men men 
@@ -18,14 +20,22 @@ const openai = new OpenAI({
   apiKey: "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"
 })
 
-// the connection to the mysql database
-var con = mysql.createConnection({
-  host: "localhost", //här får man lägga till sina egna inställningar om man vill fixa
-  user: "newuser",
-  password: "hejpådigapa",
-  database: "test",
-  port: 3306
-});
+
+
+// Connect to and setup database
+const dbManager = new DatabaseManager();
+dbManager.initializeDatabase()
+    .then(() => {
+        console.log('Database initialized successfully.');
+        //dbManager.close(); //TODO MAYBE FIX
+    })
+    .catch(err => {
+        console.error('Failed to initialize the database:', err);
+        dbManager.close();
+    });
+
+
+
 
 //something something saying where to store the file the user uploads to the server momentarily, we will delete it after we have used it
 const storage = multer.diskStorage({
@@ -38,6 +48,74 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage }).single('file');
+
+
+app.post("/login", async (req, res) => {
+    // Destructure and immediately trim the username
+    let { username, password } = req.body;
+    username = username.trim();  // Trim the username to remove accidental whitespace
+
+    const callProcedure = 'CALL login_user(?, ?)';
+
+    dbManager.getConnection().query(callProcedure, [username, password], function(err, result, fields) {
+        if (err) {
+            console.error("Database error:", err);
+            res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
+            return;
+        }
+
+        if (result[0][0].message.includes("Login successful")) {
+            // Extract user data from the same result set
+            const userData = {
+                user_id: result[0][0].user_id,
+                username: result[0][0].username,
+                email: result[0][0].email,
+                firstname: result[0][0].firstname,
+                lastname: result[0][0].lastname,
+                last_login: result[0][0].last_login
+            };
+            console.log("User data:", userData);
+            res.json({ success: true, message: "Login successful", user: userData });
+        } else {
+            res.json({ success: false, message: result[0][0].message });
+        }
+    });
+});
+
+app.post("/register", async (req, res) => {
+    const { username, email, firstName, lastName, password } = req.body;
+
+    const callProcedure = 'CALL register_user(?, ?, ?, ?, ?)';
+
+    dbManager.getConnection().query(callProcedure, [username, email, firstName, lastName, password], function(err, result) {
+        if (err) {
+            console.error("Database error:", err);
+            res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
+            return;
+        }
+
+        const message = result[0][0].message;
+        if (message.includes("User registered")) {
+            const userData = {
+                user_id: result[0][0].user_id,
+                username: result[0][0].username,
+                email: result[0][0].email,
+                firstname: result[0][0].firstname,
+                lastname: result[0][0].lastname,
+                last_login: result[0][0].last_login
+            };
+            console.log("User data:", userData);
+            res.json({ success: true, message: "User registered successfully", user: userData });
+
+        } else {
+            res.json({ success: false, message: message });
+        }
+    });
+});
+
+
+
+
 
 // this recieves the file from the client side and then sends it to the openai api to get the questions and answers
 // this entire function or whatever you'd call it could probalby be done in a better way but i dont really have the time to do that right now
@@ -165,7 +243,7 @@ function createQuiz(responseData) {
   const callProcedure = 'CALL InsertQuizData(?)';
 
   // Convert the quiz data to a JSON string and pass it as a parameter to the stored procedure
-  con.query(callProcedure, [JSON.stringify(responseData)], function(err, result) {
+    dbManager.getConnection().query(callProcedure, [JSON.stringify(responseData)], function(err, result) {
       if (err) {
           console.error("Database error:", err);
           return;
@@ -181,55 +259,37 @@ function createQuiz(responseData) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-app.post("/login", async (req, res) => {
-    // Destructure and immediately trim the username
-    let { username, password } = req.body;
-    username = username.trim();  // Trim the username to remove accidental whitespace
-
-    const callProcedure = 'CALL login_user(?, ?)';
-
-    con.query(callProcedure, [username, password], function(err, result, fields) {
-        if (err) {
-            console.error("Database error:", err);
-            res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
-            return;
-        }
-
-        if (result[0][0].message.includes("Login successful")) {
-            // Extract user data from the same result set
-            const userData = {
-                user_id: result[0][0].user_id,
-                username: result[0][0].username,
-                email: result[0][0].email,
-                firstname: result[0][0].firstname,
-                lastname: result[0][0].lastname,
-                last_login: result[0][0].last_login
-            };
-            console.log("User data:", userData);
-            res.json({ success: true, message: "Login successful", user: userData });
-        } else {
-            res.json({ success: false, message: result[0][0].message });
-        }
-    });
+app.delete('/remove_quiz/:quizId', async (req, res) => {
+    const { quizId } = req.params;
+    try {
+        await dbManager.deleteQuizById(quizId);
+        res.status(200).json({ message: 'Quiz successfully deleted' });
+    } catch (error) {
+        console.error('Failed to delete quiz:', error);
+        res.status(500).json({ message: 'Failed to delete quiz' });
+    }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.get("/getQuizDetailed/:quizId", async (req, res) => {
     const quizId = req.params.quizId; // Get quizId from URL parameters
     // Optionally, get userId from an authenticated session or token if needed
     const userId = req.user?.id; // Assuming you have some authentication middleware
 
-    con.query('CALL GetQuizDetailsByQuizId(?)', [quizId], function(err, result, fields) {
+    dbManager.getConnection().query('CALL GetQuizDetailsByQuizId(?)', [quizId], function(err, result, fields) {
         if (err) {
             console.error("Database error:", err);
             res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
@@ -237,7 +297,7 @@ app.get("/getQuizDetailed/:quizId", async (req, res) => {
         }
 
         if (result[0] && result[0].length > 0) {
-            const quizData = JSON.parse(result[0][0].QuizData);
+            const quizData = JSON.parse(JSON.stringify(result[0][0].QuizData));
             console.log("Quiz Title:", quizData.title);
             quizData.questions.forEach(question => {
                 console.log("Question:", question.text);
@@ -264,7 +324,7 @@ app.get("/getQuiz", async (req, res) => {
         return;
     }
 
-    con.query(querystring, [userId], function(err, result, fields) {
+    dbManager.getConnection().query(querystring, [userId], function(err, result, fields) {
         if (err) {
             console.error("Database error:", err);
             res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
@@ -295,35 +355,16 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-app.post("/register", async (req, res) => {
-  const { username, email, firstName, lastName, password } = req.body;
 
-  const callProcedure = 'CALL register_user(?, ?, ?, ?, ?)';
-    
-  con.query(callProcedure, [username, email, firstName, lastName, password], function(err, result) {
-    if (err) {
-        console.error("Database error:", err);
-        res.status(500).json({ success: false, message: err.sqlMessage || "Database error" });
-        return;
-    }
-
-    const message = result[0][0].message;
-    if (message.includes("User registered")) {
-      const userData = {
-        user_id: result[0][0].user_id,
-        username: result[0][0].username,
-        email: result[0][0].email,
-        firstname: result[0][0].firstname,
-        lastname: result[0][0].lastname,
-        last_login: result[0][0].last_login
-      };
-      console.log("User data:", userData);
-      res.json({ success: true, message: "User registered successfully", user: userData });
-
-    } else {
-        res.json({ success: false, message: message });
-    }
-});
+process.on('SIGINT', () => {
+    console.log('Received SIGINT. Closing database connection...');
+    dbManager.close().then(() => {
+        console.log('Database connection closed.');
+        process.exit(0); // Exit cleanly after closing the connection
+    }).catch(err => {
+        console.error('Failed to close database connection:', err);
+        process.exit(1); // Exit with error code
+    });
 });
 
 
