@@ -10,16 +10,13 @@ const fs = require('fs');
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(express.json());
-
 // Project Imports
 const DatabaseManager = require('./DatabaseManager');
-
 
 // Correct way to configure the OpenAI API client, should probably store my api key in a .env file seperate from alla er, speciellt nils. men men 
 const openai = new OpenAI({
   apiKey: "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"
 })
-
 
 
 // Connect to and setup database
@@ -36,7 +33,6 @@ dbManager.initializeDatabase()
 
 
 
-
 //something something saying where to store the file the user uploads to the server momentarily, we will delete it after we have used it
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -46,7 +42,6 @@ const storage = multer.diskStorage({
       cb(null, file.fieldname + '-' + Date.now() + '-' + file.originalname);
   }
 });
-
 const upload = multer({ storage: storage }).single('file');
 
 
@@ -112,7 +107,6 @@ app.post("/register", async (req, res) => {
         }
     });
 });
-
 
 
 
@@ -237,7 +231,6 @@ async function createQuiz5Questions(pdfToText, userId, title) {
 }
 
 
-
 function createQuiz(responseData) {
   // Call the stored procedure to insert the quiz data into the database
   const callProcedure = 'CALL InsertQuizData(?)';
@@ -258,7 +251,6 @@ function createQuiz(responseData) {
 
 
 
-
 app.delete('/remove_quiz/:quizId', async (req, res) => {
     const { quizId } = req.params;
     try {
@@ -269,7 +261,6 @@ app.delete('/remove_quiz/:quizId', async (req, res) => {
         res.status(500).json({ message: 'Failed to delete quiz' });
     }
 });
-
 
 
 
@@ -313,7 +304,6 @@ app.get("/getQuizDetailed/:quizId", async (req, res) => {
     });
 });
 
-
 app.get("/getQuiz", async (req, res) => {
     const querystring = 'CALL GetQuizNamesByUserId(?)';
     const userId = req.query.userId;
@@ -350,11 +340,9 @@ app.get("/getQuiz", async (req, res) => {
 });
 
 
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
 
 process.on('SIGINT', () => {
     console.log('Received SIGINT. Closing database connection...');
