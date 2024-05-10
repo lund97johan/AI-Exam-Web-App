@@ -16,8 +16,10 @@ VALUES (1,'adam123','adam@gmail.com','adam','adamsson','hejsansvejsan','2024-04-
        (12, 'user', 'example@mail.com', 'user', 'mcUser', 'password', NOW(), NOW());
 
 INSERT INTO `Quizzes`
-VALUES (1,9,'8-Intergrated Process (CH06).pdf',NULL),(2,9,'1-Organizations, BP and IS (CH01) (1).pdf',NULL),
-       (3,1,'6-Fulfillment Process (CH04) (1).pdf',NULL),(4,3,'2-Enterprise Systems, OSS, Conversational System (CH02).pdf',NULL);
+VALUES (1,9,'8-Intergrated Process (CH06).pdf',NULL),
+       (2,9,'1-Organizations, BP and IS (CH01) (1).pdf',NULL),
+       (3,1,'6-Fulfillment Process (CH04) (1).pdf',NULL),
+       (4,3,'2-Enterprise Systems, OSS, Conversational System (CH02).pdf',NULL);
 
 INSERT INTO `Questions`
 VALUES (1,1,'What are the key concepts and assumptions discussed in the Integrated Processes section?'),
@@ -111,3 +113,10 @@ VALUES (1,1,'Fulfillment, Procurement, Production',1),
        (70,18,'User Interface, Natural Language Understanding, Integration',1),
        (71,18,'Operating System, Software Development Kit, Cloud Computing',0),
        (72,18,'Machine Learning, Agile Development, Deployment tools',0);
+
+INSERT INTO `quiz_attempts`
+(`quiz_id`, `score`, `ans_str`, `attempt_time`)
+VALUES
+    (4, '5/5', '22312', '2023-05-10 10:00:00'),
+    (4, '4/5', '21312', '2023-05-11 11:00:00'),
+    (4, '3/5', '12212', '2023-05-12 12:00:00');

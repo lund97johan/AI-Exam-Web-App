@@ -60,6 +60,10 @@ function ReturnQuizzes() {
         navigate(`/remove_quiz/${quizId}`);
     };
 
+    const handlePreviousAttemptsClick = (quizId) => {
+        navigate((`/quiz_attempts/${quizId}`));
+    };
+
     return (
         <div className="quiz-container">
             {quizzes.length > 0 ? (
@@ -69,6 +73,9 @@ function ReturnQuizzes() {
                             <input className='quiz' type='text' value={quiz.title} disabled />
                             <Link to={`/quiz/${quiz.id}`} className="quiz-button">Take Quiz</Link>
                         </div>
+                        <button className='previous-attempts-button' onClick={() => handlePreviousAttemptsClick(quiz.id)}>
+                            View Previous Attempts
+                        </button>
                         <button className='remove-button' onClick={() => handleRemoveClick(quiz.id)}>
                             Remove Quiz
                         </button>
