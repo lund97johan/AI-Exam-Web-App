@@ -19,6 +19,8 @@ import AuthProvider from "./AuthProvider";
 import OldQuizzes from './Sites/OldQuizzes/OldQuizPage';
 import Dashboard from "./Sites/DashboardSite/Dashboard";
 import RemoveQuiz from "./Sites/RemoveQuiz/RemoveQuiz";
+import QuizAttempts from "./Sites/QuizAttempts/QuizAttempts";
+import QuizAttempt from "./Sites/QuizAttempt/QuizAttempt";
 
 import QuizScore  from "./Sites/QuizScoreSite/QuizScore";
 import QuizContext from './QuizContext';
@@ -42,6 +44,8 @@ root.render(
           <Route path='/dashboard' element={<Dashboard/>}/>
           <Route path='/remove_quiz/:quizId' element={<RemoveQuiz/>}/>
           <Route path='/QuizScore' element={<QuizScore/>}/>
+          <Route path='/quiz_attempts/:quizId' element={<QuizAttempts/>}/>
+          <Route path='/quiz_attempt/:attemptId' element={<QuizAttempt/>}/>
         </Routes>
         </QuizContext>
       </AuthProvider>
