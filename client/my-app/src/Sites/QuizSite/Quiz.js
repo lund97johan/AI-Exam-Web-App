@@ -125,6 +125,7 @@ function ReturnQuiz() {
         if (finalScore < quiz.questions.length) {
             setFailure(true);
         }
+        //
     };
 
     const currentQuestion = quiz.questions[currentQuestionIndex];

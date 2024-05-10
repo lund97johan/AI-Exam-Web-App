@@ -304,6 +304,8 @@ app.get("/getQuizDetailed/:quizId", async (req, res) => {
     });
 });
 
+
+
 app.get("/getQuiz", async (req, res) => {
     const querystring = 'CALL GetQuizNamesByUserId(?)';
     const userId = req.query.userId;
