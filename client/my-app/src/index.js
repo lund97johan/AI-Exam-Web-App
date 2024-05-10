@@ -23,13 +23,11 @@ import QuizAttempts from "./Sites/QuizAttempts/QuizAttempts";
 import QuizAttempt from "./Sites/QuizAttempt/QuizAttempt";
 
 import QuizScore  from "./Sites/QuizScoreSite/QuizScore";
-import QuizContext from './QuizContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <QuizContext>
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/register" element={<Register />}/>
@@ -47,7 +45,6 @@ root.render(
           <Route path='/quiz_attempts/:quizId' element={<QuizAttempts/>}/>
           <Route path='/quiz_attempt/:attemptId' element={<QuizAttempt/>}/>
         </Routes>
-        </QuizContext>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
