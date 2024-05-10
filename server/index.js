@@ -273,7 +273,7 @@ app.delete('/remove_quiz/:quizId', async (req, res) => {
 app.get('/api/quiz_attempts/:quizId', async (req, res) => {
     const { quizId } = req.params;
     try {
-        const attempts = await dbManager.getQuizAttemptsByQuizId(quizId);
+        const attempts = await dbManager.getQuizAttemptsById(quizId);
         res.json({ attempts });
     } catch (error) {
         console.error('Failed to fetch quiz attempts:', error);
