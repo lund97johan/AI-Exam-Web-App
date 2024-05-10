@@ -133,6 +133,7 @@ function ReturnQuiz() {
             answers: selectedAnswer,
             score: finalScore
         };
+        console.log(submissionData);
 
         // Send data to the server
         try {
@@ -147,7 +148,7 @@ function ReturnQuiz() {
             const responseData = await response.json();
             if (response.ok) {
                 console.log('Submission successful:', responseData);
-                navigate('/resultsPage'); // Navigate to results or another page as needed
+                // Navigate to results or another page as needed
             } else {
                 console.error('Failed to submit quiz:', responseData.message);
             }
