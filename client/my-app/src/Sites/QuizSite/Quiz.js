@@ -119,13 +119,41 @@ function ReturnQuiz() {
     const submitQuiz = async () => {
         const finalScore = calculateScore();
         console.log("Final Score:", finalScore); // Log the final score to debug
-        setFinalScore(calculateScore());
+        setFinalScore(finalScore);
         setMaximumScore(quiz.questions.length);
         setShowScore(true);
         if (finalScore < quiz.questions.length) {
             setFailure(true);
         }
-        //
+
+        // Prepare the data to send to the server
+        const submissionData = {
+            userId: user.id,
+            quizId: quiz.quiz_id,
+            answers: selectedAnswer,
+            score: finalScore
+        };
+
+        // Send data to the server
+        try {
+            const response = await fetch('/submitQuizAnswers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(submissionData)
+            });
+
+            const responseData = await response.json();
+            if (response.ok) {
+                console.log('Submission successful:', responseData);
+                navigate('/resultsPage'); // Navigate to results or another page as needed
+            } else {
+                console.error('Failed to submit quiz:', responseData.message);
+            }
+        } catch (error) {
+            console.error('Error submitting quiz:', error);
+        }
     };
 
     const currentQuestion = quiz.questions[currentQuestionIndex];
