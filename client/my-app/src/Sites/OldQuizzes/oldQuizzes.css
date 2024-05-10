@@ -29,7 +29,7 @@
     color: black; /* Set the color of the placeholder text to black */
   }
   
-  .quiz-button, .remove-button {
+  .quiz-button, previous-attempts-button, .remove-button {
     width: 100px;
     height: 40px;
     font-size: 16px;

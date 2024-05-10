@@ -19,8 +19,8 @@ class DatabaseManager {
     constructor() {
         this.config = {
             host: "localhost",
-            user: "newuser",
-            password: "hejpådigapa",
+            user: "root",
+            password: "password",
             database: "AI_Exam_Web_App_DB",
             port: 3306,
         };
@@ -201,6 +201,32 @@ class DatabaseManager {
             });
         });
     }
+
+    /**
+     * Retrieves quiz attempts for a given quiz ID.
+     * @param {number} quizId - The ID of the quiz for which attempts are fetched.
+     * @returns {Promise<Array>} A promise that resolves to an array of attempts.
+     */
+    getQuizAttemptsById(quizId) {
+        return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                const sql = 'SELECT attempt_id, score, attempt_time FROM quiz_attempts WHERE quiz_id = ?';
+                this.connection.query(sql, [quizId], (err, results) => {
+                    if (err) {
+                        console.error(`Error fetching quiz attempts for quiz ID ${quizId}:`, err.message);
+                        reject(err);
+                    } else {
+                        console.log('Quiz attempts fetched successfully');
+                        resolve(results);
+                    }
+                });
+            }).catch(err => {
+                console.error('Failed to connect to database:', err);
+                reject(err);
+            });
+        });
+    }
+
 
     //TODO JSDoc
     runQuery(sql, params = []) {

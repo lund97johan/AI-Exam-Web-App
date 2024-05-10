@@ -1,0 +1,21 @@
+/* QuizAttempts.css */
+
+.attempts-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.attempt-item {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.attempt-details p {
+    margin: 5px 0;
+}
