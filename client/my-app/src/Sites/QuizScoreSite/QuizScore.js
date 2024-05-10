@@ -57,32 +57,46 @@ function QuizScore() {
                     </div>
                     {currentQuestion.answers.map((answer, index) => (
                         <div key={index} className={'Quiz-question-container'} style={{ gridColumn: 2 }}>
-                            <div className='Quiz-question-potanswer' style={{ gridColumn: 2 }}>
-                                <h3>{answer.text}</h3>
-                            </div>
-                            <div style={{ gridColumn: 3 }}>
                                 {/* Check if this answer ID matches the user's selected answer ID */}
                                 {userAnswers[currentQuestion.question_id] && userAnswers[currentQuestion.question_id].answerId === answer.answer_id ? (
                                     answer.is_correct ? (
-                                        <div className='Quiz-question-correct'>
-                                            <h3>very niiice!</h3> {/* Display if the user's answer is correct */}
-                                        </div>
+                                        <>
+                                            <div className='Quiz-question-potanswer' style={{gridColumn: 2,color: "#61dafb"}}>
+                                                <h3>{answer.text}</h3>
+                                            </div>
+                                            <div className='Quiz-question-correct' style={{gridColumn: 3}}>
+                                                <h3>very niiice!</h3> {/* Display if the user's answer is correct */}
+                                            </div>
+                                        </>
                                     ) : (
-                                        <div className='Quiz-question-incorrect'>
-                                            <h3>Your answer was stupid af.</h3> {/* Show user's incorrect choice */}
-                                        </div>
+                                        <>
+                                            <div className='Quiz-question-potanswer' style={{gridColumn: 2, color:"#ff0000"}}>
+                                                <h3>{answer.text}</h3>
+                                            </div>
+                                            <div className='Quiz-question-incorrect' style={{gridColumn: 3}}>
+                                                <h3>Your answer was stupid.</h3> {/* Show user's incorrect choice */}
+                                            </div>
+                                        </>
+
                                     )
                                 ) : (
                                     (answer.is_correct && (
-                                        <div className='Quiz-question-correct'>
-                                            <h3>this is correct u stupid head!</h3> {/* Indicate the correct answer if not chosen by the user */}
-                                        </div>
-                                    )) || null // Ensure that null is returned when the condition is false
+                                        <>
+                                            <div className='Quiz-question-potanswer' style={{gridColumn: 2}}>
+                                                <h3>{answer.text}</h3>
+                                            </div>
+                                            <div className='Quiz-question-correct' style={{gridColumn: 3}}>
+                                                <h3>this is correct u stupid
+                                                    head!</h3> {/* Indicate the correct answer if not chosen by the user */}
+                                            </div>
+                                        </>
+
+                                    )) || <div className='Quiz-question-potanswer' style={{gridColumn: 2}}>
+                                        <h3>{answer.text}</h3>
+                                    </div> // Ensure that null is returned when the condition is false
                                 )}
-                            </div>
                         </div>
                     ))}
-
 
 
                     <div className="Quiz-question-button-container-container" style={{gridColumn: 2}}>

@@ -8,6 +8,7 @@
 .Quiz-question-incorrect{
     background-color: #ff0000;
     color: white;
+    padding: 10px;
 }
 
 .Quiz-question-answer-box-container input {
@@ -23,5 +24,7 @@
 }
 
 .Quiz-body-Score{
-
+    font-size: 3vh;
+    color: #61dafb;
+    text-align: center;
 }
