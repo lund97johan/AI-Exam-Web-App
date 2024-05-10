@@ -17,7 +17,13 @@ function QuizScore() {
     const currentQuestion = quiz.questions[currentQuestionIndex];
     console.log("QuizScore", quiz, userAnswers, score, passed, totalQuestions);
 
-
+    function handleBackButton() {
+        if (currentQuestionIndex === 0) {
+            navigate("/Dashboard");
+        }else{
+            setCurrentQuestionIndex(currentQuestionIndex - 1);
+        }
+    }
 
 
     // Fallback in case state is not available (e.g., user navigates directly to the page)
@@ -37,6 +43,8 @@ function QuizScore() {
                             Number of questions: {quiz.questions.length}
                         </div>
                     </div>
+
+
                     <div className="Quiz-question-number-text" style={{gridColumn: 2, gridRow: 1}}>
                         <div className='Quiz-question-nr' style={{gridColumn: 2}}>
                             <h1>Question {currentQuestionIndex + 1}</h1>
@@ -48,37 +56,40 @@ function QuizScore() {
                         </div>
                     </div>
                     {currentQuestion.answers.map((answer, index) => (
-                        <div key={index} className="Quiz-question-container" style={{gridColumn: 2}}>
-                            <div className='Quiz-question-potanswer' style={{gridColumn: 2}}>
+                        <div key={index} className={'Quiz-question-container'} style={{ gridColumn: 2 }}>
+                            <div className='Quiz-question-potanswer' style={{ gridColumn: 2 }}>
+                                <h3>{answer.text}</h3>
+                            </div>
+                            <div style={{ gridColumn: 3 }}>
+                                {/* Check if this answer ID matches the user's selected answer ID */}
                                 {userAnswers[currentQuestion.question_id] && userAnswers[currentQuestion.question_id].answerId === answer.answer_id ? (
-                                    userAnswers[currentQuestion.question_id].isCorrect ? (
-                                            <>
-                                                <div className='Quiz-question-correct'>
-                                                   {answer.text}
-                                                </div>
-
-                                            </>
-
+                                    answer.is_correct ? (
+                                        <div className='Quiz-question-correct'>
+                                            <h3>very niiice!</h3> {/* Display if the user's answer is correct */}
+                                        </div>
                                     ) : (
                                         <div className='Quiz-question-incorrect'>
-                                            <h3>{answer.text}</h3> {/* Incorrect Answer */}
+                                            <h3>Your answer was stupid af.</h3> {/* Show user's incorrect choice */}
                                         </div>
                                     )
                                 ) : (
-                                    <div className='Quiz-question-answer'>
-                                        <h3>{answer.text}</h3> {/* Unselected Answer */}
-                                    </div>
+                                    (answer.is_correct && (
+                                        <div className='Quiz-question-correct'>
+                                            <h3>this is correct u stupid head!</h3> {/* Indicate the correct answer if not chosen by the user */}
+                                        </div>
+                                    )) || null // Ensure that null is returned when the condition is false
                                 )}
                             </div>
                         </div>
                     ))}
 
 
+
                     <div className="Quiz-question-button-container-container" style={{gridColumn: 2}}>
                         <div className="Quiz-question-button-container" style={{justifyContent: "left"}}
                              id="rightbutton">
                             <button className='Quiz-button'
-                                    onClick={() => setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))}>Previous
+                                    onClick={() => handleBackButton()}>Previous
                             </button>
                         </div>
                         <div className="Quiz-question-button-container" style={{justifyContent: "right"}}
@@ -88,7 +99,6 @@ function QuizScore() {
                                     navigate("/Dashboard");
                                 } else {
                                     setCurrentQuestionIndex(currentQuestionIndex + 1);
-
                                 }
                             }}
                             >Next
@@ -99,6 +109,16 @@ function QuizScore() {
                 </div>
             </div>
             <ReturnFooter/>
+        </div>
+    );
+}
+
+function ReturnCorrectAnswerBox({row}) {
+    return (
+        <div className='Quiz-question-container' style={{gridRow: row}}>
+            <div className={'Quiz-question-potanswer'}>
+                <h3>Correct Answer</h3>
+            </div>
         </div>
     );
 }
