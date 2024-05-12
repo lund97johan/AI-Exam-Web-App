@@ -6,7 +6,7 @@ import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
 import {useAuth} from "../../AuthProvider";
 import { useParams } from 'react-router-dom';
-
+import { useQuiz } from '../../QuizContext';
 
 function Quiz(){
     return(
@@ -24,38 +24,10 @@ function ShowQuizScore(){
         <div className='App'>
             <ReturnHeader/>
               <div className='App-body'>
-                <ReturnQuizScore/>
+                <ReturnQuiz/>
             </div>
             <ReturnFooter/>
         </div>
-    )
-}
-
-function ReturnQuizScore({Score, MaximumScore, QuizId}){
-    return(
-        <>
-            <div className={Score >= MaximumScore ? 'Quiz-nrOfQuestions' : 'Quiz-nrOfQuestions-fail'}
-                 style={{gridColumn: 2, gridRow: 2}}>
-                <div className='Quiz-nrOfQuestions-text'>
-                    {Score >= MaximumScore ? 'Congratulations! you passed the test' : 'You failed!'}
-                </div>
-            </div>
-            <div className='Quiz-nrOfQuestions' style={{gridColumn: 2, gridRow: 3}}>
-                <div className='Quiz-nrOfQuestions-text'>
-                    Your score: {Score} of {MaximumScore}
-                </div>
-            </div>
-            <div className="redo-quiz-button" style={{gridColumn: 2, gridRow: 5, justifySelf:"left"}}>
-                <Link to={`/quiz/${QuizId}`}>
-                    <button className='Quiz-button'>Redo test</button>
-                </Link>
-            </div>
-            <div className='finish-test-button' style={{gridColumn: 2, gridRow: 5, justifySelf:"right"}}>
-                <Link to='/dashboard'>
-                    <button className='Quiz-button'>Finish test</button>
-                </Link>
-            </div>
-        </>
     )
 }
 
@@ -70,6 +42,7 @@ function ReturnQuiz() {
     const [showScore, setShowScore] = useState(false);
     const [finalScore, setFinalScore] = useState(0); // State for the final score
     const [maximumScore, setMaximumScore] = useState(0); // State for the maximum possible score
+    const [failure, setFailure] = useState(false); // State for the maximum possible score
     // This useEffect will log the selectedAnswer state every time it changes
     useEffect(() => {
         console.log('Selected Answers:', selectedAnswer);
@@ -140,15 +113,48 @@ function ReturnQuiz() {
         setShowScore(false); // Assuming you have access to setShowScore here
         setFinalScore(0);
         setMaximumScore(0);
-
+        setFailure(false)
     };
 
     const submitQuiz = async () => {
         const finalScore = calculateScore();
         console.log("Final Score:", finalScore); // Log the final score to debug
-        setFinalScore(calculateScore());
+        setFinalScore(finalScore);
         setMaximumScore(quiz.questions.length);
         setShowScore(true);
+        if (finalScore < quiz.questions.length) {
+            setFailure(true);
+        }
+
+        // Prepare the data to send to the server
+        const submissionData = {
+            userId: user.id,
+            quizId: quiz.quiz_id,
+            answers: selectedAnswer,
+            score: finalScore
+        };
+        console.log(submissionData);
+
+        // Send data to the server
+        try {
+            const response = await fetch('/submitQuizAnswers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(submissionData)
+            });
+
+            const responseData = await response.json();
+            if (response.ok) {
+                console.log('Submission successful:', responseData);
+                // Navigate to results or another page as needed
+            } else {
+                console.error('Failed to submit quiz:', responseData.message);
+            }
+        } catch (error) {
+            console.error('Error submitting quiz:', error);
+        }
     };
 
     const currentQuestion = quiz.questions[currentQuestionIndex];
@@ -159,74 +165,98 @@ function ReturnQuiz() {
         <div className='Quiz-body'>
             {showScore ? (
                 <>
-                    <div className={finalScore >= maximumScore ? 'Quiz-Result-Text-Pass' : 'Quiz-Result-Text-Fail'}
+                    <div className={failure ?  'Quiz-Result-Text-Fail': 'Quiz-Result-Text-Pass'}
                          style={{gridColumn: 2, gridRow: 2}}>
-                            {finalScore >= maximumScore ? 'Congratulations! you passed the test' : 'You failed!'}
+                        {failure ?  'You failed!' : 'Congratulations! you passed the test' }
                     </div>
                     <div className='Quiz-Result-Score-Container' style={{gridColumn: 2, gridRow: 3}}>
                         <div className='Quiz-Result-Score'>
                             Your score: {finalScore} of {maximumScore}
                         </div>
                     </div>
+                    {failure ? <>
+                        <div className='Quiz-Result-Text' style={{gridColumn: 2, gridRow: 4, justifySelf: 'left'}}>
+                            You can now view the correct answers
+                        </div>
+                        <div className='finish-test-button'
+                             style={{gridColumn: 2, gridRow: 4, justifySelf: "right", marginRight: "20vh"}}>
+                            <button className='Quiz-button' onClick={() => {
+                                navigate('/QuizScore', {
+                                    state: {
+                                        quiz: quiz,
+                                        userAnswers: selectedAnswer,
+                                        score: finalScore,
+                                        passed: failure,
+                                        totalQuestions: quiz.questions.length
+                                    }
+                                });
+                            }}>see how you fucked up
+                            </button>
+                        </div>
+                    </> : null
 
-                    <div className="redo-quiz-button" style={{gridColumn: 2, gridRow: 5, justifySelf: "left", marginLeft: "20vh"}}>
+
+                    }
+                    <div className="redo-quiz-button"
+                         style={{gridColumn: 2, gridRow: 5, justifySelf: "left", marginLeft: "20vh"}}>
                         <button className='Quiz-button' onClick={resetQuiz}>Redo test</button>
                     </div>
-                    <div className='finish-test-button' style={{gridColumn: 2, gridRow: 5, justifySelf:"right", marginRight: "20vh"}}>
-                        <Link to='/dashboard'>
+                    <div className='finish-test-button'
+                         style={{gridColumn: 2, gridRow: 5, justifySelf: "right", marginRight: "20vh"}}>
+                    <Link to='/dashboard'>
                             <button className='Quiz-button'>Finish test</button>
                         </Link>
                     </div>
                 </>
             ) : (
-                            <>
-                            <div className='Quiz-nrOfQuestions' style={{ gridColumn: 3 }}>
+                <>
+                    <div className='Quiz-nrOfQuestions' style={{gridColumn: 3}}>
                         <div className='Quiz-nrOfQuestions-text'>
                             Number of questions: {quiz.questions.length}
                         </div>
                     </div>
-                <div className="Quiz-question-number-text" style={{ gridColumn: 2, gridRow: 1 }}>
-                    <div className='Quiz-question-nr' style={{ gridColumn: 2 }}>
-                        <h1>Question {currentQuestionIndex + 1}</h1>
-                    </div>
-                </div>
-                <div className="Quiz-question-text-container" style={{ gridColumn: 2 }}>
-                    <div className='Quiz-question' style={{ gridColumn: 2 }}>
-                        <h2>{currentQuestion.text}</h2>
-                    </div>
-                </div>
-                {currentQuestion.answers.map((answer, index) => (
-                    <div key={index} className="Quiz-question-container" style={{ gridColumn: 2 }}>
-                        <div className='Quiz-question-potanswer' style={{ gridColumn: 2 }}>
-                            {answer.text}
+                    <div className="Quiz-question-number-text" style={{ gridColumn: 2, gridRow: 1 }}>
+                        <div className='Quiz-question-nr' style={{ gridColumn: 2 }}>
+                            <h1>Question {currentQuestionIndex + 1}</h1>
                         </div>
-                        <label className='Quiz-question-answer-box-container' style={{ gridColumn: 3 }}>
-                            <input
-                                type="radio"
-                                name={`question_${currentQuestion.question_id}`}
-                                value={answer.answer_id}
-                                checked={selectedAnswer[currentQuestion.question_id]?.answerId === answer.answer_id}
-                                onChange={() => handleAnswerSelect(currentQuestion.question_id, answer.answer_id, answer.is_correct)}
-                            />
-                            <span className="Quiz-question-answer-box"></span>
-                        </label>
                     </div>
-                ))}
-                <div className="Quiz-question-button-container-container" style={{ gridColumn: 2 }}>
-                    <div className="Quiz-question-button-container" style={{ justifyContent: "left" }} id="rightbutton">
-                        <button className='Quiz-button' onClick={() => setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))}>Previous</button>
+                    <div className="Quiz-question-text-container" style={{ gridColumn: 2 }}>
+                        <div className='Quiz-question' style={{ gridColumn: 2 }}>
+                            <h2>{currentQuestion.text}</h2>
+                        </div>
                     </div>
-                    <div className="Quiz-question-button-container" style={{ justifyContent: "right" }} id="leftbutton">
-                        <button className='Quiz-button' onClick={() => {
-                            if (currentQuestionIndex >= quiz.questions.length - 1) {
-                                submitQuiz();
-                            } else {
-                                setCurrentQuestionIndex(currentQuestionIndex + 1);
-                            }
-                        }}
-                        >Next</button>
+                    {currentQuestion.answers.map((answer, index) => (
+                        <div key={index} className="Quiz-question-container" style={{ gridColumn: 2 }}>
+                            <div className='Quiz-question-potanswer' style={{ gridColumn: 2 }}>
+                                {answer.text}
+                            </div>
+                            <label className='Quiz-question-answer-box-container' style={{ gridColumn: 3 }}>
+                                <input
+                                    type="radio"
+                                    name={`question_${currentQuestion.question_id}`}
+                                    value={answer.answer_id}
+                                    checked={selectedAnswer[currentQuestion.question_id]?.answerId === answer.answer_id}
+                                    onChange={() => handleAnswerSelect(currentQuestion.question_id, answer.answer_id, answer.is_correct)}
+                                />
+                                <span className="Quiz-question-answer-box"></span>
+                            </label>
+                        </div>
+                    ))}
+                    <div className="Quiz-question-button-container-container" style={{ gridColumn: 2 }}>
+                        <div className="Quiz-question-button-container" style={{ justifyContent: "left" }} id="rightbutton">
+                            <button className='Quiz-button' onClick={() => setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))}>Previous</button>
+                        </div>
+                        <div className="Quiz-question-button-container" style={{ justifyContent: "right" }} id="leftbutton">
+                            <button className='Quiz-button' onClick={() => {
+                                if (currentQuestionIndex >= quiz.questions.length - 1) {
+                                    submitQuiz();
+                                } else {
+                                    setCurrentQuestionIndex(currentQuestionIndex + 1);
+                                }
+                            }}
+                            >Next</button>
+                        </div>
                     </div>
-                </div>
 
                 </>
             )}

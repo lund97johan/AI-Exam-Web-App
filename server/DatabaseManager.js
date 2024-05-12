@@ -3,7 +3,7 @@ const fs = require('fs');
 
 // Importing MySQL driver, ensure version 2.x for compatibility with current methods
 const mysql = require('mysql2');
-
+const mysql1 = require('mysql');
 /**
  * Manages database operations including connecting to the database,
  * executing SQL scripts, and closing the database connection.
@@ -19,8 +19,8 @@ class DatabaseManager {
     constructor() {
         this.config = {
             host: "localhost",
-            user: "root",
-            password: "password",
+            user: "newuser",
+            password: "hejpådigapa",
             database: "AI_Exam_Web_App_DB",
             port: 3306,
         };

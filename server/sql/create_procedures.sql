@@ -197,5 +197,3 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteQuiz`(IN q_id INT)
 BEGIN
 	DELETE FROM quizzes WHERE quiz_id = q_id; 
 END
-
-
