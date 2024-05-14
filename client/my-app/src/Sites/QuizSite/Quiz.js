@@ -130,9 +130,11 @@ function ReturnQuiz() {
         const submissionData = {
             userId: user.id, // Ensure user ID is available
             quizId: quiz.quiz_id,
-            answers: selectedAnswer, // Join the array with a comma and space
-            score: finalScore
+            answers: selectedAnswer, // Assuming this is structured correctly for your backend
+            score: finalScore, // This should be just the count of correct answers
+            totalQuestions: quiz.questions.length // Total number of questions in the quiz
         };
+
         console.log(submissionData);
 
         // Send data to the server

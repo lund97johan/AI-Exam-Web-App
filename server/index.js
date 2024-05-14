@@ -282,7 +282,7 @@ app.get('/api/quiz_attempts/:quizId', async (req, res) => {
 
 // Assuming Express is already set up
 app.post('/submitQuizAnswers', (req, res) => {
-    const { userId, quizId, answers, score } = req.body; // Destructure the needed information from the request body
+    const { userId, quizId, answers, score, totalQuestions } = req.body; // Destructure the needed information from the request body
     const answerIds = [];
 
     // Iterate through the answers object to extract answerIds
@@ -292,14 +292,15 @@ app.post('/submitQuizAnswers', (req, res) => {
         }
     }
 
+
     const ans_str = answerIds.join(', '); // Convert the array of answerIds to a comma-separated string
     const attempt_time = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format datetime for MySQL
-
+    const totalScore = `${score}/${totalQuestions}`;
     // SQL query to insert the quiz attempt into the database
     const sql = `INSERT INTO quiz_attempts (quiz_id, score, ans_str, attempt_time) VALUES (?, ?, ?, ?)`;
 
     // Execute the SQL query using the existing database connection
-    dbManager.getConnection().query(sql, [quizId, score, ans_str, attempt_time], (err, result) => {
+    dbManager.getConnection().query(sql, [quizId, totalScore, ans_str, attempt_time], (err, result) => {
         if (err) {
             console.error('Error saving quiz results:', err);
             return res.status(500).json({ message: 'Failed to save quiz results' });

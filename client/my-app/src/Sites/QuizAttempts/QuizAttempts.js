@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import './QuizAttempts.css';
+import {ReturnFooter, ReturnHeader} from "../../App";
 
 function QuizAttempts() {
+    const location = useLocation();
     const { quizId } = useParams();
     const navigate = useNavigate();
     const [attempts, setAttempts] = useState([]);
     const [quiz, setQuiz] = useState(null);
     const [selectedAnswer, setSelectedAnswer] = useState([]);
     const [updatedAnswers, setUpdatedAnswers] = useState([]);
+    const {quizName} = location.state || {};
 
     useEffect(() => {
         const fetchAttempts = async () => {
@@ -74,22 +77,29 @@ function QuizAttempts() {
         }
     };
     return (
-        <div className="attempts-container">
-            <h1>Quiz Attempts for Quiz ID: {quizId}</h1>
-            {attempts.length > 0 ? (
-                attempts.map((attempt, index) => (
-                    <div key={index} className="attempt-item">
-                        <div className="attempt-details">
-                            <p>Score: {attempt.score}</p>
-                            <p>Attempt Time: {new Date(attempt.attempt_time).toLocaleString()}</p>
-                        </div>
-                        <button onClick={() => NavigateQuizAttempt(attempt.attempt_id)}>View Attempt</button>
-                    </div>
-                ))
-            ) : (
-                <p>No attempts found for this quiz.</p>
-            )}
+        <div className='App'>
+            <ReturnHeader/>
+            <div className='App-body'>
+                <div className="attempts-container">
+                    <h1 style={{color:"white"}}>Quiz Attempts for Quiz ID: {quizName}</h1>
+                    {attempts.length > 0 ? (
+                        attempts.map((attempt, index) => (
+                            <div key={index} className="attempt-item">
+                                <div className="attempt-details">
+                                    <p>Score: {attempt.score}</p>
+                                    <p>Attempt Time: {new Date(attempt.attempt_time).toLocaleString()}</p>
+                                </div>
+                                <button onClick={() => NavigateQuizAttempt(attempt.attempt_id)}>View Attempt</button>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No attempts found for this quiz.</p>
+                    )}
+                </div>
+            </div>
+            <ReturnFooter/>
         </div>
+
     );
 }
 
