@@ -19,8 +19,8 @@ class DatabaseManager {
     constructor() {
         this.config = {
             host: "localhost",
-            user: "root",
-            password: "password",
+            user: "newuser",
+            password: "hejpådigapa",
             database: "AI_Exam_Web_App_DB",
             port: 3306,
         };
@@ -212,6 +212,7 @@ class DatabaseManager {
     async saveQuizResults(quizId, answers, score) {
         // Convert answers object to a JSON string if storing as text
         const ans_str = JSON.stringify(answers); // Assuming answers need to be stored as a JSON string
+        console.log(ans_str)
         const attempt_time = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format for MySQL datetime
 
         const sql = `INSERT INTO quiz_attempts (quiz_id, score, ans_str, attempt_time) VALUES (?, ?, ?, ?)`;

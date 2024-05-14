@@ -278,33 +278,58 @@ app.get('/api/quiz_attempts/:quizId', async (req, res) => {
 /**
  * Retrieves all relevant data for a specific quiz attempt.
  */
-app.get('/api/quiz_attempt/:attemptId', async (req, res) => {
-    const { attemptId } = req.params;
-    try {
-        const attemptDetails = await dbManager.getAttemptDetails(attemptId);
-        res.json(attemptDetails);
-    } catch (error) {
-        console.error('Failed to fetch attempt details:', error);
-        res.status(500).json({ message: 'Failed to fetch attempt details' });
-    }
-});
 
 
 // Assuming Express is already set up
-app.post('/submitQuizAnswers', async (req, res) => {
-    const { quizId, answers, score } = req.body; // Destructure the data sent from the client, removing userId
+app.post('/submitQuizAnswers', (req, res) => {
+    const { userId, quizId, answers, score } = req.body; // Destructure the needed information from the request body
+    const answerIds = [];
 
-    try {
-        // Process the submission data
-        const result = await dbManager.saveQuizResults(quizId, answers, score);
-
-        // Respond back to the client
-        res.status(200).json({ message: 'Quiz results saved successfully', result: result });
-    } catch (error) {
-        console.error('Error saving quiz results:', error);
-        res.status(500).json({ message: 'Failed to save quiz results' });
+    // Iterate through the answers object to extract answerIds
+    for (const key in answers) {
+        if (answers.hasOwnProperty(key)) {
+            answerIds.push(answers[key].answerId);
+        }
     }
+
+    const ans_str = answerIds.join(', '); // Convert the array of answerIds to a comma-separated string
+    const attempt_time = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format datetime for MySQL
+
+    // SQL query to insert the quiz attempt into the database
+    const sql = `INSERT INTO quiz_attempts (quiz_id, score, ans_str, attempt_time) VALUES (?, ?, ?, ?)`;
+
+    // Execute the SQL query using the existing database connection
+    dbManager.getConnection().query(sql, [quizId, score, ans_str, attempt_time], (err, result) => {
+        if (err) {
+            console.error('Error saving quiz results:', err);
+            return res.status(500).json({ message: 'Failed to save quiz results' });
+        }
+        res.status(200).json({ message: 'Quiz results saved successfully', attemptId: result.insertId });
+    });
 });
+
+
+
+app.get('/api/quiz_attempt/:attemptId', (req, res) => {
+    const { attemptId } = req.params;
+    console.log('Fetching attempt details for attempt ID:', attemptId);
+    dbManager.getConnection().query(`SELECT ans_str FROM quiz_attempts WHERE attempt_id = ?`, [attemptId], (err, results) => {
+        if (err) {
+            console.error('Error fetching attempt:', err);
+            return res.status(500).json({ message: 'Failed to fetch attempt details' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Quiz attempt not found' });
+        }
+
+
+        // Split the comma-separated answer IDs and convert them to integers
+        const answerIds = results[0].ans_str.split(',').map(id => parseInt(id.trim()));
+
+        res.json({ answerIds });
+    });
+});
+
 
 
 

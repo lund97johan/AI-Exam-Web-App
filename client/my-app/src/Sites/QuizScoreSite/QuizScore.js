@@ -10,7 +10,7 @@ import {useAuth} from "../../AuthProvider";
 
 function QuizScore() {
     const location = useLocation();
-    const { quiz, userAnswers, score, passed, totalQuestions } = location.state || {};  // Destructure the passed state with fallback to an empty object
+    const { quiz, userAnswers, score, passed, totalQuestions} = location.state || {};  // Destructure the passed state with fallback to an empty object
     const navigate = useNavigate();
     const { user } = useAuth();
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -24,6 +24,8 @@ function QuizScore() {
             setCurrentQuestionIndex(currentQuestionIndex - 1);
         }
     }
+
+
 
 
     // Fallback in case state is not available (e.g., user navigates directly to the page)

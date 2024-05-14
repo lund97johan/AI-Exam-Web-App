@@ -128,9 +128,9 @@ function ReturnQuiz() {
 
         // Prepare the data to send to the server
         const submissionData = {
-            userId: user.id,
+            userId: user.id, // Ensure user ID is available
             quizId: quiz.quiz_id,
-            answers: selectedAnswer,
+            answers: selectedAnswer, // Join the array with a comma and space
             score: finalScore
         };
         console.log(submissionData);
