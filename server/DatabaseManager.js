@@ -253,6 +253,66 @@ class DatabaseManager {
         });
     }
 
+    /**
+     * Retrieves detailed information for a specific quiz attempt.
+     * @param {number} attemptId - The ID of the quiz attempt to retrieve.
+     * @returns {Promise<Object>} A promise that resolves with the quiz attempt details.
+     */
+    getAttemptDetails(attemptId) {
+        return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                // Fetch basic attempt details
+                const attemptSql = `SELECT quiz_id, score, ans_str FROM quiz_attempts WHERE attempt_id = ?`;
+                this.connection.query(attemptSql, [attemptId], async (err, attemptResults) => {
+                    if (err) {
+                        console.error(`Error fetching attempt details:`, err.message);
+                        reject(err);
+                        return;
+                    }
+                    if (attemptResults.length === 0) {
+                        reject(new Error("No attempt found with the given ID"));
+                        return;
+                    }
+
+                    const attempt = attemptResults[0];
+                    const questionsSql = `
+                    SELECT q.question_id, q.text AS question_text, a.text AS answer_text, a.is_correct
+                    FROM questions q
+                    JOIN answers a ON q.question_id = a.question_id
+                    WHERE q.quiz_id = ?
+                    ORDER BY q.question_id, a.is_correct DESC
+                `;
+
+                    // Fetch questions and answers related to the quiz
+                    this.connection.query(questionsSql, [attempt.quiz_id], (err, questionsResults) => {
+                        if (err) {
+                            console.error(`Error fetching questions for quiz ID ${attempt.quiz_id}:`, err.message);
+                            reject(err);
+                            return;
+                        }
+
+                        // Parse user answers from JSON string
+                        const userAnswers = JSON.parse(attempt.ans_str);
+
+                        // Assemble the final response
+                        const details = {
+                            score: attempt.score,
+                            questions: questionsResults.map(q => ({
+                                ...q,
+                                userAnswer: userAnswers[q.question_id]
+                            }))
+                        };
+
+                        resolve(details);
+                    });
+                });
+            }).catch(err => {
+                console.error('Failed to connect to database:', err);
+                reject(err);
+            });
+        });
+    }
+
 
     //TODO JSDoc
     runQuery(sql, params = []) {

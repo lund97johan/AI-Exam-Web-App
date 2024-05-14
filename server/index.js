@@ -247,10 +247,9 @@ function createQuiz(responseData) {
 }
 
 
-
-
-
-
+/**
+ * Removes Quizzes from the db, along with all questions, answers and attempts related to the quiz.
+ */
 app.delete('/remove_quiz/:quizId', async (req, res) => {
     const { quizId } = req.params;
     try {
@@ -262,8 +261,9 @@ app.delete('/remove_quiz/:quizId', async (req, res) => {
     }
 });
 
-
-
+/**
+ * Retrieves quiz attempts (multiple, and not with questions and answers) from the db.
+ */
 app.get('/api/quiz_attempts/:quizId', async (req, res) => {
     const { quizId } = req.params;
     try {
@@ -275,6 +275,19 @@ app.get('/api/quiz_attempts/:quizId', async (req, res) => {
     }
 });
 
+/**
+ * Retrieves all relevant data for a specific quiz attempt.
+ */
+app.get('/api/quiz_attempt/:attemptId', async (req, res) => {
+    const { attemptId } = req.params;
+    try {
+        const attemptDetails = await dbManager.getAttemptDetails(attemptId);
+        res.json(attemptDetails);
+    } catch (error) {
+        console.error('Failed to fetch attempt details:', error);
+        res.status(500).json({ message: 'Failed to fetch attempt details' });
+    }
+});
 
 
 // Assuming Express is already set up
