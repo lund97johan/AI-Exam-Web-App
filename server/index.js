@@ -262,6 +262,8 @@ app.delete('/remove_quiz/:quizId', async (req, res) => {
     }
 });
 
+
+
 app.get('/api/quiz_attempts/:quizId', async (req, res) => {
     const { quizId } = req.params;
     try {
@@ -275,11 +277,21 @@ app.get('/api/quiz_attempts/:quizId', async (req, res) => {
 
 
 
+// Assuming Express is already set up
+app.post('/submitQuizAnswers', async (req, res) => {
+    const { quizId, answers, score } = req.body; // Destructure the data sent from the client, removing userId
 
+    try {
+        // Process the submission data
+        const result = await dbManager.saveQuizResults(quizId, answers, score);
 
-
-
-
+        // Respond back to the client
+        res.status(200).json({ message: 'Quiz results saved successfully', result: result });
+    } catch (error) {
+        console.error('Error saving quiz results:', error);
+        res.status(500).json({ message: 'Failed to save quiz results' });
+    }
+});
 
 
 

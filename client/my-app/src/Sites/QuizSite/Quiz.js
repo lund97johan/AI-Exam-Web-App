@@ -6,7 +6,7 @@ import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
 import {useAuth} from "../../AuthProvider";
 import { useParams } from 'react-router-dom';
-import { useQuiz } from '../../QuizContext';
+
 
 function Quiz(){
     return(

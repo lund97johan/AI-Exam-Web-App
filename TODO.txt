@@ -1,3 +1,5 @@
+PREVENT PROGRESSING QUIZ WITHOUT SELECTING ALTERNATIVE
+
 Add QuizAttempts button on OldQuizzes
 
 -Implement QuizAttempts

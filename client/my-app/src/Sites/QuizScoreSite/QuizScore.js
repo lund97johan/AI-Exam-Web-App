@@ -6,7 +6,7 @@ import {ReturnHeader} from "../../App";
 import {ReturnFooter} from "../../App";
 import {useAuth} from "../../AuthProvider";
 
-import quizContext, { useQuiz } from '../../QuizContext';
+
 
 function QuizScore() {
     const location = useLocation();

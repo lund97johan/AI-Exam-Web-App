@@ -19,8 +19,8 @@ class DatabaseManager {
     constructor() {
         this.config = {
             host: "localhost",
-            user: "newuser",
-            password: "hejpådigapa",
+            user: "root",
+            password: "password",
             database: "AI_Exam_Web_App_DB",
             port: 3306,
         };
@@ -198,6 +198,32 @@ class DatabaseManager {
             }).catch(err => {
                 console.error('Failed to connect to database:', err);
                 reject(err);
+            });
+        });
+    }
+
+    /**
+     * Saves the results of a quiz attempt to the database.
+     * @param {number} quizId - ID of the quiz taken.
+     * @param {Object} answers - Object containing the user's answers.
+     * @param {string} score - Final score of the quiz attempt as a string.
+     * @returns {Promise} A promise that resolves with the result of the database operation.
+     */
+    async saveQuizResults(quizId, answers, score) {
+        // Convert answers object to a JSON string if storing as text
+        const ans_str = JSON.stringify(answers); // Assuming answers need to be stored as a JSON string
+        const attempt_time = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format for MySQL datetime
+
+        const sql = `INSERT INTO quiz_attempts (quiz_id, score, ans_str, attempt_time) VALUES (?, ?, ?, ?)`;
+
+        return new Promise((resolve, reject) => {
+            this.connection.query(sql, [quizId, score, ans_str, attempt_time], (err, results) => {
+                if (err) {
+                    console.error('Failed to save quiz results:', err);
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
             });
         });
     }
