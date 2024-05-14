@@ -1,6 +1,8 @@
+PREVENT PROGRESSING QUIZ WITHOUT SELECTING ALTERNATIVE
+
 Add QuizAttempts button on OldQuizzes
 
-Implement QuizAttempts
+-Implement QuizAttempts
 Implement QuizAttempt
 
 Ensure deletion cascades work for Quizzes and QuizAttempts and anything else
@@ -22,14 +24,23 @@ Ensure cohesive look for all sites
 
 Look over .css files
 
-User deletion
-
-Maybe remove database reset on restart, or just add comments in the related code, and explanation in the report
-
 JSDoc all .js files
 
 Remove trash code
 
-Update db diagram
+FOR THE REPORT:
 
-Complete
+Update diagrams
+    DB
+    Sites
+    Flowcharts???
+
+Remember to explain flaws, weaknesses, unfinished parts in the report
+    User Deletion
+    DB Reset
+
+Screenshots showing functionalities
+
+User Instructions
+
+Video Demo

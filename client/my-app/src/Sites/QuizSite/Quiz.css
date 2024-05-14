@@ -32,6 +32,7 @@
 .Quiz-question-potanswer{
     font-size: 100%;
     color: #fdfdfd;
+    padding: 10px;
 }
 
 .Quiz-question-container{

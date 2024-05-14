@@ -7,37 +7,30 @@ function QuizAttempt() {
     const [attemptDetails, setAttemptDetails] = useState(null);
 
     useEffect(() => {
-        // Simulate fetching data
-        const fetchAttemptDetails = async () => {
-            // Here you would fetch data from the server using fetch or axios
-            // This is a dummy placeholder for the purpose of this example
-            const data = {
-                score: '5/10',
-                attempt_time: new Date().toLocaleString(),
-                answers: ['Answer 1', 'Answer 2', 'Answer 3']  // Placeholder answers
-            };
-            setAttemptDetails(data);
-        };
-
-        fetchAttemptDetails();
+        fetch(`/api/quiz_attempt/${attemptId}`)
+            .then(response => response.json())
+            .then(data => setAttemptDetails(data))
+            .catch(error => console.error('Error fetching attempt details:', error));
     }, [attemptId]);
 
+    if (!attemptDetails) {
+        return <div>Loading...</div>;
+    }
+
     return (
-        <div className="attempt-details-container">
-            {attemptDetails ? (
-                <div>
-                    <h1>Details for Attempt ID: {attemptId}</h1>
-                    <p>Score: {attemptDetails.score}</p>
-                    <p>Attempt Time: {attemptDetails.attempt_time}</p>
-                    <ul>
-                        {attemptDetails.answers.map((answer, index) => (
-                            <li key={index}>{answer}</li>
-                        ))}
-                    </ul>
-                </div>
-            ) : (
-                <p>Loading attempt details...</p>
-            )}
+        <div>
+            {attemptDetails.questions.map((question, index) => {
+                const correctAnswer = question.answers?.find(a => a.is_correct) || { answer_text: 'No answer found' };
+                const userAnswer = question.answers?.find(a => a.answer_id === question.userAnswer) || { answer_text: 'No answer selected' };
+                return (
+                    <div key={index}>
+                        <p>{index + 1}: {question.question_text}</p>
+                        <p>Correct answer: {correctAnswer.answer_text}</p>
+                        <p>Your Answer: {userAnswer.answer_text}</p>
+                    </div>
+                );
+            })}
+            <p>Final Score: {attemptDetails.score}</p>
         </div>
     );
 }

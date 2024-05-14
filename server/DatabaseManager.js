@@ -3,7 +3,7 @@ const fs = require('fs');
 
 // Importing MySQL driver, ensure version 2.x for compatibility with current methods
 const mysql = require('mysql2');
-
+const mysql1 = require('mysql');
 /**
  * Manages database operations including connecting to the database,
  * executing SQL scripts, and closing the database connection.
@@ -203,6 +203,32 @@ class DatabaseManager {
     }
 
     /**
+     * Saves the results of a quiz attempt to the database.
+     * @param {number} quizId - ID of the quiz taken.
+     * @param {Object} answers - Object containing the user's answers.
+     * @param {string} score - Final score of the quiz attempt as a string.
+     * @returns {Promise} A promise that resolves with the result of the database operation.
+     */
+    async saveQuizResults(quizId, answers, score) {
+        // Convert answers object to a JSON string if storing as text
+        const ans_str = JSON.stringify(answers); // Assuming answers need to be stored as a JSON string
+        const attempt_time = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format for MySQL datetime
+
+        const sql = `INSERT INTO quiz_attempts (quiz_id, score, ans_str, attempt_time) VALUES (?, ?, ?, ?)`;
+
+        return new Promise((resolve, reject) => {
+            this.connection.query(sql, [quizId, score, ans_str, attempt_time], (err, results) => {
+                if (err) {
+                    console.error('Failed to save quiz results:', err);
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
+
+    /**
      * Retrieves quiz attempts for a given quiz ID.
      * @param {number} quizId - The ID of the quiz for which attempts are fetched.
      * @returns {Promise<Array>} A promise that resolves to an array of attempts.
@@ -219,6 +245,66 @@ class DatabaseManager {
                         console.log('Quiz attempts fetched successfully');
                         resolve(results);
                     }
+                });
+            }).catch(err => {
+                console.error('Failed to connect to database:', err);
+                reject(err);
+            });
+        });
+    }
+
+    /**
+     * Retrieves detailed information for a specific quiz attempt.
+     * @param {number} attemptId - The ID of the quiz attempt to retrieve.
+     * @returns {Promise<Object>} A promise that resolves with the quiz attempt details.
+     */
+    getAttemptDetails(attemptId) {
+        return new Promise((resolve, reject) => {
+            this.connect().then(() => {
+                // Fetch basic attempt details
+                const attemptSql = `SELECT quiz_id, score, ans_str FROM quiz_attempts WHERE attempt_id = ?`;
+                this.connection.query(attemptSql, [attemptId], async (err, attemptResults) => {
+                    if (err) {
+                        console.error(`Error fetching attempt details:`, err.message);
+                        reject(err);
+                        return;
+                    }
+                    if (attemptResults.length === 0) {
+                        reject(new Error("No attempt found with the given ID"));
+                        return;
+                    }
+
+                    const attempt = attemptResults[0];
+                    const questionsSql = `
+                    SELECT q.question_id, q.text AS question_text, a.text AS answer_text, a.is_correct
+                    FROM questions q
+                    JOIN answers a ON q.question_id = a.question_id
+                    WHERE q.quiz_id = ?
+                    ORDER BY q.question_id, a.is_correct DESC
+                `;
+
+                    // Fetch questions and answers related to the quiz
+                    this.connection.query(questionsSql, [attempt.quiz_id], (err, questionsResults) => {
+                        if (err) {
+                            console.error(`Error fetching questions for quiz ID ${attempt.quiz_id}:`, err.message);
+                            reject(err);
+                            return;
+                        }
+
+                        // Parse user answers from JSON string
+                        const userAnswers = JSON.parse(attempt.ans_str);
+
+                        // Assemble the final response
+                        const details = {
+                            score: attempt.score,
+                            questions: questionsResults.map(q => ({
+                                ...q,
+                                userAnswer: userAnswers[q.question_id]
+                            }))
+                        };
+
+                        resolve(details);
+                    });
                 });
             }).catch(err => {
                 console.error('Failed to connect to database:', err);

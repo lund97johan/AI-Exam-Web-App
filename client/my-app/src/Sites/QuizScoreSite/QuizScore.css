@@ -1,0 +1,30 @@
+.Quiz-question-correct{
+
+
+    background-color: #61dafb;
+    color: white;
+}
+
+.Quiz-question-incorrect{
+    background-color: #ff0000;
+    color: white;
+    padding: 10px;
+}
+
+.Quiz-question-answer-box-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+.yoo{
+
+
+}
+
+.Quiz-body-Score{
+    font-size: 3vh;
+    color: #61dafb;
+    text-align: center;
+}
