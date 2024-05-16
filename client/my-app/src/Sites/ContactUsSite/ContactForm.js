@@ -30,7 +30,7 @@ function ContactForm() {
     return (
         <form  className='Contactus-form'onSubmit={handleSubmit}>
             <div className='ContactUs-text'>
-                name
+                Name
             </div>
             <input className='registerInputbox'
                 type="text" 
@@ -40,7 +40,7 @@ function ContactForm() {
             </input>
 
             <div className='ContactUs-text'>
-                email
+                Email
             </div>
             <input className='registerInputbox'
                     type="email"

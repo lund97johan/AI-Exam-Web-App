@@ -29,20 +29,37 @@
     color: black; /* Set the color of the placeholder text to black */
   }
   
+  
   .quiz-button, previous-attempts-button, .remove-button {
     width: 100px;
-    height: 40px;
+    height: 2/0px;
     font-size: 16px;
   }
   
   .quiz-button {
     background-color: green; /* Change the background color of the "TA Quiz" button to green */
     color: white; /* Change the text color of the "TA Quiz" button to white */
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    width: 20%; /* Makes buttons take up majority of container width */
+    transition: background-color 0.3s, color 0.3s;
   }
   
   .remove-button {
     background-color: red; /* Change the background color of the "Remove Quiz" button if desired */
     color: white; /* Change the text color of the "Remove Quiz" button if desired */
     margin-left: 10px; /* Adjust margin-left as needed */
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    width: 10%; /* Makes buttons take up majority of container width */
+    transition: background-color 0.3s, color 0.3s;
   }
   
