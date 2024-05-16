@@ -79,7 +79,11 @@
     width: 100%;
     height: 50vh;
     object-fit: cover;
+<<<<<<< HEAD
     object-position: center -1px;
+=======
+    object-position: top ;
+>>>>>>> 84438c7700bc411b9e4d66cb00c9058a7f7edf69
     border-radius: 8px;
 }
 .quiz-image-john{

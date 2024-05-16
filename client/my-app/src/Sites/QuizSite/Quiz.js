@@ -19,15 +19,35 @@ function Quiz(){
         </div>
     )
 }
+function ShowQuizScore(){
+    return(
+        <div className='App'>
+            <ReturnHeader/>
+              <div className='App-body'>
+                <ReturnQuiz/>
+            </div>
+            <ReturnFooter/>
+        </div>
+    )
+}
+
 function ReturnQuiz() {
     // State and variables
-    const { quizId } = useParams();
-    const { user } = useAuth();
+    const {quizId} = useParams();
+    const {user} = useAuth();
     const navigate = useNavigate();
     const [quiz, setQuiz] = useState(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState({}); // State to store selected answers
-    
+    const [showScore, setShowScore] = useState(false);
+    const [finalScore, setFinalScore] = useState(0); // State for the final score
+    const [maximumScore, setMaximumScore] = useState(0); // State for the maximum possible score
+    const [failure, setFailure] = useState(false); // State for the maximum possible score
+    // This useEffect will log the selectedAnswer state every time it changes
+    useEffect(() => {
+        console.log('Selected Answers:', selectedAnswer);
+    }, [selectedAnswer]);
+
     // Fetching quiz data
     useEffect(() => {
         if (!user) {
@@ -36,6 +56,9 @@ function ReturnQuiz() {
         }
 
         const fetchQuiz = async () => {
+            setSelectedAnswer({});
+            setCurrentQuestionIndex(0);
+            setShowScore(false);
             try {
                 const response = await fetch(`/getQuizDetailed/${quizId}`, {
                     method: 'GET',
@@ -47,6 +70,7 @@ function ReturnQuiz() {
                 const data = await response.json();
                 if (response.ok) {
                     setQuiz(data.quiz);
+                    console.log("Quiz:", data.quiz);
                 } else {
                     console.error(data.message || 'Failed to fetch quiz');
                 }
@@ -63,61 +87,185 @@ function ReturnQuiz() {
     }
 
     // Handle selection of an answer
-    const handleAnswerSelect = (questionId, answerId) => {
-        setSelectedAnswer({
-            ...selectedAnswer,
-            [questionId]: answerId
+    const handleAnswerSelect = (questionId, answerId, isCorrect) => {
+        console.log(`Updating answer for question ${questionId}: ${answerId}, Correct: ${isCorrect}`);
+        setSelectedAnswer(prevAnswers => {
+            const updatedAnswers = {...prevAnswers, [questionId]: { answerId, isCorrect }};
+            console.log('New State:', updatedAnswers);
+            return updatedAnswers;
         });
     };
 
-    const currentQuestion = quiz.questions[currentQuestionIndex];
+    const calculateScore = () => {
+        let score = 0;
+        Object.values(selectedAnswer).forEach(answer => {
+            console.log("Answer:", answer);
+            if (answer.isCorrect) {
+                score += 1;
+            }
+        });
+        return score;
+    };
+    const resetQuiz = () => {
+        // Reset relevant states
+        setSelectedAnswer({});
+        setCurrentQuestionIndex(0);
+        setShowScore(false); // Assuming you have access to setShowScore here
+        setFinalScore(0);
+        setMaximumScore(0);
+        setFailure(false)
+    };
 
+    const submitQuiz = async () => {
+        const finalScore = calculateScore();
+        console.log("Final Score:", finalScore); // Log the final score to debug
+        setFinalScore(finalScore);
+        setMaximumScore(quiz.questions.length);
+        setShowScore(true);
+        if (finalScore < quiz.questions.length) {
+            setFailure(true);
+        }
+
+        // Prepare the data to send to the server
+        const submissionData = {
+            userId: user.id, // Ensure user ID is available
+            quizId: quiz.quiz_id,
+            answers: selectedAnswer, // Assuming this is structured correctly for your backend
+            score: finalScore, // This should be just the count of correct answers
+            totalQuestions: quiz.questions.length // Total number of questions in the quiz
+        };
+
+        console.log(submissionData);
+
+        // Send data to the server
+        try {
+            const response = await fetch('/submitQuizAnswers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(submissionData)
+            });
+
+            const responseData = await response.json();
+            if (response.ok) {
+                console.log('Submission successful:', responseData);
+                // Navigate to results or another page as needed
+            } else {
+                console.error('Failed to submit quiz:', responseData.message);
+            }
+        } catch (error) {
+            console.error('Error submitting quiz:', error);
+        }
+    };
+
+    const currentQuestion = quiz.questions[currentQuestionIndex];
+    const updateCurrentQuestionIndex = () => {
+        setCurrentQuestionIndex(Math.min(currentQuestionIndex + 1, quiz.questions.length - 1))
+    }
     return (
         <div className='Quiz-body'>
-            <div className='Quiz-nrOfQuestions' style={{ gridColumn: 3 }}>
-                <div className='Quiz-nrOfQuestions-text'>
-                    Number of questions: {quiz.questions.length}
-                </div>
-            </div>
-            <div className="Quiz-question-number-text" style={{ gridColumn: 2 }}>
-                <div className='Quiz-question-nr' style={{ gridColumn: 2 }}>
-                    <h1>Question {currentQuestionIndex + 1}</h1>
-                </div>
-            </div>
-            <div className="Quiz-question-text-container" style={{ gridColumn: 2 }}>
-                <div className='Quiz-question' style={{ gridColumn: 2 }}>
-                    <h2>{currentQuestion.text}</h2>
-                </div>
-            </div>
-            {currentQuestion.answers.map((answer, index) => (
-                <div key={index} className="Quiz-question-container" style={{ gridColumn: 2 }}>
-                    <div className='Quiz-question-potanswer' style={{ gridColumn: 2 }}>
-                        {answer.text}
+            {showScore ? (
+                <>
+                    <div className={failure ?  'Quiz-Result-Text-Fail': 'Quiz-Result-Text-Pass'}
+                         style={{gridColumn: 2, gridRow: 2}}>
+                        {failure ?  'You failed!' : 'Congratulations! you passed the test' }
                     </div>
-                    <label className='Quiz-question-answer-box-container' style={{ gridColumn: 3 }}>
-                        <input 
-                            type="radio" 
-                            name={`question_${currentQuestion.id}`} 
-                            value={answer.id} 
-                            checked={selectedAnswer[currentQuestion.id] === answer.id} 
-                            onChange={() => handleAnswerSelect(currentQuestion.id, answer.id)}
-                        />
-                        <span className="Quiz-question-answer-box"></span>
-                    </label>
-                </div>
-            ))}
-            <div className="Quiz-question-button-container-container" style={{ gridColumn: 2 }}>
-                <div className="Quiz-question-button-container" style={{ justifyContent: "left" }} id="rightbutton">
-                    <button className='Quiz-button' onClick={() => setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))}>Previous</button>
-                </div>
-                <div className="Quiz-question-button-container" style={{ justifyContent: "right" }} id="leftbutton">
-                    <button className='Quiz-button' onClick={() => setCurrentQuestionIndex(Math.min(currentQuestionIndex + 1, quiz.questions.length - 1))}>Next</button>
-                </div>
-            </div>
+                    <div className='Quiz-Result-Score-Container' style={{gridColumn: 2, gridRow: 3}}>
+                        <div className='Quiz-Result-Score'>
+                            Your score: {finalScore} of {maximumScore}
+                        </div>
+                    </div>
+                    {failure ? <>
+                        <div className='Quiz-Result-Text' style={{gridColumn: 2, gridRow: 4, justifySelf: 'left'}}>
+                            You can now view the correct answers
+                        </div>
+                        <div className='finish-test-button'
+                             style={{gridColumn: 2, gridRow: 4, justifySelf: "right", marginRight: "20vh"}}>
+                            <button className='Quiz-button' onClick={() => {
+                                navigate('/QuizScore', {
+                                    state: {
+                                        quiz: quiz,
+                                        userAnswers: selectedAnswer,
+                                        score: finalScore,
+                                        passed: failure,
+                                        totalQuestions: quiz.questions.length
+                                    }
+                                });
+                            }}>see how you fucked up
+                            </button>
+                        </div>
+                    </> : null
+
+
+                    }
+                    <div className="redo-quiz-button"
+                         style={{gridColumn: 2, gridRow: 5, justifySelf: "left", marginLeft: "20vh"}}>
+                        <button className='Quiz-button' onClick={resetQuiz}>Redo test</button>
+                    </div>
+                    <div className='finish-test-button'
+                         style={{gridColumn: 2, gridRow: 5, justifySelf: "right", marginRight: "20vh"}}>
+                    <Link to='/dashboard'>
+                            <button className='Quiz-button'>Finish test</button>
+                        </Link>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <div className='Quiz-nrOfQuestions' style={{gridColumn: 3}}>
+                        <div className='Quiz-nrOfQuestions-text'>
+                            Number of questions: {quiz.questions.length}
+                        </div>
+                    </div>
+                    <div className="Quiz-question-number-text" style={{ gridColumn: 2, gridRow: 1 }}>
+                        <div className='Quiz-question-nr' style={{ gridColumn: 2 }}>
+                            <h1>Question {currentQuestionIndex + 1}</h1>
+                        </div>
+                    </div>
+                    <div className="Quiz-question-text-container" style={{ gridColumn: 2 }}>
+                        <div className='Quiz-question' style={{ gridColumn: 2 }}>
+                            <h2>{currentQuestion.text}</h2>
+                        </div>
+                    </div>
+                    {currentQuestion.answers.map((answer, index) => (
+                        <div key={index} className="Quiz-question-container" style={{ gridColumn: 2 }}>
+                            <div className='Quiz-question-potanswer' style={{ gridColumn: 2 }}>
+                                {answer.text}
+                            </div>
+                            <label className='Quiz-question-answer-box-container' style={{ gridColumn: 3 }}>
+                                <input
+                                    type="radio"
+                                    name={`question_${currentQuestion.question_id}`}
+                                    value={answer.answer_id}
+                                    checked={selectedAnswer[currentQuestion.question_id]?.answerId === answer.answer_id}
+                                    onChange={() => handleAnswerSelect(currentQuestion.question_id, answer.answer_id, answer.is_correct)}
+                                />
+                                <span className="Quiz-question-answer-box"></span>
+                            </label>
+                        </div>
+                    ))}
+                    <div className="Quiz-question-button-container-container" style={{ gridColumn: 2 }}>
+                        <div className="Quiz-question-button-container" style={{ justifyContent: "left" }} id="rightbutton">
+                            <button className='Quiz-button' onClick={() => setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))}>Previous</button>
+                        </div>
+                        <div className="Quiz-question-button-container" style={{ justifyContent: "right" }} id="leftbutton">
+                            <button className='Quiz-button' onClick={() => {
+                                if (currentQuestionIndex >= quiz.questions.length - 1) {
+                                    submitQuiz();
+                                } else {
+                                    setCurrentQuestionIndex(currentQuestionIndex + 1);
+                                }
+                            }}
+                            >Next</button>
+                        </div>
+                    </div>
+
+                </>
+            )}
         </div>
+
     );
 }
-//nu kommer jag inte kunna jobba på ett tag när jag slutar snusa, såååååååå GG
 
 /*
 function ReturnQuiz(){
@@ -133,7 +281,7 @@ function ReturnQuiz(){
         }
 
         const fetchQuiz = async () => {
-            try {
+
                 const response = await fetch(`/getQuizDetailed/${quizId}`, {
                     method: 'GET',
                     headers: {

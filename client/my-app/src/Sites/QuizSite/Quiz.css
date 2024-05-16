@@ -5,8 +5,8 @@
     align-items: center;
     justify-content: center;
     background-color: #353a45;
-    min-width: 100%;
-    padding-bottom: 20%;
+    min-width: 90vh;
+    min-height: 90vh;
 }
 
 .Quiz-nrOfQuestions{
@@ -32,6 +32,7 @@
 .Quiz-question-potanswer{
     font-size: 100%;
     color: #fdfdfd;
+    padding: 10px;
 }
 
 .Quiz-question-container{
@@ -139,3 +140,26 @@
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
+
+  .Quiz-Result-Text-Pass{
+    font-size: 3vh;
+    color: #61dafb;
+    text-align: center;
+  }
+
+.Quiz-Result-Text-Fail{
+    font-size: 3vh;
+    color: #ff0000;
+    text-align: center;
+}
+.Quiz-Result-Score{
+    font-size: 3vh;
+    color: #fdfdfd;
+    text-align: center;
+}
+.Quiz-Result-Score-Container{
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    align-items: center;
+}
