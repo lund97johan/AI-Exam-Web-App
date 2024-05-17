@@ -47,7 +47,7 @@ function Dashboard() {
             <div className='App-body'>
                 {user ? (
                     <div className="user-details"> 
-                        <h1>Welcome, {user.firstname} {user.lastname}!</h1>
+                        <h1 className={'welcomethingy'}>Welcome, {user.firstname} {user.lastname}!</h1>
 
                         {/* Commenting out the JSX for the profile picture upload since it's not implemented yet */}
                         {/*
@@ -57,10 +57,10 @@ function Dashboard() {
                         </label>
                         <input id="file-input" type="file" onChange={handleImageUpload} disabled={uploading} style={{ display: 'none' }}/>
                         */}
-                        <p>User ID: {user.user_id}</p>
+                        <p className={'thingys'}>User ID: {user.user_id}</p>
                         <p>Username: {user.username}</p>
                         <p>Email: {user.email}</p>
-                        <p>Account creation: {user.created_at}</p>
+                        <p>Last Login: {user.last_login}</p>
                     </div>
                 ) : (
                     <p>Loading...</p>

@@ -347,12 +347,12 @@ margin-right: 5%;
   padding-left: 10px;
   padding-right: 10px;
   z-index: 1;
-  left: 50%; /* Start from the middle of the parent */
-  transform: translateX(-50%); /* Shift back by half of its own width to center */
-  width: auto; /* Let the width grow as needed */
-  max-width: calc(100vw - 20px); /* Optional: Limit width to the viewport width minus some padding */
+  left: 50%;
+  width: auto;
+  max-width: calc(100vw - 20px);
   border-radius: 2px;
   margin-top: 5px;
+  transform: translate(-50%, -2%);
 }
 .Header-text-dropdown-content-grid{
   display: grid;
