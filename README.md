@@ -18,17 +18,13 @@ För att köra detta projekt lokalt krävs det att följande programvara är ins
 4. alltså, öppna upp mysql workbench och skriv `CREATE DATABASE AI_Exam_Web_App_DB;`tror jag borde funka
 5. den vill iallafall att man har en databas som heter de redan.
 6. testa annars att bara köra `npm start` igen, det borde funka, efter du har stängt av en gång
-```
-```
+
 4. om problemet fortfarande framstår, se till att `client/my-app` innehåller `node_modules` och `server` innehåller `node_modules`
 5. annars kör `npm install` i respektive mapp
-```
-```
+
 6. ifall problemet fortfarande framstår, kontakta mig på `henrav-2@student.ltu.se`
 7. jag svarar så fort jag kan, säger vi, orkar inte lista ut några fler problemshooting tips just nu.
 8. lycka till,
-```
-```
 
 ## användning
 1. använd inte för mycket av min OpenAi API key, jag har bara 4.87 dollar kvar.
