@@ -15,6 +15,9 @@ För att köra detta projekt lokalt krävs det att följande programvara är ins
 1. mysql kan ibland slänga error ifall du inte redan har en databas som heter `AI_Exam_Web_App_DB`
 2. ifall detta sker kan man behöva skapa en databas med detta namn och köra `npm start` igen
 3. då borde detta fungera
+4. alltså, öppna upp mysql workbench och skriv `CREATE DATABASE AI_Exam_Web_App_DB;`tror jag borde funka
+5. den vill iallafall att man har en databas som heter de redan.
+6. testa annars att bara köra `npm start` igen, det borde funka, efter du har stängt av en gång
 ```
 ```
 4. om problemet fortfarande framstår, se till att `client/my-app` innehåller `node_modules` och `server` innehåller `node_modules`
