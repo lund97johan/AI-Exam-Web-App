@@ -64,7 +64,7 @@ function ReturnBilderBoxes() {
                 </div>
                 <div className="picture-box-container">
                     <div className="picture-box">
-                        <img src="../Mattias.png" alt="mattias" className="quiz-image"/>
+                        <img src="../Mattias.jpg" alt="mattias" className="quiz-image"/>
                         <p className="quiz-text">Matfri</p>
                     </div>
                 </div>

@@ -86,14 +86,14 @@
     width: 100%;
     height: 50vh;
     object-fit: cover;
-    object-position: center -20vh;
+    object-position: center     ;
     border-radius: 8px;
 }
 .quiz-image-nilsfri{
     width: 100%;
     height: 50vh;
     object-fit: cover;
-    object-position: center -20vh;
+    object-position: center ;
     border-radius: 8px;
 }
 
