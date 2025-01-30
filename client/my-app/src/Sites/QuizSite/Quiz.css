@@ -5,8 +5,10 @@
     align-items: center;
     justify-content: center;
     background-color: #353a45;
-    min-width: 90vh;
+    min-width: 100vh;
     min-height: 90vh;
+    max-height: 90vh;
+    max-width: 100vh;
 }
 
 .Quiz-nrOfQuestions{

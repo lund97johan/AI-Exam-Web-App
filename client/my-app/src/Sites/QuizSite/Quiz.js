@@ -177,11 +177,11 @@ function ReturnQuiz() {
                         </div>
                     </div>
                     {failure ? <>
-                        <div className='Quiz-Result-Text' style={{gridColumn: 2, gridRow: 4, justifySelf: 'left'}}>
+                        <div className='Quiz-Result-Text' style={{gridColumn: 2, gridRow: 4, justifySelf: 'left', marginLeft: '1vh'}}>
                             You can now view the correct answers
                         </div>
                         <div className='finish-test-button'
-                             style={{gridColumn: 2, gridRow: 4, justifySelf: "right", marginRight: "20vh"}}>
+                             style={{gridColumn: 2, gridRow: 4, justifySelf: "right", marginRight: "1vh"}}>
                             <button className='Quiz-button' onClick={() => {
                                 navigate('/QuizScore', {
                                     state: {
@@ -192,7 +192,7 @@ function ReturnQuiz() {
                                         totalQuestions: quiz.questions.length
                                     }
                                 });
-                            }}>see how you fucked up
+                            }}>see correct answers
                             </button>
                         </div>
                     </> : null
@@ -200,11 +200,11 @@ function ReturnQuiz() {
 
                     }
                     <div className="redo-quiz-button"
-                         style={{gridColumn: 2, gridRow: 5, justifySelf: "left", marginLeft: "20vh"}}>
+                         style={{gridColumn: 2, gridRow: 5, justifySelf: "left", marginLeft: "1vh"}}>
                         <button className='Quiz-button' onClick={resetQuiz}>Redo test</button>
                     </div>
                     <div className='finish-test-button'
-                         style={{gridColumn: 2, gridRow: 5, justifySelf: "right", marginRight: "20vh"}}>
+                         style={{gridColumn: 2, gridRow: 5, justifySelf: "right", marginRight: "1vh"}}>
                     <Link to='/dashboard'>
                             <button className='Quiz-button'>Finish test</button>
                         </Link>
