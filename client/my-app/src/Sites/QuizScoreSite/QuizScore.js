@@ -67,7 +67,7 @@ function QuizScore() {
                                                 <h3>{answer.text}</h3>
                                             </div>
                                             <div className='Quiz-question-correct' style={{gridColumn: 3}}>
-                                                <h3>very niiice!</h3> {/* Display if the user's answer is correct */}
+                                                <h3>nice!</h3> {/* Display if the user's answer is correct */}
                                             </div>
                                         </>
                                     ) : (
@@ -76,7 +76,7 @@ function QuizScore() {
                                                 <h3>{answer.text}</h3>
                                             </div>
                                             <div className='Quiz-question-incorrect' style={{gridColumn: 3}}>
-                                                <h3>Your answer was stupid.</h3> {/* Show user's incorrect choice */}
+                                                <h3>wrong.</h3> {/* Show user's incorrect choice */}
                                             </div>
                                         </>
 
@@ -88,7 +88,7 @@ function QuizScore() {
                                                 <h3>{answer.text}</h3>
                                             </div>
                                             <div className='Quiz-question-correct' style={{gridColumn: 3}}>
-                                                <h3>this is correct u stupid
+                                                <h3>this is correct
                                                     head!</h3> {/* Indicate the correct answer if not chosen by the user */}
                                             </div>
                                         </>

@@ -18,9 +18,9 @@ class DatabaseManager {
      */
     constructor() {
         this.config = {
-            host: "localhost",
-            user: "newuser",
-            password: "hejpådigapa",
+            host: process.env.DB_HOST, //här får man lägga till sina egna inställningar om man vill fixa
+            user: process.env.DB_USER_NAME,
+            password: process.env.DB_PASSWORD,
             database: "AI_Exam_Web_App_DB",
             port: 3306,
         };

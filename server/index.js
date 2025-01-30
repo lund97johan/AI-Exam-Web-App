@@ -9,13 +9,14 @@ const mysql = require('mysql2');
 const fs = require('fs');
 const PORT = process.env.PORT || 3001;
 const app = express();
+require('dotenv').config();
 app.use(express.json());
 // Project Imports
 const DatabaseManager = require('./DatabaseManager');
 
 // Correct way to configure the OpenAI API client, should probably store my api key in a .env file seperate from alla er, speciellt nils. men men 
 const openai = new OpenAI({
-  apiKey: "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"
+    apiKey: process.env.OPENAI_API_KEY
 })
 
 
@@ -449,7 +450,7 @@ app.listen(PORT, () => {
 });
 */
 
-//require('dotenv').config({ path: './yoo.env' });
+//require('dotenv').config({ path: './.env' });
 //const { Pool } = require('pg');
 /*
   const pool = new Pool({

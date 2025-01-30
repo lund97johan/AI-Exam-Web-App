@@ -19,9 +19,9 @@ function runScript(filePath, connection, callback) {
 
 function initializeDatabase() {
     const connection = mysql.createConnection({
-        host: "localhost", //här får man lägga till sina egna inställningar om man vill fixa
-        user: "newuser",
-        password: "hejpådigapa",
+        host: process.env.DB_HOST, //här får man lägga till sina egna inställningar om man vill fixa
+        user: process.env.DB_USER_NAME,
+        password: process.env.DB_PASSWORD,
         database: "AI_Exam_Web_App_DB",
         port: 3306,
         multipleStatements: true  // Ensure this is true if your script contains multiple SQL statements
