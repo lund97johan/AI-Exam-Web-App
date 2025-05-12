@@ -47,7 +47,7 @@ const upload = multer({ storage: storage }).single('file');
 
 
 app.post("/login", async (req, res) => {
-    // Destructure and immediately trim the username
+
     let { username, password } = req.body;
     username = username.trim();
 
@@ -164,7 +164,7 @@ app.post('/upload', (req, res) => {
          ]`;
 
 
-         // here we actually send the prompt to the openai api and get the response
+
          const response = await openai.chat.completions.create({
              model: "gpt-3.5-turbo",
              messages: [{ role: "user", content: prompt }]
@@ -172,12 +172,11 @@ app.post('/upload', (req, res) => {
          console.log('Response:', response);
 
 
-         // Assuming response.data.choices[0].message.content contains a JSON string of questions
-         const message = response.choices[0].message;
-         const quizContent = JSON.parse(message.content);  // Parse the JSON content
 
-         // add the user ID of the currently logged in user to the quiz data, the userid is sent in the json file from the client side from "FileUpload.js"
-         //also add the title of the quiz that is just what the file name was called when the user uploaded it into the "FileUpload.js" file
+         const message = response.choices[0].message;
+         const quizContent = JSON.parse(message.content);
+
+
          const responseData = {
              userId: req.body.userId,
              title: req.body.title,
@@ -185,17 +184,15 @@ app.post('/upload', (req, res) => {
          };
 
           console.log('Response data:', responseData);
-          // Insert the quiz data into the database
-          // call the function responsible for inserting the quiz data into the database
+
           createQuiz(responseData);
-          res.status(200).json(responseData);  // Send the modified quiz questions and answers
+          res.status(200).json(responseData);
       } catch (error) {
-        //something error manager dont really know
+
           console.error('Error processing the request:', error);
           res.status(500).send({ error: 'Failed to parse PDF, generate quiz, or parse JSON: ' + error.message });
       } finally {
-        //delete the file after it has been used
-        //how? i dont know javascript magic
+
           fs.unlink(req.file.path, err => {
               if (err) console.error('Error deleting file:', err);
           });
@@ -204,7 +201,7 @@ app.post('/upload', (req, res) => {
 });
 
 async function createQuiz5Questions(pdfToText, userId, title) {
-    // Generate 5 quiz questions based on the text
+
     const prompt = `Generate a series of multiple choice quiz questions containing 5 questions with 4 answers per question based on the following text. Each question should be structured as a JSON object with the question text, four options, and a correct answer. Please format the entire output as a JSON array:
           Text: "${pdfToText}"  // Corrected to use the parameter passed
           Please format the output as follows:
@@ -242,7 +239,7 @@ function createQuiz(responseData) {
           console.error("Database error:", err);
           return;
       }
-      //logg the success of the insertion
+
       console.log("Quiz and associated questions and answers inserted successfully.");
   });
 }
