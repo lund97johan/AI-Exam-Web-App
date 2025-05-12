@@ -1,7 +1,7 @@
 // Importing file system module for file operations
 const fs = require('fs');
 
-// Importing MySQL driver, ensure version 2.x for compatibility with current methods
+
 const mysql = require('mysql2');
 const mysql1 = require('mysql');
 /**
@@ -66,7 +66,7 @@ class DatabaseManager {
             })*/
             .catch(err => {
                 console.error('An error occurred during database initialization:', err);
-                throw err;  // Re-throw to allow caller to handle it
+                throw err;
             });
     }
 
@@ -90,7 +90,7 @@ class DatabaseManager {
 
         return new Promise((resolve, reject) => {
             const sqlScript = fs.readFileSync(filePath, { encoding: 'utf-8' });
-            const sqlCommands = sqlScript.split(';').filter(sql => sql.trim()); // Filter out any empty commands
+            const sqlCommands = sqlScript.split(';').filter(sql => sql.trim());
 
             const runCommand = async (command) => {
                 return new Promise((resolve, reject) => {
@@ -100,7 +100,7 @@ class DatabaseManager {
                             reject(err);
                         } else {
                             if (command.trim().toUpperCase().startsWith('SHOW')) {
-                                console.log(results); // Log the result of SHOW TABLES
+                                console.log(results);
                             }
                             resolve();
                         }
@@ -112,7 +112,7 @@ class DatabaseManager {
                 for (const command of sqlCommands) {
                     await runCommand(command);
                 }
-                resolve(); // Resolve only after all commands have been executed
+                resolve();
             };
 
             executeCommands().catch(reject);
@@ -141,7 +141,7 @@ class DatabaseManager {
                 }
 
                 multiStatementConnection.query(sqlScript, (err, results) => {
-                    multiStatementConnection.end(); // Ensure to close the connection after execution
+                    multiStatementConnection.end();
                     if (err) {
                         console.error(`Error executing SQL script: ${err.message}`);
                         reject(err);
@@ -210,10 +210,10 @@ class DatabaseManager {
      * @returns {Promise} A promise that resolves with the result of the database operation.
      */
     async saveQuizResults(quizId, answers, score) {
-        // Convert answers object to a JSON string if storing as text
-        const ans_str = JSON.stringify(answers); // Assuming answers need to be stored as a JSON string
+
+        const ans_str = JSON.stringify(answers);
         console.log(ans_str)
-        const attempt_time = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format for MySQL datetime
+        const attempt_time = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
         const sql = `INSERT INTO quiz_attempts (quiz_id, score, ans_str, attempt_time) VALUES (?, ?, ?, ?)`;
 
@@ -284,7 +284,7 @@ class DatabaseManager {
                     ORDER BY q.question_id, a.is_correct DESC
                 `;
 
-                    // Fetch questions and answers related to the quiz
+
                     this.connection.query(questionsSql, [attempt.quiz_id], (err, questionsResults) => {
                         if (err) {
                             console.error(`Error fetching questions for quiz ID ${attempt.quiz_id}:`, err.message);
@@ -292,10 +292,10 @@ class DatabaseManager {
                             return;
                         }
 
-                        // Parse user answers from JSON string
+
                         const userAnswers = JSON.parse(attempt.ans_str);
 
-                        // Assemble the final response
+
                         const details = {
                             score: attempt.score,
                             questions: questionsResults.map(q => ({
@@ -326,7 +326,7 @@ class DatabaseManager {
     }
 
     getConnection() {
-        return this.connection;  // This exposes the connection object
+        return this.connection;
     }
 
 }

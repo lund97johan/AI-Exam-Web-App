@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './RemoveQuiz.css';
 
 function RemoveQuiz() {
-    const { quizId } = useParams();  // Get the quiz ID from URL parameters
+    const { quizId } = useParams();
     const navigate = useNavigate();
 
     const handleRemoveQuiz = () => {
@@ -13,13 +13,13 @@ function RemoveQuiz() {
             .then(response => response.json())
             .then(data => {
                 console.log(data.message);
-                navigate('/old_quizzes'); // Navigate back to quizzes list after removal
+                navigate('/old_quizzes');
             })
             .catch(error => console.error('Error removing quiz:', error));
     };
 
     const handleCancel = () => {
-        navigate('/old_quizzes');  // Navigate back without doing anything
+        navigate('/old_quizzes');
     };
 
     return (

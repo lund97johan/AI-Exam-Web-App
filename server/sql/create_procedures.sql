@@ -1,6 +1,5 @@
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetQuizDetailsByQuizId`(IN `quiz_id` INT)
 BEGIN
-    -- Select a specific quiz, its questions, and answers in JSON format
     SELECT JSON_OBJECT(
         'quiz_id', q.quiz_id,
         'title', q.title,
@@ -29,7 +28,6 @@ END;
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetQuizNamesByUserId`(IN `userid` INT)
 BEGIN
-    -- Selecting only the titles of quizzes created by the specified user ID
     SELECT title, quiz_id
     FROM Quizzes
     WHERE user_id = userid;
@@ -38,7 +36,6 @@ END;
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetQuizzesQuestionsAnswersByUserId`(IN `user_id` INT)
 BEGIN
-    -- Select quizzes, their questions, and answers in JSON format
     SELECT JSON_OBJECT(
         'quiz_id', q.quiz_id,
         'title', q.title,
@@ -75,30 +72,25 @@ BEGIN
     DECLARE v_option TEXT;
     DECLARE v_is_correct TINYINT;
 
-    -- Insert into Quizzes
     INSERT INTO Quizzes(user_id, title)
     VALUES (JSON_UNQUOTE(JSON_EXTRACT(quizData, '$.userId')),
             JSON_UNQUOTE(JSON_EXTRACT(quizData, '$.title')));
 
     SET v_quiz_id = LAST_INSERT_ID();
 
-    -- Loop through each question in the JSON array
     WHILE v_index < JSON_LENGTH(JSON_EXTRACT(quizData, '$.questionsAndAnswers')) DO
         SET v_question = JSON_EXTRACT(quizData, CONCAT('$.questionsAndAnswers[', v_index, ']'));
 
-        -- Insert into Questions
         INSERT INTO Questions(quiz_id, text)
         VALUES (v_quiz_id,
                 JSON_UNQUOTE(JSON_EXTRACT(v_question, '$.question')));
 
         SET v_question_id = LAST_INSERT_ID();
-        SET v_indexOptions = 0;  -- Reset the index for options
+        SET v_indexOptions = 0;
 
-        -- Extract and loop through options
         WHILE v_indexOptions < JSON_LENGTH(JSON_EXTRACT(v_question, '$.options')) DO
             SET v_option = JSON_UNQUOTE(JSON_EXTRACT(v_question, CONCAT('$.options[', v_indexOptions, ']')));
 
-            -- Check if this option is the correct answer
             SET v_is_correct = IF(v_option = JSON_UNQUOTE(JSON_EXTRACT(v_question, '$.answer')), 1, 0);
 
             INSERT INTO Answers(question_id, text, is_correct)
@@ -150,7 +142,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `register_user`(
 BEGIN
 	DECLARE existing_user_count INT;
     DECLARE existing_username_count INT;
-	-- Check if the username already exists
     SELECT COUNT(*) INTO existing_username_count FROM Users WHERE username = p_username;
     IF existing_username_count > 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'A user with this username already exists.';
@@ -191,8 +182,7 @@ BEGIN
 END;
 
 
--- Simple delete procedure for quizzes with given quiz id 
--- Note this will cause cascade deleting related questions and answers to the quiz
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteQuiz`(IN q_id INT)
 BEGIN
 	DELETE FROM quizzes WHERE quiz_id = q_id; 

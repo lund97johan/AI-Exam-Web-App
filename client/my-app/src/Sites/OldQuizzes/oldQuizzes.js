@@ -10,24 +10,24 @@ function OldQuizzes() {
   const [selectedQuiz, setSelectedQuiz] = useState("");
   const [quizzes, setQuizzes] = useState([]);
   const { user } = useAuth();
-  // Function to handle quiz selection
+
   const handleQuizSelection = (quizName) => {
     setSelectedQuiz(quizName);
   }
     useEffect(() => {
         const fetchQuizzes = async () => {
-            if (!user) {  // Assuming 'user' holds the current user state
+            if (!user) {
                 console.log("Redirecting because no user is logged in.");
-                navigate("/login");  // Redirect to login if no user
+                navigate("/login");
                 return;
             }
 
             try {
-                const response = await fetch('/getQuiz', { // Endpoint changed from /getQuiz to /quizzes
+                const response = await fetch('/getQuiz', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        // Assuming your user object includes a token
+
                     },
                 });
 

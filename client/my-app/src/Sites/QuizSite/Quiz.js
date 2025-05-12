@@ -38,12 +38,12 @@ function ReturnQuiz() {
     const navigate = useNavigate();
     const [quiz, setQuiz] = useState(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [selectedAnswer, setSelectedAnswer] = useState({}); // State to store selected answers
+    const [selectedAnswer, setSelectedAnswer] = useState({});
     const [showScore, setShowScore] = useState(false);
-    const [finalScore, setFinalScore] = useState(0); // State for the final score
-    const [maximumScore, setMaximumScore] = useState(0); // State for the maximum possible score
-    const [failure, setFailure] = useState(false); // State for the maximum possible score
-    // This useEffect will log the selectedAnswer state every time it changes
+    const [finalScore, setFinalScore] = useState(0);
+    const [maximumScore, setMaximumScore] = useState(0);
+    const [failure, setFailure] = useState(false);
+
     useEffect(() => {
         console.log('Selected Answers:', selectedAnswer);
     }, [selectedAnswer]);
@@ -86,7 +86,7 @@ function ReturnQuiz() {
         return <div>Loading...</div>;
     }
 
-    // Handle selection of an answer
+
     const handleAnswerSelect = (questionId, answerId, isCorrect) => {
         console.log(`Updating answer for question ${questionId}: ${answerId}, Correct: ${isCorrect}`);
         setSelectedAnswer(prevAnswers => {
@@ -107,10 +107,10 @@ function ReturnQuiz() {
         return score;
     };
     const resetQuiz = () => {
-        // Reset relevant states
+
         setSelectedAnswer({});
         setCurrentQuestionIndex(0);
-        setShowScore(false); // Assuming you have access to setShowScore here
+        setShowScore(false);
         setFinalScore(0);
         setMaximumScore(0);
         setFailure(false)
@@ -118,7 +118,7 @@ function ReturnQuiz() {
 
     const submitQuiz = async () => {
         const finalScore = calculateScore();
-        console.log("Final Score:", finalScore); // Log the final score to debug
+        console.log("Final Score:", finalScore);
         setFinalScore(finalScore);
         setMaximumScore(quiz.questions.length);
         setShowScore(true);
@@ -126,18 +126,18 @@ function ReturnQuiz() {
             setFailure(true);
         }
 
-        // Prepare the data to send to the server
+
         const submissionData = {
-            userId: user.id, // Ensure user ID is available
+            userId: user.id,
             quizId: quiz.quiz_id,
-            answers: selectedAnswer, // Assuming this is structured correctly for your backend
-            score: finalScore, // This should be just the count of correct answers
-            totalQuestions: quiz.questions.length // Total number of questions in the quiz
+            answers: selectedAnswer,
+            score: finalScore,
+            totalQuestions: quiz.questions.length
         };
 
         console.log(submissionData);
 
-        // Send data to the server
+
         try {
             const response = await fetch('/submitQuizAnswers', {
                 method: 'POST',
@@ -150,7 +150,7 @@ function ReturnQuiz() {
             const responseData = await response.json();
             if (response.ok) {
                 console.log('Submission successful:', responseData);
-                // Navigate to results or another page as needed
+
             } else {
                 console.error('Failed to submit quiz:', responseData.message);
             }

@@ -9,11 +9,11 @@ import { useParams } from 'react-router-dom';
 
 
 function QuizExplain({quizData, quizAnswers, quizResults}){
-    const { user } = useAuth(); // Get user info from context
+    const { user } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Ensure there's a user logged in before fetching quizzes
+
         if (!user) {
             console.log("No user logged in, redirecting...");
             navigate("/login")

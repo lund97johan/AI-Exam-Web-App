@@ -52,7 +52,7 @@ function SetInStartBox() {
         });
     
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`); // Handle non-200 responses
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
     
         const data = await response.json();

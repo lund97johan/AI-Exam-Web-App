@@ -49,7 +49,7 @@ function Dashboard() {
                     <div className="user-details"> 
                         <h1 className={'welcomethingy'}>Welcome, {user.firstname} {user.lastname}!</h1>
 
-                        {/* Commenting out the JSX for the profile picture upload since it's not implemented yet */}
+                        {/*  */}
                         {/*
                         <img src={user.profilePicture || 'default-profile.png'} alt="Profile" className="profile-pic" />
                         <label htmlFor="file-input" className="upload-button">

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 function App(){
-    const {user, logout} = useAuth();// Use the custom hook correctly
+    const {user, logout} = useAuth();
     const navigate = useNavigate();
     useEffect(() => {
         if (user) {
@@ -83,7 +83,7 @@ function ReturnDropDown({gridColumn = 2, gridRow = 1}){
 }
 
 function ReturnHeader() {
-    const { user } = useAuth(); // Get user authentication status
+    const { user } = useAuth();
 
     return (
         <div className='App-header'>
@@ -95,7 +95,7 @@ function ReturnHeader() {
                     <Link to='/About'>About</Link>
                 </div>
                 <div className='Header-text'>
-                    {/* Conditional rendering of the Home link based on user status */}
+                    {/*  */}
                     <Link to={user ? "/dashboard" : "/"}>
                         Home
                     </Link>
@@ -110,11 +110,11 @@ function ReturnHeader() {
 }
 
 function LoggedInUser() {
-  const {user, logout} = useAuth();// Use the custom hook correctly
+  const {user, logout} = useAuth();//
   const navigate = useNavigate();
 
   const handleLogout = () => {
-      logout(); // Call the logout function from the AuthProvider
+      logout();
 
   };
   if (!user) {
@@ -128,7 +128,7 @@ function LoggedInUser() {
   } else {
     return (
         <div className='Header-text-dropdown' style={{gridColumn: 7}}>
-            {user.username}'s profile {/* Dropdown menus now visible only to logged-in users */}
+            {user.username}'s profile {/*  */}
             <i className="arrow down"></i>
             <div className='Header-text-dropdown-content'>
                 <div className='Header-text-dropdown-content-grid'>

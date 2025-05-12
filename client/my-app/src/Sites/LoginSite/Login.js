@@ -43,16 +43,16 @@ function SetInStartBox() {
               body: JSON.stringify(loginDetails),
           });
   
-          const data = await response.json(); // Parse JSON response
+          const data = await response.json();
           if (response.ok && data.success) {
               if (data.user) {
-                  login(data.user); // Login user with the data received
-                  navigate('/dashboard'); // Redirect to home page
+                  login(data.user);
+                  navigate('/dashboard');
               } else {
                   alert('Login successful but no user data returned');
               }
           } else {
-              alert(data.message || 'Login failed'); // Show error message
+              alert(data.message || 'Login failed');
           }
       } catch (error) {
           console.error('Login error:', error);

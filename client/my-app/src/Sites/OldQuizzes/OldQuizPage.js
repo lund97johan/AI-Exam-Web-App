@@ -20,12 +20,12 @@ function OldQuizzes() {
 }
 
 function ReturnQuizzes() {
-    const { user } = useAuth(); // Get user info from context
+    const { user } = useAuth();
     const [quizzes, setQuizzes] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Ensure there's a user logged in before fetching quizzes
+
         if (!user) {
             console.log("No user logged in, redirecting...");
             navigate("/login")
@@ -54,7 +54,7 @@ function ReturnQuizzes() {
 
         fetchQuizzes();
         console.log('fetching quizzes');
-    }, [user]); // Depend on `user` to re-run when the user state changes
+    }, [user]);
 
     const handleRemoveClick = (quizId) => {
         navigate(`/remove_quiz/${quizId}`);
@@ -87,7 +87,7 @@ function ReturnQuizzes() {
                     </div>
                 ))
             ) : (
-                <p>No quizzes available</p> // Show a message if no quizzes are found
+                <p>No quizzes available</p>
             )}
         </div>
     );

@@ -1,11 +1,8 @@
--- Drop the database if it exists
 DROP DATABASE IF EXISTS AI_Exam_Web_App_DB;
 
--- Create the database
 CREATE DATABASE AI_Exam_Web_App_DB;
 USE AI_Exam_Web_App_DB;
 
--- Users
 CREATE TABLE `users` (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(100) DEFAULT NULL,
@@ -18,7 +15,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`)
 );
 
--- Quizzes, depends on Users
+
 CREATE TABLE `quizzes` (
   `quiz_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
@@ -29,7 +26,7 @@ CREATE TABLE `quizzes` (
   CONSTRAINT `fk_quiz_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Questions, depends on Quizzes
+
 CREATE TABLE `questions` (
   `question_id` int NOT NULL AUTO_INCREMENT,
   `quiz_id` int DEFAULT NULL,
@@ -39,7 +36,7 @@ CREATE TABLE `questions` (
   CONSTRAINT `fk_question_quiz_id` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Answers, depends on Questions
+
 CREATE TABLE `answers` (
   `answer_id` int NOT NULL AUTO_INCREMENT,
   `question_id` int DEFAULT NULL,
@@ -50,7 +47,7 @@ CREATE TABLE `answers` (
   CONSTRAINT `fk_answer_question_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- PDFs, depends on Users
+
 CREATE TABLE `pdfs` (
   `PDF_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
@@ -61,7 +58,7 @@ CREATE TABLE `pdfs` (
   CONSTRAINT `fk_PDFs_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 );
 
--- Quiz Attempts, depends on Quizzes
+
 CREATE TABLE `quiz_attempts` (
   `attempt_id` int NOT NULL AUTO_INCREMENT,
   `quiz_id` int DEFAULT NULL,

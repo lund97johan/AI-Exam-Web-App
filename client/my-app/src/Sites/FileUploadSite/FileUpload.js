@@ -36,15 +36,15 @@ function ReturnFileUpload() {
         const formData = new FormData();
         formData.append('file', file);
         if (user) {
-            formData.append('userId', user.user_id);  // Append user ID from context
+            formData.append('userId', user.user_id);
         }
     
-        // Get the file name
+
         const fileName = file.name;
-        // Append the file name as the "title" to the form data
+
         formData.append('title', fileName);
         formData.append('nrQuestions', nrQuestions);
-        //send data to server
+
         fetch('/upload', {
             method: 'POST',
             body: formData,

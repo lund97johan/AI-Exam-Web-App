@@ -4,23 +4,23 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
-        // Try to get user data from local storage
+
         const savedUser = localStorage.getItem('user');
         return savedUser ? JSON.parse(savedUser) : null;
     });
 
     const login = (userData) => {
-        localStorage.setItem('user', JSON.stringify(userData));  // Save user data to local storage
+        localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);
     };
 
     const logout = () => {
-        localStorage.removeItem('user');  // Remove user data from local storage
+        localStorage.removeItem('user');
         setUser(null);
     };
 
     useEffect(() => {
-        // Optionally add more effects on user change or check token validity
+
     }, [user]);
 
     return (

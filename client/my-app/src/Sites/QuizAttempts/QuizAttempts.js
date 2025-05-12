@@ -33,27 +33,27 @@ function QuizAttempts() {
 
     const NavigateQuizAttempt = async (quizAttemptId) => {
         try {
-            // Fetch detailed quiz information
+
             const responseQuiz = await fetch(`/getQuizDetailed/${quizId}`);
             const dataQuiz = await responseQuiz.json();
             if (!responseQuiz.ok) {
                 console.error('Failed to fetch quiz:', dataQuiz.message);
-                return; // Exit if fetching the quiz details fails
+                return;
             }
             setQuiz(dataQuiz.quiz);
 
-            // Fetch specific quiz attempt details
+
             const responseAttempt = await fetch(`/api/quiz_attempt/${quizAttemptId}`);
             const dataAttempt = await responseAttempt.json();
             if (!responseAttempt.ok) {
                 console.error('Failed to fetch quiz attempt:', dataAttempt.message);
-                return; // Exit if fetching the attempt details fails
+                return;
             }
 
-            // Process the answer IDs assuming the first answer corresponds to the first question, etc.
+
             const userAnswers = {};
             dataAttempt.answerIds.forEach((answerId, index) => {
-                const questionId = dataQuiz.quiz.questions[index].question_id; // Linking answerId to questionId by order
+                const questionId = dataQuiz.quiz.questions[index].question_id;
                 userAnswers[questionId] = {
                     answerId: answerId,
                     isCorrect: dataQuiz.quiz.questions[index].answers.find(a => a.answer_id === answerId)?.is_correct
@@ -62,13 +62,13 @@ function QuizAttempts() {
 
             setSelectedAnswer(userAnswers);
 
-            // Navigate to the QuizScore page with the required data
+
             navigate('/QuizScore', {
                 state: {
                     quiz: dataQuiz.quiz,
                     userAnswers: userAnswers,
-                    score: null, // You may need to calculate this or ensure it is returned by the API
-                    passed: null, // Determine this based on the score or other criteria
+                    score: null,
+                    passed: null,
                     totalQuestions: dataQuiz.quiz.questions.length
                 }
             });

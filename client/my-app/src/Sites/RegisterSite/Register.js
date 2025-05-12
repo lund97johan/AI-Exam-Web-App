@@ -55,7 +55,7 @@ function ReturnRegister(){
                 navigate('/');
             } else {
                 console.log('Register failed:', data.message);
-                alert(data.message);  // Display error message to the user
+                alert(data.message);
             }
         } catch (error) {
             console.error('Register error:', error);

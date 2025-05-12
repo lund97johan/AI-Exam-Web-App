@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-// Helper function to run an SQL script
+
 function runScript(filePath, connection, callback) {
     console.log(`Executing script: ${filePath}`);
     const script = fs.readFileSync(filePath, { encoding: 'utf-8' });
@@ -24,7 +24,7 @@ function initializeDatabase() {
         password: process.env.DB_PASSWORD,
         database: "AI_Exam_Web_App_DB",
         port: 3306,
-        multipleStatements: true  // Ensure this is true if your script contains multiple SQL statements
+        multipleStatements: true
     });
 
     connection.connect(err => {
@@ -34,11 +34,11 @@ function initializeDatabase() {
         }
         console.log('Connected to the database.');
 
-        // Define the paths to your SQL files
+
         const dbScriptPath = path.join(__dirname, 'sql', 'create_db.sql');
         const procedureScriptPath = path.join(__dirname, 'sql', 'create_procedures.sql');
 
-        // Execute scripts in sequence
+
         runScript(dbScriptPath, connection, err => {
             if (err) {
                 connection.end();

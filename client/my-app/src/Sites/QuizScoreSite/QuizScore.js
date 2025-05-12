@@ -10,7 +10,7 @@ import {useAuth} from "../../AuthProvider";
 
 function QuizScore() {
     const location = useLocation();
-    const { quiz, userAnswers, score, passed, totalQuestions} = location.state || {};  // Destructure the passed state with fallback to an empty object
+    const { quiz, userAnswers, score, passed, totalQuestions} = location.state || {};
     const navigate = useNavigate();
     const { user } = useAuth();
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -28,10 +28,10 @@ function QuizScore() {
 
 
 
-    // Fallback in case state is not available (e.g., user navigates directly to the page)
+
     if (!quiz) {
         console.log("No quiz data available, redirecting...");
-        navigate("/"); // Redirect to home or another appropriate route
+        navigate("/");
         return null;
     }
 
@@ -59,7 +59,7 @@ function QuizScore() {
                     </div>
                     {currentQuestion.answers.map((answer, index) => (
                         <div key={index} className={'Quiz-question-container'} style={{ gridColumn: 2 }}>
-                                {/* Check if this answer ID matches the user's selected answer ID */}
+                                {/*  */}
                                 {userAnswers[currentQuestion.question_id] && userAnswers[currentQuestion.question_id].answerId === answer.answer_id ? (
                                     answer.is_correct ? (
                                         <>
@@ -67,7 +67,7 @@ function QuizScore() {
                                                 <h3>{answer.text}</h3>
                                             </div>
                                             <div className='Quiz-question-correct' style={{gridColumn: 3}}>
-                                                <h3>nice!</h3> {/* Display if the user's answer is correct */}
+                                                <h3>nice!</h3> {/* */}
                                             </div>
                                         </>
                                     ) : (
@@ -76,7 +76,7 @@ function QuizScore() {
                                                 <h3>{answer.text}</h3>
                                             </div>
                                             <div className='Quiz-question-incorrect' style={{gridColumn: 3}}>
-                                                <h3>wrong.</h3> {/* Show user's incorrect choice */}
+                                                <h3>wrong.</h3> {/*  */}
                                             </div>
                                         </>
 
@@ -89,13 +89,13 @@ function QuizScore() {
                                             </div>
                                             <div className='Quiz-question-correct' style={{gridColumn: 3}}>
                                                 <h3>this is correct
-                                                    head!</h3> {/* Indicate the correct answer if not chosen by the user */}
+                                                    head!</h3> {/* I */}
                                             </div>
                                         </>
 
                                     )) || <div className='Quiz-question-potanswer' style={{gridColumn: 2}}>
                                         <h3>{answer.text}</h3>
-                                    </div> // Ensure that null is returned when the condition is false
+                                    </div> //
                                 )}
                         </div>
                     ))}

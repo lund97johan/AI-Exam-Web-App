@@ -49,7 +49,7 @@ const upload = multer({ storage: storage }).single('file');
 app.post("/login", async (req, res) => {
     // Destructure and immediately trim the username
     let { username, password } = req.body;
-    username = username.trim();  // Trim the username to remove accidental whitespace
+    username = username.trim();
 
     const callProcedure = 'CALL login_user(?, ?)';
 
@@ -61,7 +61,7 @@ app.post("/login", async (req, res) => {
         }
 
         if (result[0][0].message.includes("Login successful")) {
-            // Extract user data from the same result set
+
             const userData = {
                 user_id: result[0][0].user_id,
                 username: result[0][0].username,
@@ -228,15 +228,15 @@ async function createQuiz5Questions(pdfToText, userId, title) {
     });
     console.log('Response:', response);
 
-    return response.data.choices[0].message.content; // Assuming this is how the response is structured
+    return response.data.choices[0].message.content;
 }
 
 
 function createQuiz(responseData) {
-  // Call the stored procedure to insert the quiz data into the database
+
   const callProcedure = 'CALL InsertQuizData(?)';
 
-  // Convert the quiz data to a JSON string and pass it as a parameter to the stored procedure
+
     dbManager.getConnection().query(callProcedure, [JSON.stringify(responseData)], function(err, result) {
       if (err) {
           console.error("Database error:", err);
@@ -281,12 +281,12 @@ app.get('/api/quiz_attempts/:quizId', async (req, res) => {
  */
 
 
-// Assuming Express is already set up
+
 app.post('/submitQuizAnswers', (req, res) => {
-    const { userId, quizId, answers, score, totalQuestions } = req.body; // Destructure the needed information from the request body
+    const { userId, quizId, answers, score, totalQuestions } = req.body;
     const answerIds = [];
 
-    // Iterate through the answers object to extract answerIds
+
     for (const key in answers) {
         if (answers.hasOwnProperty(key)) {
             answerIds.push(answers[key].answerId);
@@ -294,13 +294,13 @@ app.post('/submitQuizAnswers', (req, res) => {
     }
 
 
-    const ans_str = answerIds.join(', '); // Convert the array of answerIds to a comma-separated string
-    const attempt_time = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format datetime for MySQL
+    const ans_str = answerIds.join(', ');
+    const attempt_time = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const totalScore = `${score}/${totalQuestions}`;
-    // SQL query to insert the quiz attempt into the database
+
     const sql = `INSERT INTO quiz_attempts (quiz_id, score, ans_str, attempt_time) VALUES (?, ?, ?, ?)`;
 
-    // Execute the SQL query using the existing database connection
+
     dbManager.getConnection().query(sql, [quizId, totalScore, ans_str, attempt_time], (err, result) => {
         if (err) {
             console.error('Error saving quiz results:', err);
@@ -325,7 +325,7 @@ app.get('/api/quiz_attempt/:attemptId', (req, res) => {
         }
 
 
-        // Split the comma-separated answer IDs and convert them to integers
+
         const answerIds = results[0].ans_str.split(',').map(id => parseInt(id.trim()));
 
         res.json({ answerIds });
@@ -337,9 +337,9 @@ app.get('/api/quiz_attempt/:attemptId', (req, res) => {
 
 
 app.get("/getQuizDetailed/:quizId", async (req, res) => {
-    const quizId = req.params.quizId; // Get quizId from URL parameters
-    // Optionally, get userId from an authenticated session or token if needed
-    const userId = req.user?.id; // Assuming you have some authentication middleware
+    const quizId = req.params.quizId;
+
+    const userId = req.user?.id;
 
     dbManager.getConnection().query('CALL GetQuizDetailsByQuizId(?)', [quizId], function(err, result, fields) {
         if (err) {
@@ -370,7 +370,7 @@ app.get("/getQuizDetailed/:quizId", async (req, res) => {
 app.get("/getQuiz", async (req, res) => {
     const querystring = 'CALL GetQuizNamesByUserId(?)';
     const userId = req.query.userId;
-    // Ensure userId is present
+
     if (!req.query.userId) {
         console.log("No userId provided");
         res.status(400).json({ success: false, message: "userId is required" });
@@ -384,19 +384,19 @@ app.get("/getQuiz", async (req, res) => {
             return;
         }
 
-        // Check if there are any quizzes returned
+
         if (result[0] && result[0].length > 0) {
             const quizNames = result[0].map(row => row.title);
-            //add their quizz id to the quiz names
+
             quizNames.forEach((quizName, index) => {
                 quizNames[index] = { id: result[0][index].quiz_id, title: quizName };
             });
-            console.log("Query result:", result[0]); // Log the raw result for debugging
-            console.log("Quiz names:", quizNames); // Log the processed names for clarity
+            console.log("Query result:", result[0]);
+            console.log("Quiz names:", quizNames);
 
             res.json({ success: true, quizzes: quizNames });
         } else {
-            console.log("No quizzes found for userId:", req.query.userId); // Log this scenario for debugging
+            console.log("No quizzes found for userId:", req.query.userId);
             res.status(404).json({ success: false, message: "No quizzes found" });
         }
     });
@@ -411,10 +411,10 @@ process.on('SIGINT', () => {
     console.log('Received SIGINT. Closing database connection...');
     dbManager.close().then(() => {
         console.log('Database connection closed.');
-        process.exit(0); // Exit cleanly after closing the connection
+        process.exit(0);
     }).catch(err => {
         console.error('Failed to close database connection:', err);
-        process.exit(1); // Exit with error code
+        process.exit(1);
     });
 });
 
