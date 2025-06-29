@@ -1,9 +1,10 @@
-import React from 'react';
+import  React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
 
 import Welcome from "./App";
 import Register from "./Sites/RegisterSite/Register";
@@ -17,37 +18,43 @@ import Quiz from './Sites/QuizSite/Quiz';
 import FileUpload from './Sites/FileUploadSite/FileUpload';
 import AuthProvider from "./AuthProvider";
 import OldQuizzes from './Sites/OldQuizzes/OldQuizPage';
-import Dashboard from "./Sites/DashboardSite/Dashboard";
+
 import RemoveQuiz from "./Sites/RemoveQuiz/RemoveQuiz";
 import QuizAttempts from "./Sites/QuizAttempts/QuizAttempts";
 import QuizAttempt from "./Sites/QuizAttempt/QuizAttempt";
+import {Layout, App} from './App';
 
+import ReturnMap from './Sites/Maps/Map';
 import QuizScore  from "./Sites/QuizScoreSite/QuizScore";
+import MapComponent from "./Sites/Maps/Map";
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Welcome />} />
-          <Route path="/register" element={<Register />}/>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/contactus' element={<ContactUs/>}/>
-          <Route path='/BotInfo' element={<BotInfo/>}/>
-          <Route path='/About' element={<About/>}/>
-          <Route path='/quiz' element={<Quiz/>}/>
-          <Route path='/old_quizzes' element={<OldQuizzes/>}/>
-          <Route path='/FileUpload' element={<FileUpload/>}/>
-          <Route path='/quiz/:quizId' element={<Quiz/>}/>
-          <Route path='/dashboard' element={<Dashboard/>}/>
-          <Route path='/remove_quiz/:quizId' element={<RemoveQuiz/>}/>
-          <Route path='/QuizScore' element={<QuizScore/>}/>
-          <Route path='/quiz_attempts/:quizId' element={<QuizAttempts/>}/>
-          <Route path='/quiz_attempt/:attemptId' element={<QuizAttempt/>}/>
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+    <React.StrictMode>
+        <Router>
+            <AuthProvider>
+                <Routes>
+                    <Route element={<Layout />}>
+                        <Route index element={<Navigate to="dashboard" replace />} />
+                        <Route path="dashboard" element={< App/>} />
+                        <Route path="register" element={<Register />} />
+                        <Route path="login" element={<Login />} />
+                        <Route path="contactus" element={<ContactUs />} />
+                        <Route path="botinfo" element={<BotInfo />} />
+                        <Route path="about" element={<About />} />
+                        <Route path="quiz" element={<Quiz />} />
+                        <Route path="quiz/:quizId" element={<Quiz />} />
+                        <Route path="old_quizzes" element={<OldQuizzes />} />
+                        <Route path="fileupload" element={<FileUpload />} />
+                        <Route path="remove_quiz/:quizId" element={<RemoveQuiz />} />
+                        <Route path="quizscore" element={<QuizScore />} />
+                        <Route path="quiz_attempts/:quizId" element={<QuizAttempts />} />
+                        <Route path="map" element={<MapComponent />} />
+                    </Route>
+                </Routes>
+            </AuthProvider>
+        </Router>
+    </React.StrictMode>
 );
 
 

@@ -2,8 +2,7 @@ import * as React from "react";
 
 import {useEffect, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom'; //  Link
-import {ReturnHeader} from "../../App";
-import {ReturnFooter} from "../../App";
+
 import {useAuth} from "../../AuthProvider";
 import { useParams } from 'react-router-dom';
 
@@ -22,13 +21,9 @@ function QuizExplain({quizData, quizAnswers, quizResults}){
     },[user]);
 
     return(
-        <div className='App'>
-            <ReturnHeader/>
-            <div className='App-body'>
+
                 <ShowResults/>
-            </div>
-            <ReturnFooter/>
-        </div>
+
     )
 }
 

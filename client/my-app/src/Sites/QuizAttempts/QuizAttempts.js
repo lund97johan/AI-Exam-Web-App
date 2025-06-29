@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import './QuizAttempts.css';
-import {ReturnFooter, ReturnHeader} from "../../App";
+
 
 function QuizAttempts() {
     const location = useLocation();
@@ -34,7 +34,7 @@ function QuizAttempts() {
     const NavigateQuizAttempt = async (quizAttemptId) => {
         try {
 
-            const responseQuiz = await fetch(`/getQuizDetailed/${quizId}`);
+            const responseQuiz = await fetch(`/api/getQuizDetailed/${quizId}`);
             const dataQuiz = await responseQuiz.json();
             if (!responseQuiz.ok) {
                 console.error('Failed to fetch quiz:', dataQuiz.message);
@@ -77,9 +77,7 @@ function QuizAttempts() {
         }
     };
     return (
-        <div className='App'>
-            <ReturnHeader/>
-            <div className='App-body'>
+
                 <div className="attempts-container">
                     <h1 style={{color:"white"}}>Quiz Attempts for Quiz ID: {quizName}</h1>
                     {attempts.length > 0 ? (
@@ -96,9 +94,7 @@ function QuizAttempts() {
                         <p>No attempts found for this quiz.</p>
                     )}
                 </div>
-            </div>
-            <ReturnFooter/>
-        </div>
+
 
     );
 }

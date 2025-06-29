@@ -1,100 +1,140 @@
 import React, {useEffect, useState} from 'react';
 import './FileUpload.css';
 
-import {ReturnHeader} from "../../App";
-import {ReturnFooter} from "../../App";
 import { useAuth } from '../../AuthProvider';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 
 function FileUpload(){
     const {user, logout} = useAuth();
     const navigate = useNavigate();
 
-    return(
-        <div className='App'>
-            <ReturnHeader/>
-            <div className='App-body'>
-                <ReturnFileUpload/>
+
+    return user ? (
+
+                <ReturnFileUpload />
+
+    ) : (
+        <RequireLoginMessage />
+    );
+
+}
+
+function RequireLoginMessage() {
+    return (
+        <div className="rlm-wrapper">
+            <p className="rlm-text">
+                You need to <span className="rlm-em">login</span> or&nbsp;
+                <span className="rlm-em">register</span> to be able to make quizzes
+            </p>
+            <div className="rlm-btn-group">
+                <Link to="/login" className="LoginButton rlm-btn">
+                    Login
+                </Link>
+                <span className="rlm-divider">or</span>
+                <Link to="/register" className="LoginButton rlm-btn">
+                    Register
+                </Link>
             </div>
-            <ReturnFooter/>
         </div>
-    )
+    );
 }
 
 function ReturnFileUpload() {
     const [file, setFile] = useState(null);
     const { user } = useAuth();
-    const [nrQuestions, setNrQuestions] = useState(0);
-
-
+    const [nrQuestions, setNrQuestions] = useState(5);
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const handleFileChange = (e) => {
         setFile(e.target.files[0])
 
     };
+    const options = Array.from({ length: 8 }, (_, i) => (i + 1) * 5);
     const handleFileUpload = () => {
+        if (!file) return;
 
         const formData = new FormData();
-        formData.append('file', file);
-        if (user) {
-            formData.append('userId', user.user_id);
-        }
-    
+        formData.append("file", file);
+        if (user) formData.append("userId", user.user_id);
+        formData.append("title", file.name);
+        formData.append("nrQuestions", nrQuestions);
 
-        const fileName = file.name;
+        setIsLoading(true);                        // ⬅️ start spinner
 
-        formData.append('title', fileName);
-        formData.append('nrQuestions', nrQuestions);
-
-        fetch('/upload', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            alert('File uploaded successfully');
-        })
-        .catch(error => console.error('Error uploading file', error));
+        fetch("/api/upload", { method: "POST", body: formData })
+            .then((r) => r.json())
+            .then((data) => {
+                console.log("Response from server:", data);
+                if (data.success) {
+                    console.log("File uploaded successfully");
+                    navigate(`/old_quizzes`);
+                } else{
+                    console.error("Upload failed:", data.message);
+                    document.getElementById('errorBox').innerHTML = data.message || 'Upload failed';
+                }
+            })
+            .catch((err) => console.error("Upload error:", err))
+            .finally(() => setIsLoading(false));     // ⬅️ stop spinner
     };
     const changeNrQuestions = (e) => {
         setNrQuestions(e.target.value);
     }
 
     return (
+        <div className="file-upload-body">
+            <div className="upload-card">
+                {isLoading && <div className="spinner" />}   {/* simple overlay */}
+                {/* intro text -------------------------------------------------- */}
+                <p className="about-us-fileupload-text">
+                    Welcome to our easy upload portal! Click the button below to pick a document,
+                    then choose how many questions you’d like. We’ll generate a quiz for you
+                    in just a few clicks.
+                </p>
 
-        <div className={'file-upload-body'} >
-            <div className={'file-upload-body-container'} style={{gridColumn: 2, gridRow: 1}}>
-                <div className={'about-us-fileupload-container'}>
-                    <div className={'about-us-fileupload-text'}>
-                        Welcome to Our Easy Upload Portal! click and open to drop your files here or use the upload button below to get started. Our tool will help you generate quiz questions from your documents in just a few clicks.
+                {/* upload controls -------------------------------------------- */}
+                <div className="file-upload-upload-container">
+                    {/* hidden <input type="file"> lives inside the label */}
+                    <label className="upload-btn">
+                        Choose File
+                        <input type="file" onChange={handleFileChange} />
+                    </label>
+
+                    <button
+                        className="upload-btn"
+                        disabled={!file}
+                        onClick={handleFileUpload}
+                    >
+                        Upload File
+                    </button>
+
+                    {/* filename preview */}
+                    {file && <span className="file-name">{file.name}</span>}
+                </div>
+
+                {/* question selector ------------------------------------------ */}
+                <div className="nr-of-questions-container">
+                    <select
+                        className="nr-selector"
+                        value={nrQuestions}
+                        onChange={(e) => setNrQuestions(e.target.value)}
+                    >
+                        {options.map((n) => (
+                            <option key={n} value={n}>
+                                {n}
+                            </option>
+                        ))}
+                    </select>
+
+                    <div className="nr-questions">
+                        {nrQuestions} : Number of questions to be generated
+                    </div>
+                    <div>
+                        <span id={'errorBox'}></span>
                     </div>
                 </div>
             </div>
-            <div className={'file-upload-body-container'} style={{gridColumn: 2, gridRow: 2}}>
-                <div className={'file-upload-upload-container'}>
-                    <input className={'fileuploadtext'} type="file" onChange={handleFileChange}/>
-                    <button onClick={handleFileUpload}>Upload File</button>
-                </div>
-                <div className={'nr-of-questions-container'}>
-                    <span>
-                            <select className={'nr-selector'} onChange={(e) => setNrQuestions(e.target.value)}>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
-                        </span>
-                    <div className={'nr-questions'}>{nrQuestions} :   Number of questions to be generated</div>
-                </div>
-
-            </div>
         </div>
-
-
-    )
-        ;
+    );
 
 
 }

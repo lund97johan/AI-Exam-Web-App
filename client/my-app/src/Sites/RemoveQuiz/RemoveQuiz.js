@@ -7,7 +7,7 @@ function RemoveQuiz() {
     const navigate = useNavigate();
 
     const handleRemoveQuiz = () => {
-        fetch(`/remove_quiz/${quizId}`, {
+        fetch(`/api/remove_quiz/${quizId}`, {
             method: 'DELETE',
         })
             .then(response => response.json())

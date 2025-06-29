@@ -3,14 +3,11 @@ import * as React from "react";
 import "./About.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {ReturnHeader} from "../../App";
-import {ReturnFooter} from "../../App";
+
 
 function About(){
   return(
-      <div className='App'>
-          <ReturnHeader/>
-          <div className='App-body'>
+
               <div className="about-main">
                   <div className="hello-textbox">
                       <p>About Us
@@ -28,9 +25,7 @@ function About(){
                   </div>
                   <ReturnBilderBoxes/>
               </div>
-          </div>
-          <ReturnFooter/>
-      </div>
+
   )
 }
 

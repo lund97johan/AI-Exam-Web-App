@@ -3,14 +3,11 @@ import * as React from "react";
 import "./botinfo.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {ReturnHeader} from "../../App";
-import {ReturnFooter} from "../../App";
+
 
 function BotInfo(){
     return(
-      <div className='App'>
-      <ReturnHeader/>
-      <div className='App-body'>
+
           <div className="test">
               <div className="textbox-botInfo">
                   <p>Welcome to our intelligent bot, designed to simplify your academic journey by providing concise summaries of quizzes, student notes, and teacher lectures.
@@ -28,9 +25,7 @@ Here's what our bot can do for you:
               </div>
               
           </div>
-      </div>
-      <ReturnFooter/>
-  </div>
+
 )
 }
 
@@ -43,7 +38,7 @@ function SetInStartBox() {
       event.preventDefault();
       const loginDetails = {username, password};
       try {
-        const response = await fetch('/login', {
+        const response = await fetch('/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

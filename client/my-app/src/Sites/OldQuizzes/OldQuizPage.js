@@ -2,20 +2,15 @@ import * as React from "react";
 import "./oldQuizzes.css";
 import {useEffect, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom'; //  Link
-import {ReturnHeader} from "../../App";
-import {ReturnFooter} from "../../App";
+
 import {useAuth} from "../../AuthProvider";
 
 
 function OldQuizzes() {
   return (
-      <div className='App'>
-          <ReturnHeader/>
-              <div className='App-body'>
+
                   <ReturnQuizzes/>
-              </div>
-          <ReturnFooter/>
-      </div>
+
   );
 }
 
@@ -23,7 +18,7 @@ function ReturnQuizzes() {
     const { user } = useAuth();
     const [quizzes, setQuizzes] = useState([]);
     const navigate = useNavigate();
-
+    const [fetching, setFetching] = useState(true);
     useEffect(() => {
 
         if (!user) {
@@ -34,7 +29,7 @@ function ReturnQuizzes() {
 
         const fetchQuizzes = async () => {
             try {
-                const response = await fetch(`/getQuiz?userId=${user.user_id}`, {
+                const response = await fetch(`/api/getQuiz?userId=${user.user_id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -50,6 +45,7 @@ function ReturnQuizzes() {
             } catch (error) {
                 console.error('Network or server error', error);
             }
+            setFetching(false);
         };
 
         fetchQuizzes();
@@ -70,25 +66,60 @@ function ReturnQuizzes() {
     };
 
     return (
-        <div className="quiz-container">
-            {quizzes.length > 0 ? (
-                quizzes.map((quiz, index) => (
-                    <div key={index} className="quiz-item">
+
+        <> {fetching ? (FetchingQuizzes() ) : (
+            <div className="quiz-container">
+            {quizzes.length ? (
+                quizzes.map((quiz) => (
+                    <div key={quiz.id} className="quiz-item">
+                        {/*  label + primary action share one flex box  */}
                         <div className="quiz-input">
-                            <input className='quiz' type='text' value={quiz.title} disabled />
-                            <Link to={`/quiz/${quiz.id}`} className="quiz-button">Take Quiz</Link>
+                            <input className="quiz" value={quiz.title} disabled/>
+
+                            <Link to={`/quiz/${quiz.id}`} className="quiz-button">
+                                Take&nbsp;Quiz
+                            </Link>
                         </div>
-                        <button className='previous-attempts-button' onClick={() => handlePreviousAttemptsClick(quiz.id, quiz.title)}>
+
+                        <button
+                            className="previous-attempts-button"
+                            onClick={() => handlePreviousAttemptsClick(quiz.id, quiz.title)}
+                        >
                             View Previous Attempts
                         </button>
-                        <button className='remove-button' onClick={() => handleRemoveClick(quiz.id)}>
+
+                        <button
+                            className="remove-button"
+                            onClick={() => handleRemoveClick(quiz.id)}
+                        >
                             Remove Quiz
                         </button>
                     </div>
                 ))
             ) : (
-                <p>No quizzes available</p>
+                <div className="no-quizzes-cta">
+                    <p>No quizzes yet.</p>
+                    <button
+                        className="upload-btn"
+                        onClick={() => navigate("/FileUpload")}
+                    >
+                        Upload a PDF &amp; create one
+                    </button>
+                </div>
             )}
+        </div>)}
+        </>
+
+    );
+
+}
+
+
+function FetchingQuizzes() {
+    return (
+        <div className="fetching-container">
+            <p>Fetching quizzes...</p>
+            <div className="spinner2"></div>
         </div>
     );
 }

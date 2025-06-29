@@ -3,19 +3,14 @@ import * as React from "react";
 import "./Login.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {ReturnHeader} from "../../App";
-import {ReturnFooter} from "../../App";
+
 import { useAuth } from '../../AuthProvider';
 
 function Login(){
     return(
-        <div className='App'>
-            <ReturnHeader/>
-              <div className='App-body'>
+
                 <SetInStartBox/>
-              </div>
-            <ReturnFooter/>
-        </div>
+
       )
 }
 
@@ -28,6 +23,14 @@ function SetInStartBox() {
     function handleClick() {
       navigate("/register");
     }
+
+    const navigateRegister = () => {
+        navigate('/register');
+    }
+
+    const wrongInput = (message) => {
+        document.getElementById('errorBox').innerHTML = message === null ? 'Wrong input' : message;
+    }
   
   
   
@@ -35,7 +38,7 @@ function SetInStartBox() {
       event.preventDefault();
       const loginDetails = { username, password };
       try {
-          const response = await fetch('/login', {
+          const response = await fetch('/api/login', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
@@ -52,7 +55,7 @@ function SetInStartBox() {
                   alert('Login successful but no user data returned');
               }
           } else {
-              alert(data.message || 'Login failed');
+                wrongInput(data.message || 'Login failed, please check your credentials.');
           }
       } catch (error) {
           console.error('Login error:', error);
@@ -65,37 +68,46 @@ function SetInStartBox() {
   
     return (
       <div className="testMain">
-<div className='StartLoginBox' >
-        <div className='LoginRow'>
-          <text className='LoginText'>login</text>
-        </div>
-        <div className='LoginRow'>
-          <input 
-          className='StartLoginInput'
-          type='text'
-          placeholder='User Name'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div className='LoginRow'>
-          <input
-          className='StartLoginInput'
-          type ='password'
-          placeholder='Password'
-          value={password}
-          
-          onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className='LoginRow'>
-        <button className='LoginButton' type='submit' onClick={handleLogin}>Login</button>
-           {/*  <button className='LoginButton' type='submit' onClick={handleClick}>Login</button> */}
-        </div>  
-      </div>
-      </div>
-      
-    )
-  }
+          <div className='StartLoginBox'>
+              <div className='LoginRow'>
+                  <text className='LoginText'>login</text>
+              </div>
+              <div className='LoginRow'>
+                  <input
+                      className='StartLoginInput'
+                      type='text'
+                      placeholder='User Name'
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                  />
+              </div>
+              <div className='LoginRow'>
+                  <input
+                      className='StartLoginInput'
+                      type='password'
+                      placeholder='Password'
+                      value={password}
 
- export default Login;
+                      onChange={(e) => setPassword(e.target.value)}
+                  />
+              </div>
+              <div>
+                  <span id={'errorBox'} className={'login-error'}></span>
+              </div>
+              <div className='LoginRow'>
+                  <button className='LoginButton' type='submit' onClick={handleLogin}>Login</button>
+                  {/*  <button className='LoginButton' type='submit' onClick={handleClick}>Login</button> */}
+              </div>
+              <div>
+                  <h3 style={{color:"white"}}>
+                      Dont have an account?
+                  </h3>
+                  <button className='LoginButton' type='submit' onClick={navigateRegister}>Register</button>
+            </div>
+      </div>
+</div>
+
+)
+}
+
+export default Login;

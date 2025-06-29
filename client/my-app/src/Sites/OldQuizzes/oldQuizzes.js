@@ -2,14 +2,14 @@ import * as React from "react";
 import "./oldQuizzes.css";
 import {useEffect, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom'; //  Link
-import {ReturnHeader} from "../../App";
-import {ReturnFooter} from "../../App";
+
 
 
 function OldQuizzes() {
   const [selectedQuiz, setSelectedQuiz] = useState("");
   const [quizzes, setQuizzes] = useState([]);
   const { user } = useAuth();
+  const [fetching, setFetching] = useState(false);
 
   const handleQuizSelection = (quizName) => {
     setSelectedQuiz(quizName);
@@ -21,9 +21,10 @@ function OldQuizzes() {
                 navigate("/login");
                 return;
             }
+            setFetching(true);
 
             try {
-                const response = await fetch('/getQuiz', {
+                const response = await fetch('/api/getQuiz', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -41,15 +42,14 @@ function OldQuizzes() {
                 console.error('Failed to fetch quizzes:', error);
                 alert('Failed to fetch quizzes, please try again later');
             }
+            setFetching(false);
         };
 
         fetchQuizzes();
     }, [user]);
 
   return (
-    <div className='App'>
-      <ReturnHeader />
-      <div className='App-body'>
+
         <div className="quiz-container">
           <div className="quiz-item">
             <div className="quiz-input">
@@ -88,9 +88,7 @@ function OldQuizzes() {
             <button className='remove-button'>Remove Quiz</button>
           </div>
         </div>
-      </div>
-      <ReturnFooter />
-    </div>
+
   );
 }
 

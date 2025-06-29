@@ -2,11 +2,10 @@ import * as React from "react";
 import "./Dashboard.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ReturnHeader } from "../../App";
-import { ReturnFooter } from "../../App";
+
 import { useAuth } from "../../AuthProvider";
 
-function Dashboard() {
+export function Dashboard() {
     const { user, setUser } = useAuth();
     const navigate = useNavigate();    
     
@@ -42,9 +41,7 @@ function Dashboard() {
     */
 
     return (
-        <div className='App'>
-            <ReturnHeader/>
-            <div className='App-body'>
+   <>
                 {user ? (
                     <div className="user-details"> 
                         <h1 className={'welcomethingy'}>Welcome, {user.firstname} {user.lastname}!</h1>
@@ -65,9 +62,7 @@ function Dashboard() {
                 ) : (
                     <p>Loading...</p>
                 )}
-            </div>
-            <ReturnFooter/>
-        </div>
+   </>
     );
 }
 

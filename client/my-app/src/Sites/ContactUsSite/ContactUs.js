@@ -3,8 +3,7 @@ import ContactForm from "./ContactForm";
 import "./ContactUs.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ReturnHeader } from "../../App";
-import { ReturnFooter } from "../../App";
+
 
 /*function ContactUs() {
     return (
@@ -20,13 +19,9 @@ import { ReturnFooter } from "../../App";
 
 function ContactUs() {
     return (
-        <div className='App'>
-            <ReturnHeader />
-            <div className='App-body'>
+
                 <ContactForm />
-            </div>
-            <ReturnFooter />
-        </div>
+
     );
 }
 

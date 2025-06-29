@@ -6,26 +6,28 @@ import {useEffect, useState} from 'react';
 import {Link } from "react-router-dom";
 import { useAuth } from './AuthProvider';
 import { useNavigate } from 'react-router-dom';
-
-
-function App(){
-    const {user, logout} = useAuth();
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (user) {
-            navigate("/dashboard");
-            return;
-        }
-    });
-    return(
-        <div className='App'>
-            <ReturnHeader/>
-            <div className='App-body'>
-              <LoginOrRegisterColumns column={3} row={2}/>
-            </div>
-            <ReturnFooter/>
+import { Dashboard } from './Sites/DashboardSite/Dashboard';
+import { Outlet } from 'react-router-dom';
+export function Layout() {
+    return (
+    <div className="App">
+        <ReturnHeader/>
+        <div className="App-body">
+            <Outlet/>
         </div>
+        <ReturnFooter/>
+    </div>
     )
+}
+
+
+export function App() {
+    const { user } = useAuth();
+
+    return user
+        ? <Dashboard />
+        : <LoginOrRegisterColumns column={3} row={2} />;
+
 
 }
 
@@ -42,26 +44,11 @@ function ReturnFooter(){
   return(
     <div className='App-footer'>
        <text className='Footer-text'>
-          © 2024 Tenta QuizBuilder. All rights reserved.
-       </text>
-       <text className='Footer-text'>
-        By Group 18:
+        2024 Tenta QuizBuilder
        </text>
        <div className='Footer-container'>
           <text className='Footer-text'>
             Henrik Ravnborg
-          </text>
-          <text className='Footer-text'>
-            Jesper Truedsson
-          </text>
-          <text className='Footer-text'>
-            Johan Lund
-          </text>
-          <text className='Footer-text'>
-            Mattias Fridsén 
-          </text>
-          <text className='Footer-text'>
-            Nils Fritzner
           </text>
        </div>
     </div>
@@ -88,30 +75,32 @@ function ReturnHeader() {
     return (
         <div className='App-header'>
             <div className='Header-container'>
+
                 <div className='Header-text' style={{gridColumn: 3}}>
-                    <Link to="/BotInfo">AI Bot</Link>
-                </div>
-                <div className='Header-text'>
-                    <Link to='/About'>About</Link>
-                </div>
-                <div className='Header-text'>
                     {/*  */}
-                    <Link to={user ? "/dashboard" : "/"}>
+                    <Link to={user ? "/dashboard" : ""}>
                         Home
                     </Link>
+                </div>
+                <div className={'Header-text'}>
+                    <Link to={"/Map"}>Map</Link>
+                </div>
+                <div className={'Header-text'}>
+                    <Link to={"/FileUpload"}>Create Quiz</Link>
                 </div>
                 <div className='Header-text'>
                     <Link to="/contactus">Contact Us</Link>
                 </div>
                 <LoggedInUser/>
+
             </div>
         </div>
     );
 }
 
 function LoggedInUser() {
-  const {user, logout} = useAuth();//
-  const navigate = useNavigate();
+    const {user, logout} = useAuth();//
+    const navigate = useNavigate();
 
   const handleLogout = () => {
       logout();
@@ -127,27 +116,30 @@ function LoggedInUser() {
     );
   } else {
     return (
-        <div className='Header-text-dropdown' style={{gridColumn: 7}}>
-            {user.username}'s profile {/*  */}
-            <i className="arrow down"></i>
-            <div className='Header-text-dropdown-content'>
-                <div className='Header-text-dropdown-content-grid'>
-                    <text>
-                        <Link to="/dashboard">Profile</Link>
-                    </text>
-                    <text>
-                        <Link to="/old_quizzes">Quizzes</Link>
-                    </text>
-                    <text>
-                        <Link to='/FileUpload'>Upload File</Link>
-                    </text>
-                    <text>
-                        <Link to='/' onClick={handleLogout}>Logout</Link>
-                    </text>
-                    
+        <div>
+            <div className='Header-text-dropdown' style={{gridColumn: 7}}>
+                {user.username}'s profile {/*  */}
+                <i className="arrow down"></i>
+                <div className='Header-text-dropdown-content'>
+                    <div className='Header-text-dropdown-content-grid'>
+                        <text>
+                            <Link to="/dashboard">Profile</Link>
+                        </text>
+                        <text>
+                            <Link to="/old_quizzes">Quizzes</Link>
+                        </text>
+                        <text>
+                            <Link to='/FileUpload'>Upload File</Link>
+                        </text>
+                        <text>
+                            <Link to='/' onClick={handleLogout}>Logout</Link>
+                        </text>
+
+                    </div>
                 </div>
             </div>
         </div>
+
     );
   }
 }
@@ -159,30 +151,20 @@ function useLoggedInUser() {
 
 function LoginOrRegisterColumns({column, row}) {
     return (
-        <div className="testMain">
-            <div className='LoginRow' style={{gridColumn: 3, gridRow: 1}}>
-                <text className='LoginText'>Welcome to our AI quizbuilder website, login or register to start creating
-                    tenta quizzes
-                </text>
+        <div className="lr-hero-wrapper">
+            <p className="lr-hero-text">
+                Welcome to our AI quiz-builder website.<br />
+                <span className="lr-hero-em">Log in</span> or&nbsp;
+                <span className="lr-hero-em">register</span> to start creating tenta quizzes.
+            </p>
+
+            <div className="lr-btn-group">
+                <Link to="/login" className="LoginButton lr-btn">Login</Link>
+                <span className="lr-divider">or</span>
+                <Link to="/register" className="LoginButton lr-btn">Register</Link>
             </div>
-            <div className="LoginOrRegisterColumns" style={{gridColumn: column, gridRow: row}}>
-                <div className="LoginRow">
-                    <Link to="/login">
-                        <button className="LoginButton">Login</button>
-                    </Link>
         </div>
-        <div className="LoginRow" >
-          <div className ="LoginText" style={{color: "white", fontSize: 20}}
-          >OR</div>
-        </div>
-        <div className="LoginRow">
-          <Link to ="/register">
-          <button className="LoginButton">Register</button>
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 function SetInStartBox() {
@@ -194,7 +176,7 @@ function SetInStartBox() {
     const loginDetails = {username, password};
 
     try {
-      const response = await fetch('/login', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -211,7 +193,7 @@ function SetInStartBox() {
     console.log('login error', error);
   }
 };
-  
+
 
 
   return (
@@ -220,7 +202,7 @@ function SetInStartBox() {
         <text className='LoginText'>login</text>
       </div>
       <div className='LoginRow'>
-        <input 
+        <input
         className='StartLoginInput'
         type='text'
         placeholder='User Name'
@@ -251,6 +233,4 @@ function LoginButton(){
   )
 }
 
-export default App;
-export {ReturnHeader};
-export {ReturnFooter};
+export default Layout;

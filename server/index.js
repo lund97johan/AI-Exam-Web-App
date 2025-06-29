@@ -46,7 +46,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).single('file');
 
 
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
 
     let { username, password } = req.body;
     username = username.trim();
@@ -78,7 +78,7 @@ app.post("/login", async (req, res) => {
     });
 });
 
-app.post("/register", async (req, res) => {
+app.post("/api/register", async (req, res) => {
     const { username, email, firstName, lastName, password } = req.body;
 
     const callProcedure = 'CALL register_user(?, ?, ?, ?, ?)';
@@ -114,7 +114,7 @@ app.post("/register", async (req, res) => {
 
 // this recieves the file from the client side and then sends it to the openai api to get the questions and answers
 // this entire function or whatever you'd call it could probalby be done in a better way but i dont really have the time to do that right now
-app.post('/upload', (req, res) => {
+app.post('/api/upload', (req, res) => {
   //something something javascript magic upload file
   upload(req, res, async function (err) {
       if (err) {
@@ -144,11 +144,14 @@ app.post('/upload', (req, res) => {
          responses.append({userId: req.body.userId, title: req.body.title});
         */
          // give exact promt to gpt so it returns the correct dataformat every time using our insane "service"
-         const prompt = `Generate a series of multiple choice quiz questions with "${nrQuestions}" questions and 4 answers per question based on the following text. Each question should be structured as a JSON object with the question text, four options, and a correct answer. Please format the entire output as a JSON array:
+         const prompt = `Generate a series of multiple choice quiz questions with 5 questions and 4 answers per question based on the following text. 
+         Each question should be structured as a JSON object with the question text, four options, and a correct answer.
+         The correct answer should be random, it could be either option A, B, C or D. Please format the entire output as a JSON array:
          Text: "${data.text}"
          User ID: "${req.body.userId}"  // Include user ID in prompt
          Quiz Title: "${req.body.title}" // Include quiz title in prompt
-         Please format the output as follows:
+         Please format the output as follows exactly, must follow this format exactly, otherwise the client will not be able to parse it correctly
+         :
          [
              {
                  "question": "What is the main theme of the text?",
@@ -159,28 +162,38 @@ app.post('/upload', (req, res) => {
                  "question": "How does the author describe the relationship between X and Y?",
                  "options": ["Option A", "Option B", "Option C", "Option D"],
                  "answer": "Option B"
-             }
+             },
+             {
+                  "question": "Which argument does the author use to support their main point?",
+                  "options": ["Option A", "Option B", "Option C", "Option D"],
+                  "answer": "Option C"
+              }
              // More questions as needed
          ]`;
 
 
 
          const response = await openai.chat.completions.create({
-             model: "gpt-3.5-turbo",
+             model: "gpt-4.1-nano",
              messages: [{ role: "user", content: prompt }]
          });
          console.log('Response:', response);
-
-
-
-         const message = response.choices[0].message;
-         const quizContent = JSON.parse(message.content);
-
+         let quizContent = JSON.parse(response.choices[0].message.content);
+         console.log('Quiz content:', quizContent);
+          if (nrQuestions > 5){
+                for (let i = 0; i < nrQuestions / 5 - 1; i++) {
+                    const additionalQuestions = await repeatedCreateQuiz5Questions(data.text, quizContent);
+                    console.log('Additional questions content:', JSON.parse(additionalQuestions.choices[0].message.content));
+                    const message = JSON.parse(additionalQuestions.choices[0].message.content);
+                    quizContent = quizContent.concat(message);
+                }
+          }
 
          const responseData = {
              userId: req.body.userId,
              title: req.body.title,
-             questionsAndAnswers: quizContent
+             questionsAndAnswers: quizContent,
+             success: true,
          };
 
           console.log('Response data:', responseData);
@@ -188,9 +201,15 @@ app.post('/upload', (req, res) => {
           createQuiz(responseData);
           res.status(200).json(responseData);
       } catch (error) {
-
-          console.error('Error processing the request:', error);
-          res.status(500).send({ error: 'Failed to parse PDF, generate quiz, or parse JSON: ' + error.message });
+          const responseData = {
+                userId: req.body.userId,
+                title: req.body.title,
+                questionsAndAnswers: [],
+                success: false,
+                message: error.message || "An error occurred while processing the request."
+            };
+          console.error('Error processing the request:', responseData);
+          res.status(500).send({ responseData });
       } finally {
 
           fs.unlink(req.file.path, err => {
@@ -199,6 +218,35 @@ app.post('/upload', (req, res) => {
       }
   });
 });
+
+async function repeatedCreateQuiz5Questions(dataText, previousQuestionsAndAnswers) {
+    const prompt = `
+Generate exactly 5 new multiple-choice questions based on this text, and do NOT repeat or paraphrase any of these existing questions:
+
+${JSON.stringify(previousQuestionsAndAnswers)}
+
+Text:
+${dataText}
+
+Return _only_ a JSON array of 5 objects, each with the keys "question", "options" (an array of four strings), and "answer" (one of those strings). Do NOT include comments, semicolons, or any other text:
+
+[
+  {
+    "question": "First question…",
+    "options": ["A","B","C","D"],
+    "answer": "B"
+  },
+  { … }
+]
+
+the "answer": "B" must be exactly the same as the answer "B" in options. 
+`.trim();
+
+    return openai.chat.completions.create({
+        model: "gpt-4.1-nano",
+        messages: [{ role: "user", content: prompt }]
+    });
+}
 
 async function createQuiz5Questions(pdfToText, userId, title) {
 
@@ -229,6 +277,8 @@ async function createQuiz5Questions(pdfToText, userId, title) {
 }
 
 
+
+
 function createQuiz(responseData) {
 
   const callProcedure = 'CALL InsertQuizData(?)';
@@ -248,7 +298,7 @@ function createQuiz(responseData) {
 /**
  * Removes Quizzes from the db, along with all questions, answers and attempts related to the quiz.
  */
-app.delete('/remove_quiz/:quizId', async (req, res) => {
+app.delete('/api/remove_quiz/:quizId', async (req, res) => {
     const { quizId } = req.params;
     try {
         await dbManager.deleteQuizById(quizId);
@@ -279,7 +329,7 @@ app.get('/api/quiz_attempts/:quizId', async (req, res) => {
 
 
 
-app.post('/submitQuizAnswers', (req, res) => {
+app.post('/api/submitQuizAnswers', (req, res) => {
     const { userId, quizId, answers, score, totalQuestions } = req.body;
     const answerIds = [];
 
@@ -333,7 +383,7 @@ app.get('/api/quiz_attempt/:attemptId', (req, res) => {
 
 
 
-app.get("/getQuizDetailed/:quizId", async (req, res) => {
+app.get("/api/getQuizDetailed/:quizId", async (req, res) => {
     const quizId = req.params.quizId;
 
     const userId = req.user?.id;
@@ -364,7 +414,7 @@ app.get("/getQuizDetailed/:quizId", async (req, res) => {
 
 
 
-app.get("/getQuiz", async (req, res) => {
+app.get("/api/getQuiz", async (req, res) => {
     const querystring = 'CALL GetQuizNamesByUserId(?)';
     const userId = req.query.userId;
 
