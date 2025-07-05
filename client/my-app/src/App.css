@@ -10,7 +10,7 @@
 }
 
 .lr-hero-wrapper {
-  min-height: 50vh;                        /* pushes to the middle */
+  min-height: 50vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -20,9 +20,7 @@
   margin-bottom: 50%;
 }
 
-/* -------------------------------------------------------------
-   HEADLINE TEXT
---------------------------------------------------------------*/
+
 .lr-hero-text {
   max-width: 640px;
   color: #fdfdfd;
@@ -30,13 +28,11 @@
 }
 
 .lr-hero-em {
-  color: #61dafb;                          /* blue accent */
+  color: #61dafb;
   font-weight: 700;
 }
 
-/* -------------------------------------------------------------
-   BUTTON GROUP
---------------------------------------------------------------*/
+
 .lr-btn-group {
   display: flex;
   gap: 1.2rem;
@@ -44,13 +40,12 @@
   flex-wrap: wrap;
 }
 
-/* reuse existing blue button style, but ensure <Link> looks like btn */
+
 .lr-btn {
-  text-decoration: none;                   /* remove link underline */
-  display: inline-block;                   /* respect padding */
+  text-decoration: none;
+  display: inline-block;
 }
 
-/* small “or” divider */
 .lr-divider {
   color: #cfcfcf;
   font-size: 1rem;
@@ -66,7 +61,7 @@
   width: 100%;
   justify-content: center;
   justify-items: center;
-  
+
 }
 .App-footer{
   display: grid;
@@ -106,12 +101,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: transparent;     /* leave your global bg as-is */
+  background: transparent;
 }
 
-/* ==============================================================
-   CARD
-   --------------------------------------------------------------*/
 .StartLoginBox {
   display: flex;
   flex-direction: column;
@@ -126,19 +118,15 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
-/* ==============================================================
-   TITLE
-   --------------------------------------------------------------*/
+
 .LoginText {
-  display: block;                   /* <text> is non-standard, so treat as span */
+  display: block;
   font: 600 1.8rem/1 "Arial", sans-serif;
   color: #fdfdfd;
   text-align: center;
 }
 
-/* ==============================================================
-   INPUTS
-   --------------------------------------------------------------*/
+
 .StartLoginInput {
   width: 90%;
   padding: 0.8rem 1rem;
@@ -154,9 +142,7 @@
   color: #777;
 }
 
-/* ==============================================================
-   BUTTON
-   --------------------------------------------------------------*/
+
 .LoginButton {
   width: 90%;
   padding: 0.85rem 1rem;
@@ -179,9 +165,7 @@
   transform: scale(0.97);
 }
 
-/* ==============================================================
-   ROW PADDING (optional – keep if you like extra spacing)
-   --------------------------------------------------------------*/
+
 .LoginRow {
   width: 100%;
 
@@ -202,7 +186,7 @@
   min-height: 10vh;
   max-height: 10vh;
   z-index: 999;
-  
+
 }
 .ProfileTextDivider{
   display: grid;
@@ -272,12 +256,12 @@
 .NavigationTabs:hover{
   background-color: grey;
 }
-.NavigationTabs.NavigationTabs:click{
+.NavigationTabs.NavigationTabs:active, .NavigationTabs.NavigationTabs:visited, .NavigationTabs.NavigationTabs:link{
   color: #61dafb;
 }
 
 .mainMain{
-  display: flexbox;
+  display: flex;
   grid-template-rows: 2fr;
   width: 55%;
   margin-left: 1%;
@@ -314,7 +298,9 @@
   background-color: #353a45;
   justify-content: center;
   justify-items: center;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
+
 }
 .arrow {
   border: solid white;
@@ -334,7 +320,7 @@
   grid-template-columns: 1.5fr 2fr;
   max-height: fit-content;
   background-color: #969aa8;
-  
+
 }
 
 
@@ -361,7 +347,7 @@ margin-right: 5%;
   margin-top: 5%;
 }
 
-  
+
 
 .Main{
   display: flex;
@@ -435,9 +421,9 @@ margin-right: 5%;
   pointer-events: none;
 
   position: absolute;
-  top: 100%;                 /* right under the trigger — no gap   */
+  top: 100%;
   left: 50%;
-  transform: translateX(-50%) scaleY(0.95);   /* subtle shrink      */
+  transform: translateX(-50%) scaleY(0.95);
   transform-origin: top center;
 
   min-width: 100px;
@@ -475,5 +461,5 @@ margin-right: 5%;
   visibility: visible;
   pointer-events: auto;
 
-  transform: translateX(-50%) scaleY(1);      /* no vertical gap    */
+  transform: translateX(-50%) scaleY(1);
 }
