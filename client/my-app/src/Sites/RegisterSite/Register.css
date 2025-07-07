@@ -1,9 +1,9 @@
 .Register-main {
-    min-height: 90vh;
+    max-height: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2rem;
+
 }
 
 /* =============================================================
@@ -11,7 +11,7 @@
    -----------------------------------------------------------*/
 .RegisterBox {
     background: #2e333d;
-    padding: 2.5rem 2rem;
+    padding: 1.5rem 1rem;
     width: 100%;
     max-width: 480px;
 
@@ -129,10 +129,10 @@
     display: block;
 
     background: #2e333d;
-    padding: 2.5rem 2rem;
+    padding: 1.5rem 1rem;
     width: 100%;
     max-width: 480px;
-    margin-bottom: 70%;
+
 
     grid-template-columns: max-content 1fr;
     gap: 1.2rem 1.5rem;

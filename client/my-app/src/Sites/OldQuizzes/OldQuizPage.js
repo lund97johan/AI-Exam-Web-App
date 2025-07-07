@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom'; //  Link
 
 import {useAuth} from "../../AuthProvider";
+import {Button} from "reactstrap";
 
 
 function OldQuizzes() {
@@ -65,6 +66,7 @@ function ReturnQuizzes() {
         });
     };
 
+
     return (
 
         <> {fetching ? (FetchingQuizzes() ) : (
@@ -76,20 +78,19 @@ function ReturnQuizzes() {
                         <div className="quiz-input">
                             <input className="quiz" value={quiz.title} disabled/>
 
-                            <Link to={`/quiz/${quiz.id}`} className="quiz-button">
-                                Take&nbsp;Quiz
-                            </Link>
                         </div>
-
+                        <button  onClick={() => navigate(`/quiz/${quiz.id}`)} className="buttonThingy greenButton">
+                            Take&nbsp;Quiz
+                        </button>
                         <button
-                            className="previous-attempts-button"
+                            className="buttonThingy whiteButton"
                             onClick={() => handlePreviousAttemptsClick(quiz.id, quiz.title)}
                         >
-                            View Previous Attempts
+                            Previous Attempts
                         </button>
 
                         <button
-                            className="remove-button"
+                            className="buttonThingy redButton"
                             onClick={() => handleRemoveClick(quiz.id)}
                         >
                             Remove Quiz

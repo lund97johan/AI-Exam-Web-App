@@ -1,7 +1,7 @@
 -- Sample user for testing purposes
 -- INSERT INTO `users` (`username`, `email`, `firstname`, `lastname`, `password_hash`, `created_at`, `last_login`)
 
-INSERT INTO `Users`
+INSERT INTO `users`
 VALUES (1,'adam123','adam@gmail.com','adam','adamsson','hejsansvejsan','2024-04-15 12:22:45','2024-04-20 10:47:52'),
        (2,'jeppe','jepser@gmail.com','jesper','pillaren','hejsan','2024-04-15 15:13:56','2024-04-19 14:42:19'),
        (3,'henke','henke@ravnborg.se','henrik','ravnborg','hej','2024-04-15 15:19:34','2024-05-03 14:52:55'),
@@ -15,13 +15,13 @@ VALUES (1,'adam123','adam@gmail.com','adam','adamsson','hejsansvejsan','2024-04-
        (11,'anders','anders@gmail.com','anders','hejsan','hej','2024-04-15 16:55:43','2024-04-15 16:59:38'),
        (12, 'user', 'example@mail.com', 'user', 'mcUser', 'password', NOW(), NOW());
 
-INSERT INTO `Quizzes`
+INSERT INTO `quizzes`
 VALUES (1,9,'8-Intergrated Process (CH06).pdf',NULL),
        (2,9,'1-Organizations, BP and IS (CH01) (1).pdf',NULL),
        (3,1,'6-Fulfillment Process (CH04) (1).pdf',NULL),
        (4,3,'2-Enterprise Systems, OSS, Conversational System (CH02).pdf',NULL);
 
-INSERT INTO `Questions`
+INSERT INTO `questions`
 VALUES (1,1,'What are the key concepts and assumptions discussed in the Integrated Processes section?'),
        (2,1,'Which process involves reviewing the inventory of finished goods as an initial step?'),
        (3,1,'Which process involves reviewing the inventory of raw materials as an initial step?'),
@@ -41,7 +41,7 @@ VALUES (1,1,'What are the key concepts and assumptions discussed in the Integrat
        (17,4,'What is the main advantage of Open-Source ERP Systems compared to Closed-Source vendors?'),
        (18,4,'What are the essential components of a Chatbot according to the text?');
 
-INSERT INTO `Answers`
+INSERT INTO `answers`
 VALUES (1,1,'Fulfillment, Procurement, Production',1),
        (2,1,'Human Capital Management, Asset Management',0),
        (3,1,'Supply Chain Management, Product Lifecycle Management',0),

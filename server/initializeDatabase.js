@@ -20,7 +20,7 @@ function runScript(filePath, connection, callback) {
 function initializeDatabase() {
     const connection = mysql.createConnection({
         host: process.env.DB_HOST, //här får man lägga till sina egna inställningar om man vill fixa
-        user: process.env.DB_USER_NAME,
+        user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: "AI_Exam_Web_App_DB",
         port: 3306,

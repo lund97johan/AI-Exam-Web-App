@@ -30,7 +30,7 @@
    --------------------------------------------------------------*/
 .quiz-item {
   display: flex;
-  flex-wrap: wrap;          /* stacks gracefully on phones */
+
   align-items: center;
   gap: 1rem;
 
@@ -98,6 +98,43 @@
 .quiz-button:focus {
   background: var(--green-dark);
 }
+
+.buttonThingy{
+  height: 4vh;
+  width:7vw;
+  padding: 0.2rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, color 0.2s ease;
+}
+.buttonThingy:hover{
+    transform: scale(1.05);
+
+    color: #fff;
+
+
+}
+
+
+.redButton{
+  background: #ea0000;
+  color: white;
+}
+
+.greenButton{
+  background: #31c031;
+  color: white;
+}
+
+.whiteButton{
+  background: white;
+  color: black;
+}
+
+
 
 /* neutral (view attempts) */
 .previous-attempts-button {

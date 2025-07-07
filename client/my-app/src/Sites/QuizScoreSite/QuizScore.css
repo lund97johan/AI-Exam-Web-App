@@ -9,7 +9,7 @@
     justify-items: center;
     align-items: center;
     position: relative;
-    padding: 0.2rem 2rem;
+    padding: 1rem 2rem;
     background: rgba(255,255,255,0.05);
     border-radius: 8px;
     transition: background 0.2s ease;
@@ -41,9 +41,9 @@
 }
 .quiz-thingy-container{
     position: relative;
+    padding-top: 10px;
+    padding-bottom: 10px;
 
-    padding-top: 4px;
-    padding-bottom: 4px;
 }
 /* keep long sentences from hitting the pill */
 .Quiz-question-potanswer {

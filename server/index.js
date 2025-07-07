@@ -9,7 +9,7 @@ const mysql = require('mysql2');
 const fs = require('fs');
 const PORT = process.env.PORT || 3001;
 const app = express();
-require('dotenv').config();
+require('dotenv').config({path: '../.env'});
 app.use(express.json());
 // Project Imports
 const DatabaseManager = require('./DatabaseManager');
@@ -101,6 +101,7 @@ app.post("/api/register", async (req, res) => {
                 last_login: result[0][0].last_login
             };
             console.log("User data:", userData);
+            createSampleQuiz(userData.user_id);
             res.json({ success: true, message: "User registered successfully", user: userData });
 
         } else {
@@ -108,6 +109,112 @@ app.post("/api/register", async (req, res) => {
         }
     });
 });
+
+function createSampleQuiz(id) {
+
+    const sampleQuiz = {
+        userId: id,
+        title: "Sample Quiz",
+        questionsAndAnswers: [
+            {
+                question: "What is the capital of France?",
+                options: ["Paris", "London", "Berlin", "Madrid"],
+                answer: "Paris"
+            },
+            {
+                question: "What is 2 + 2?",
+                options: ["3", "4", "5", "6"],
+                answer: "4"
+            },
+            {
+                question: "What is the largest planet in our solar system?",
+                options: ["Earth", "Mars", "Jupiter", "Saturn"],
+                answer: "Jupiter"
+            }
+        ]
+    };
+    createQuiz(sampleQuiz);
+  getQuizIDLatest(id)
+        .then(quizId => {
+            if (quizId) {
+                console.log('Latest quiz ID for user:', id, 'is', quizId);
+                createSampleAttempt(id, quizId).then(r =>
+                    console.log('Sample attempt created for user:', id, 'with quiz ID:', quizId)
+                ).catch(err =>
+                    console.error('Error creating sample attempt for user:', id, 'with quiz ID:', quizId, err)
+                );
+            } else {
+                console.log('No quizzes found for user:', id);
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching latest quiz ID:', err);
+        });
+
+
+
+}
+
+function getQuizIDLatest(userID){
+    sql = `SELECT quiz_id FROM quizzes WHERE user_id = ?`;
+    return new Promise((resolve, reject) => {
+        dbManager.getConnection().query(sql, [userID], (err, results) => {
+            if (err) {
+                console.error('Error fetching latest quiz ID:', err);
+                return reject(err);
+            }
+            if (results.length > 0) {
+                resolve(results[0].quiz_id);
+            } else {
+                resolve(null); // No quizzes found for this user
+            }
+        });
+    });
+}
+async function createSampleAttempt(userId, quizId) {
+
+    console.log('Creating sample attempt for user:', userId, 'with quiz ID:', quizId);
+    const sampleAttempt = {
+        userId: userId,
+        quizId: quizId,
+        answers: {
+            0: {answerId: 1, isCorrect: 1},
+            1: {answerId: 2, isCorrect: 0},
+            2: {answerId: 3, isCorrect: 1}
+        },
+        score: 2,
+        totalQuestions: 3
+    };
+
+    try {
+        const response = await fetch(`http://localhost:${PORT}/api/submitQuizAnswers`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: sampleAttempt.userId,
+                quizId: sampleAttempt.quizId,
+                answers: sampleAttempt.answers,
+                score: sampleAttempt.score,
+                totalQuestions: sampleAttempt.totalQuestions
+            })
+
+        })
+        if (!response.ok) {
+            throw new Error('Failed to create sample attempt');
+        }
+        const data = await response.json();
+        console.log('Sample attempt created successfully:', data);
+
+    } catch (error) {
+        console.error('Error creating sample attempt:', error);
+
+    }
+
+
+
+}
 
 
 

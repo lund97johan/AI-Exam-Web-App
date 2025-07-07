@@ -13,6 +13,7 @@ export function Layout() {
     <div className="App">
         <ReturnHeader/>
         <div className="App-body">
+            <div className="stars"></div>
             <Outlet/>
         </div>
         <ReturnFooter/>
@@ -22,10 +23,10 @@ export function Layout() {
 
 
 export function App() {
-    const { user } = useAuth();
+    const {user} = useAuth();
 
     return user
-        ? <Dashboard />
+        ? <Dashboard/>
         : <LoginOrRegisterColumns column={3} row={2} />;
 
 
